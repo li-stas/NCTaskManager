@@ -104,7 +104,7 @@ public class Task {
         }
         return endTime;
     }
-    //o	int getRepeatInterval(), інтервал повторюваності. у разі,
+    //	int getRepeatInterval(), інтервал повторюваності. у разі,
     // якщо задача _не повторюється_ метод має повертати 0;
     final public int getRepeatInterval() {
         if (!isRepeated()) {
