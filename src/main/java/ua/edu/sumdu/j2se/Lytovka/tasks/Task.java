@@ -159,14 +159,16 @@ public class Task {
                 + "title='" + title + '\''
                 + ", active=" + active
                 + ", repeated=" + repeated;
-        //if (repeated) {
+        if (false) {
+            //if (repeated) {
             toString += ", startTime=" + startTime
                     + ", endTime=" + endTime
                     + ", interval=" + interval;
-        //} else {
+            //} else {
             toString += ", time=" + time;
-        //}
-        toString += '}';
+            //}
+            toString += '}';
+        }
         return toString;
     }
 

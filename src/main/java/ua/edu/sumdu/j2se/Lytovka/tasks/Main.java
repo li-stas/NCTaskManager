@@ -2,6 +2,21 @@ package ua.edu.sumdu.j2se.Lytovka.tasks;
 
 public class Main {
 	public static void main(String[] args) {
+		ArrayTaskList tasksList = new ArrayTaskList();
+		Task task1 = new Task("A", 10);
+		Task task2 = new Task("B", 20); //, 100, 20);
+		Task task3 = new Task("C", 30);
+		tasksList.add(task1);		//System.out.println(tasksList);
+		tasksList.add(task2);		//System.out.println(tasksList +" "+ tasksList.size());
+		tasksList.add(task3);
+		System.out.println(tasksList);
+
+		System.out.println(tasksList.remove(task3));
+		System.out.println(tasksList);
+
+		}
+
+	public static void main2(String[] args) {
 		Task task;
 		if (false) { // одно разовая задача
 			task = new Task("some", 10);
