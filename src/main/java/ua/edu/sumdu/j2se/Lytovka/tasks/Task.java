@@ -10,36 +10,34 @@ public class Task {
      *
      */
     private String title; //назви задачі
-
-    private int startTime; // початок  заданим інтервалом
-    private int endTime; //  кінець
-    private int interval; // заданим інтервалом
+    private boolean repeated; //повторюваності задачі
+    private boolean active; //стан задачі
 
     private int time; //час виконання задачі
 
-    private boolean repeated; //повторюваності задачі
-    private boolean active; //стану задачі
-
-    //private int startTime; //повертати час початку виконання задачі;
-    //private int endTime; //повертати час закінчення виконання задачі;
-    //private int repeatInterval; //задача знаходиться в інтералі повторюваності
-
+    private int startTime; // початок заданим інтервалом
+    private int endTime; // кінець заданим інтервалом
+    private int interval; // заданим інтервалом
 
     //, що не повторюються:
-    //конструює неактивну задачу, яка виконується у заданий час
-    // без повторення із заданою назвою
-    public Task(String title, int time) {
+    // конструює неактивну задачу, яка
+    // виконується у заданий час без
+    // повторення iз заданою назвою
+    public Task(final String title, final int time) {
         this.title = title;
         this.time = time;
         this.repeated = false;
         this.active = false;
-        //??this.start = this.end = time;
+        this.startTime = time;
+        this.endTime = time;
     }
 
     // , що повторюються:
-    //   конструює неактивну задачу, яка виконується у заданому проміжку часу
-    //   (і початок і кінець включно) із заданим інтервалом і має задану назву.
-    public Task(String title, int start, int end, int interval) {
+    //   конструює неактивну задачу, яка
+    //   виконується  у заданому проміжку
+    //   часу  (і початок і кінець включно)
+    //   із заданим інтервалом і має  назву.
+    public Task(final String title, int start, int end, int interval) {
         this.title = title;
         this.startTime = start;
         this.endTime = end;
@@ -49,12 +47,16 @@ public class Task {
     }
 
     // загальні методи для задач
-    //●	 Методи для зчитування та встановлення назви задачі: String getTitle(), void setTitle(String title).
+    //●	 Методи зчитування та встановлення
     final public String getTitle() {
         return title;
     }
     final public void setTitle(String title) {
         this.title = title;
+    }
+    //●	Метод для перевірки повторюваності задачі boolean isRepeated().
+    final public boolean isRepeated() {
+        return repeated;
     }
     // ●	Методи для зчитування та встановлення стану задачі: boolean isActive(), void setActive(boolean active).
     final public boolean isActive() {
@@ -62,10 +64,6 @@ public class Task {
     }
     final public void setActive(boolean active) {
         this.active = active;
-    }
-    //●	Метод для перевірки повторюваності задачі boolean isRepeated().
-    final public boolean isRepeated() {
-        return repeated;
     }
 
     //, що не _повторюються_:
@@ -83,7 +81,7 @@ public class Task {
             this.repeated = false;
         }
         this.time = time;
-        //??this.start = this.end = time;
+        this.startTime = this.endTime = time;
     }
 
     // , що повторюються:
@@ -121,6 +119,55 @@ public class Task {
         this.startTime = start;
         this.endTime = end;
         this.interval = interval;
+    }
+    final public int nextTimeAfter(int current) {
+        int currentTime;
+        if (active) { // активна
+            if (!repeated) { // одно разовая
+                if (current < time) { // только время ДО начала, если начло то уже -1
+                    return time;
+                }
+                return -1;
+            } else { // повторяется
+                if (current < startTime) { // время до страта
+                    return startTime;
+                } else {
+                    currentTime = current + interval;
+                    if ( currentTime >= endTime) { // выпадаем за интервал
+                        return -1;
+                    }
+                    int i = 0;
+                    while (true) { // следующие после заданого
+                        i++;
+                        currentTime = startTime + (interval * i);
+                        if (currentTime > current) {
+                            break;
+                        }
+                    }
+                    return currentTime;
+                }
+            }
+        }
+        // не  активна
+         return -1;
+    }
+
+    @Override
+    public String toString() {
+        String toString;
+        toString = "Task{"
+                + "title='" + title + '\''
+                + ", active=" + active
+                + ", repeated=" + repeated;
+        //if (repeated) {
+            toString += ", startTime=" + startTime
+                    + ", endTime=" + endTime
+                    + ", interval=" + interval;
+        //} else {
+            toString += ", time=" + time;
+        //}
+        toString += '}';
+        return toString;
     }
 
 }
