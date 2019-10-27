@@ -23,11 +23,25 @@ public class Task {
     // конструює неактивну задачу, яка
     // виконується у заданий час без
     // повторення iз заданою назвою
-    public Task(final String title, final int time) {
+    public Task(String title, int time) throws IllegalArgumentException {
+        if (title.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+        if (time < 0) {
+            throw new IllegalArgumentException();
+        }
         this.title = title;
         this.time = time;
         this.repeated = false;
         this.active = false;
+        this.startTime = time;
+        this.endTime = time;
+    }
+    public Task(String title, int time, boolean active) {
+        this.title = title;
+        this.time = time;
+        this.repeated = false;
+        this.active = active;
         this.startTime = time;
         this.endTime = time;
     }
@@ -37,15 +51,51 @@ public class Task {
     //   виконується  у заданому проміжку
     //   часу  (і початок і кінець включно)
     //   із заданим інтервалом і має  назву.
-    public Task(final String title, int start, int end, int interval) {
+
+    /**
+     * c установкой активности
+     *  що повторюються:
+     *  конструює неактивну задачу, яка
+     *  виконується  у заданому проміжку
+     *  часу  (і початок і кінець включно)
+     *   із заданим інтервалом і має  назву.
+     * @param title
+     * @param start
+     * @param end
+     * @param interval
+     */
+    public Task(String title, int start, int end, int interval) throws IllegalArgumentException {
+        if (title.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+        if (start < 0 || end < 0 || start < end || interval <= 0 ) {
+            throw new IllegalArgumentException();
+        }
         this.title = title;
         this.startTime = start;
         this.endTime = end;
         this.interval = interval;
         this.repeated = true;
         this.active = false;
+        // одноазоваая задача
+        if (start == end) {
+            this.repeated = false;
+            this.time = start;
+        }
     }
-
+    public Task(String title, int start, int end, int interval, boolean active) {
+        this.title = title;
+        this.startTime = start;
+        this.endTime = end;
+        this.interval = interval;
+        this.repeated = true;
+        this.active = active;
+        // одноазоваая задача
+        if (start == end) {
+            this.repeated = false;
+            this.time = start;
+        }
+    }
     // загальні методи для задач
     //●	 Методи зчитування та встановлення
     final public String getTitle() {
@@ -155,7 +205,7 @@ public class Task {
     @Override
     public String toString() {
         String toString;
-        toString = "Task{"
+        toString = "\nTask{"
                 + "title='" + title + '\''
                 + ", active=" + active
                 + ", repeated=" + repeated;

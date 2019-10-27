@@ -13,7 +13,10 @@ public class ArrayTaskList {
     /**
      * метод, що додає до списку вказану задачу.
      */
-    public 	void add(Task task) {
+    public 	void add(Task task) throws IllegalArgumentException {
+        if (task == null) {
+            throw new IllegalArgumentException();
+        }
         if (len == 0) {
             this.aTask = new Task[]{task};
             len++;
@@ -75,12 +78,63 @@ public class ArrayTaskList {
      *  знаходиться на вказаному місці у списку,
      *  перша задача має індекс 0.
      */
-    public Task getTask(int index) {
-        if ( len == 0 || index > len - 1 ) {
-            return null; // ??
+    public Task getTask(int index) throws IndexOutOfBoundsException {
+        if ( len == 0 || index > len - 1 || index < 0) {
+            throw new IndexOutOfBoundsException();
         }
         return aTask[index];
     };
+
+    public ArrayTaskList incoming(int from, int to) {
+        ArrayTaskList resList = new ArrayTaskList();
+        for ( Task elem : aTask  ) {
+            if (!elem.isActive()) {
+                continue;
+            }
+            if (elem.isRepeated()) {
+                int testTime = 0;
+                boolean lAdd = false;
+                // начало попадает в ализируемый интервал from-to
+                if (elem.getStartTime() > from && elem.getStartTime() < to) {
+                    testTime = elem.getStartTime();
+                    lAdd = true;
+                } else { // точку анализа переместим в интервал from-to
+                    if (elem.getStartTime() > to) { // Repeat right OUT
+                        lAdd = false;
+                    } else if (elem.getEndTime() < from) { //Repeat left OUT
+                        lAdd = false;
+                    } else {
+                        int i = 0;
+                        while (true) { // следующие после заданого
+                            i++;
+                            testTime = elem.getStartTime() + (elem.getRepeatInterval() * i);
+                            if (testTime > from) {
+                                lAdd = true;
+                                break; // попали в интервал
+                            }
+                            if (testTime > to) {
+                                lAdd = false;
+                                break; // вышли за интервла задания
+                            }
+                            if (testTime >= elem.getEndTime()) {
+                                lAdd = false;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (lAdd && testTime + elem.getRepeatInterval() <= to) {
+                    resList.add(elem);
+                }
+            } else {
+                if (elem.getTime() > from && elem.getTime() <= to) {
+                    resList.add(elem);
+                }
+            }
+        }
+        return resList;
+    }
+
 
     @Override
     public String toString() {
