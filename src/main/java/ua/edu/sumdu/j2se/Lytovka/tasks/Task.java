@@ -66,7 +66,9 @@ public class Task {
      * @param interval
      */
     public Task(String title, int start, int end, int interval) throws IllegalArgumentException {
-        //if (start <  end) {             throw new IllegalArgumentException();         }
+        if (start > end) {
+            throw new IllegalArgumentException();
+        }
         if (start < 0 || end < 0 || interval <= 0) {
             throw new IllegalArgumentException();
         }
