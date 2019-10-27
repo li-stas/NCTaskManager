@@ -2,7 +2,7 @@ package ua.edu.sumdu.j2se.Lytovka.tasks;
 
 import java.util.Arrays;
 
-public class LinkedTaskList {
+public class LinkedTaskList extends AbstractTaskList {
     private Task[] aTask = null;
     private int len = 0;
     /**
