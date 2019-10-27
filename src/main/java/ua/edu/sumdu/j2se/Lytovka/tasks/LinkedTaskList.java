@@ -2,13 +2,13 @@ package ua.edu.sumdu.j2se.Lytovka.tasks;
 
 import java.util.Arrays;
 
-public class ArrayTaskList {
+public class LinkedTaskList {
     private Task[] aTask = null;
     private int len = 0;
     /**
      *  пустой конструктр.
      */
-    public ArrayTaskList() {
+    public LinkedTaskList() {
         this.aTask = null;
         this.len = 0;
     }
@@ -49,9 +49,9 @@ public class ArrayTaskList {
         String cTitle = task.getTitle();
         int index4Del = -1;
         for (int i = 0; i < len; i++) {
-           if (cTitle.startsWith(aTask[i].getTitle())) {
-               index4Del = i;
-           }
+            if (cTitle.startsWith(aTask[i].getTitle())) {
+                index4Del = i;
+            }
         }
         // удаление выбранного и смещение елементов
         if (index4Del >= 0) {
@@ -77,8 +77,8 @@ public class ArrayTaskList {
      *  метод, що повертає кількість задач у списку.
      * @return
      */
-	public int size() {
-	    return len;
+    public int size() {
+        return len;
     }
     /**
      *  – метод, що повертає задачу, яка
@@ -100,8 +100,8 @@ public class ArrayTaskList {
      * @param to
      * @return
      */
-    public ArrayTaskList incoming(int from, int to) {
-        ArrayTaskList resList = new ArrayTaskList();
+    public LinkedTaskList incoming(int from, int to) {
+        LinkedTaskList resList = new LinkedTaskList();
         for (Task elem : aTask) {
             if (!elem.isActive()) {
                 continue;
@@ -154,7 +154,7 @@ public class ArrayTaskList {
      */
     @Override
     public String toString() {
-        return "ArrayTaskList{"
+        return "LinkedTaskList{"
                 + "aTask=" + Arrays.toString(aTask)
                 + ", len=" + len
                 + '}';
