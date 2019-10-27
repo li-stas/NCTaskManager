@@ -23,13 +23,14 @@ public class Task {
     // конструює неактивну задачу, яка
     // виконується у заданий час без
     // повторення iз заданою назвою
-    public Task(String title, int time) throws IllegalArgumentException {
+    public Task(String title, int time)  throws IllegalArgumentException {
         if (title.isEmpty()) {
             throw new IllegalArgumentException();
         }
         if (time < 0) {
             throw new IllegalArgumentException();
         }
+
         this.title = title;
         this.time = time;
         this.repeated = false;
@@ -65,10 +66,11 @@ public class Task {
      * @param interval
      */
     public Task(String title, int start, int end, int interval) throws IllegalArgumentException {
-        if (title.isEmpty()) {
+        //if (start <  end) {             throw new IllegalArgumentException();         }
+        if (start < 0 || end < 0 || interval <= 0) {
             throw new IllegalArgumentException();
         }
-        if (start < 0 || end < 0 || start < end || interval <= 0 ) {
+        if (title.isEmpty()) {
             throw new IllegalArgumentException();
         }
         this.title = title;
@@ -98,35 +100,35 @@ public class Task {
     }
     // загальні методи для задач
     //●	 Методи зчитування та встановлення
-    final public String getTitle() {
+    public String getTitle() {
         return title;
     }
-    final public void setTitle(String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
     //●	Метод для перевірки повторюваності задачі boolean isRepeated().
-    final public boolean isRepeated() {
+    public boolean isRepeated() {
         return repeated;
     }
     // ●	Методи для зчитування та встановлення стану задачі: boolean isActive(), void setActive(boolean active).
-    final public boolean isActive() {
+    public boolean isActive() {
         return active;
     }
-    final public void setActive(boolean active) {
+    public void setActive(boolean active) {
         this.active = active;
     }
 
     //, що не _повторюються_:
     //	Методи для зчитування та зміни часу виконання для задач
     // - у разі, якщо задача _повторюється_ метод має повертати час початку повторення;
-    final public int getTime() {
+    public int getTime() {
         if (isRepeated()) {
             return startTime;
         }
         return time;
     }
     // - у разі, якщо задача повторювалась, вона має стати такою, що не повторюється.
-    final public void setTime(int time) {
+    public void setTime(int time) {
         if (isRepeated()) {
             this.repeated = false;
         }
@@ -138,7 +140,7 @@ public class Task {
     //●	Методи для зчитування та зміни часу виконання для задач
     //o	int getStartTime(), у разі, якщо задача _не повторюється_ метод має повертати
     // час виконання задачі;
-    final public int getStartTime() {
+    public int getStartTime() {
         if (!isRepeated()) {
             return time;
         }
@@ -146,7 +148,7 @@ public class Task {
     }
     //o	int getEndTime(), у разі, якщо задача _не повторюється_ метод має повертати
     // час виконання задачі;
-    final public int getEndTime() {
+    public int getEndTime() {
         if (!isRepeated()) {
             return time;
         }
@@ -154,7 +156,7 @@ public class Task {
     }
     //	int getRepeatInterval(), інтервал повторюваності. у разі,
     // якщо задача _не повторюється_ метод має повертати 0;
-    final public int getRepeatInterval() {
+    public int getRepeatInterval() {
         if (!isRepeated()) {
             return 0;
         }
@@ -162,7 +164,7 @@ public class Task {
     }
     //o	void setTime(int start, int end, int interval), у разі, якщо задача
     // _не повторювалася_ метод має стати такою, що повторюється.
-    final public void setTime(int start, int end, int interval) {
+    public void setTime(int start, int end, int interval) {
         if (!isRepeated()) {
             this.repeated = true;
         }
@@ -170,7 +172,7 @@ public class Task {
         this.endTime = end;
         this.interval = interval;
     }
-    final public int nextTimeAfter(int current) {
+    public int nextTimeAfter(int current) {
         int currentTime;
         if (active) { // активна
             if (!repeated) { // одно разовая
