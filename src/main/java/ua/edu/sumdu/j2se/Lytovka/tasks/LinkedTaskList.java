@@ -3,14 +3,18 @@ package ua.edu.sumdu.j2se.Lytovka.tasks;
 import java.util.Arrays;
 
 public class LinkedTaskList extends AbstractTaskList {
+    private LinkedTaskListNode fistNode; //  = new LinkedTaskListNode();
+    private int len; // = 0;
+    private LinkedTaskListNode lastNode; // = null;
+
     private Task[] aTask = null;
-    private int len = 0;
     /**
      *  пустой конструктр.
      */
     public LinkedTaskList() {
-        this.aTask = null;
-        this.len = 0;
+        fistNode = new LinkedTaskListNode();
+        len = 0;
+        lastNode = null;
     }
     /**
      * метод, що додає до списку задачу.
@@ -22,14 +26,15 @@ public class LinkedTaskList extends AbstractTaskList {
             throw new IllegalArgumentException();
         }
         if (len == 0) {
-            this.aTask = new Task[]{task};
+            fistNode.setData(task);
+            lastNode = fistNode;
             len++;
         } else {
             // AADD
-            Task[] aTmp = new Task[len + 1]; // создаем увеличенный размер
-            System.arraycopy(aTask, 0, aTmp, 0, len); // копирование в новый
-            aTmp[len] = task; // обновляем последний элемент
-            aTask = aTmp; // замена ссылки
+            LinkedTaskListNode newNode = new LinkedTaskListNode(); // создали новый
+            newNode.setData(task); // записали данные
+            lastNode.setNext(newNode); // в последнию ноду записали ссылку новой
+            lastNode = newNode;  // новую сделли последней
             len++;
         }
 
@@ -46,29 +51,51 @@ public class LinkedTaskList extends AbstractTaskList {
         if (len == 0) {
             return false; // ??
         }
+        // поиск задачи
         String cTitle = task.getTitle();
         int index4Del = -1;
-        for (int i = 0; i < len; i++) {
-            if (cTitle.startsWith(aTask[i].getTitle())) {
+
+        LinkedTaskListNode curNode = fistNode;
+        LinkedTaskListNode delNode;
+        int i = 1;
+        while (true) {
+            if (cTitle.startsWith(curNode.getData().getTitle())) {
                 index4Del = i;
+                break;
             }
+            curNode = curNode.getNext();
+            if (curNode == null) {
+                break;
+            }
+            i++;
         }
+        System.out.println("curNode.getNext()=" + curNode.getNext());
         // удаление выбранного и смещение елементов
         if (index4Del >= 0) {
-
-            // ADEL(,index4Del)
-            // удаление выбранного и смещение елементов
-            for (int i = index4Del; i < len - 1; i++) {
-                aTask[i] = aTask[i + 1];
+            if (index4Del == 1) { // первая
+                fistNode = fistNode.getNext();
+                len--;
+            } else if (curNode.getNext() == null ) { // последний
+                // предыдущая
+                curNode = fistNode;
+                for (int j = 2; j <= len - 1 ; j++) {
+                    curNode = curNode.getNext();
+                }
+                // сделаем последней
+                curNode.setNext(null);
+                lastNode = curNode;
+                len--;
+            } else {
+                // предыдущая
+                delNode = curNode; // запомним
+                // предыдущая
+                curNode = fistNode;
+                for (int j = 2; j <= index4Del - 1 ; j++) {
+                    curNode = curNode.getNext();
+                }
+                curNode.setNext(delNode.getNext());
+                len--;
             }
-            aTask[len - 1] = null;
-            /// end ADEL
-            // ASIZE()
-            Task[] aTmp = new Task[len - 1]; // создаем уменьшенный размер
-            System.arraycopy(aTask, 0, aTmp, 0, len - 1); // копирование в новый
-            aTask = aTmp; // замена ссылки
-            len--;
-            // end ASIZE
             return true;
         }
         return false;
@@ -92,7 +119,11 @@ public class LinkedTaskList extends AbstractTaskList {
         if (len == 0 || index > len - 1 || index < 0) {
             throw new IndexOutOfBoundsException();
         }
-        return aTask[index];
+        LinkedTaskListNode curNode = fistNode;
+        for (int j = 2; j <= index + 1 ; j++) {
+            curNode = curNode.getNext();
+        }
+        return curNode.getData();
     }
     /**
      * знаходити, які саме задачі будуть виконані хоча б раз у деякому проміжку
@@ -102,61 +133,91 @@ public class LinkedTaskList extends AbstractTaskList {
      */
     public LinkedTaskList incoming(int from, int to) {
         LinkedTaskList resList = new LinkedTaskList();
-        for (Task elem : aTask) {
-            if (!elem.isActive()) {
-                continue;
+        LinkedTaskListNode curNode = fistNode;
+        while (true) {
+            Task elem = curNode.getData();
+            if (isIncoming(elem,  from,  to)) {
+                resList.add(elem);
             }
-            if (elem.isRepeated()) {
-                int testTime = 0;
-                boolean lAdd = false;
-                // начало попадает в анализируемый интервал from-to
-                if (elem.getStartTime() > from && elem.getStartTime() < to) {
-                    testTime = elem.getStartTime();
-                    lAdd = true;
-                } else { // точку анализа переместим в интервал from-to
-                    if (elem.getStartTime() > to) { // Repeat right OUT
-                        lAdd = false;
-                    } else if (elem.getEndTime() < from) { //Repeat left OUT
-                        lAdd = false;
-                    } else {
-                        int i = 0;
-                        while (true) { // следующие после заданого
-                            i++;
-                            testTime = elem.getStartTime() + (elem.getRepeatInterval() * i);
-                            if (testTime > from) {
-                                lAdd = true;
-                                break; // попали в интервал
-                            }
-                            if (testTime > to) {
-                                lAdd = false;
-                                break; // вышли за интервла задания
-                            }
-                            if (testTime >= elem.getEndTime()) {
-                                lAdd = false;
-                                break;
-                            }
-                        }
-                    }
-                }
-                if (lAdd && testTime + elem.getRepeatInterval() <= to) {
-                    resList.add(elem);
-                }
-            } else {
-                if (elem.getTime() > from && elem.getTime() <= to) {
-                    resList.add(elem);
-                }
+            curNode = curNode.getNext();
+            if (curNode == null) {
+                break;
             }
         }
         return resList;
     }
-    /**
+     /**
      * toString.
      */
     @Override
     public String toString() {
-        return "LinkedTaskList{"
-                + "aTask=" + Arrays.toString(aTask)
-                + ", len=" + len
-                + '}';
+        String cOut =  "LinkedTaskList{" +
+                "fistNode=" + fistNode +
+                ", len=" + len +
+                ", lastNode=" + lastNode +
+                '}';
+        if (len != 0) {
+            LinkedTaskListNode curNode = fistNode;
+            int i = 1;
+            while (true) {
+                cOut +=  curNode.getData() + " node=" + i;
+                curNode = curNode.getNext();
+                if (curNode == null) {
+                    break;
+                }
+                i++;
+            }
+        }
+        return cOut;
     }
 }
+
+    /*
+    public boolean isIncoming(Task elem, int from, int to) {
+        boolean lAdd2res = false;
+        if (!elem.isActive()) {
+            return false;
+        }
+        if (elem.isRepeated()) {
+            int testTime = 0;
+            boolean lAdd = false;
+            // начало попадает в анализируемый интервал from-to
+            if (elem.getStartTime() > from && elem.getStartTime() < to) {
+                testTime = elem.getStartTime();
+                lAdd = true;
+            } else { // точку анализа переместим в интервал from-to
+                if (elem.getStartTime() > to) { // Repeat right OUT
+                    lAdd = false;
+                } else if (elem.getEndTime() < from) { //Repeat left OUT
+                    lAdd = false;
+                } else {
+                    int i = 0;
+                    while (true) { // следующие после заданого
+                        i++;
+                        testTime = elem.getStartTime() + (elem.getRepeatInterval() * i);
+                        if (testTime > from) {
+                            lAdd = true;
+                            break; // попали в интервал
+                        }
+                        if (testTime > to) {
+                            lAdd = false;
+                            break; // вышли за интервла задания
+                        }
+                        if (testTime >= elem.getEndTime()) {
+                            lAdd = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (lAdd && testTime + elem.getRepeatInterval() <= to) {
+                lAdd2res = true;
+            }
+        } else {
+            if (elem.getTime() > from && elem.getTime() <= to) {
+                lAdd2res = true;
+            }
+        }
+        return lAdd2res;
+    } */
+
