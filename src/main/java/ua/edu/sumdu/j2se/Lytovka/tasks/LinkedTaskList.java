@@ -133,6 +133,12 @@ public class LinkedTaskList extends AbstractTaskList {
      */
     public LinkedTaskList incoming(int from, int to) {
         LinkedTaskList resList = new LinkedTaskList();
+        for (int i = 0; i < len ; i++) {
+            if (isIncoming( getTask(i),  from,  to)) {
+                resList.add(getTask(i));
+            }
+        }
+        /*
         LinkedTaskListNode curNode = fistNode;
         while (true) {
             Task elem = curNode.getData();
@@ -143,7 +149,7 @@ public class LinkedTaskList extends AbstractTaskList {
             if (curNode == null) {
                 break;
             }
-        }
+        }*/
         return resList;
     }
      /**

@@ -104,11 +104,17 @@ public class ArrayTaskList extends AbstractTaskList {
      */
     public ArrayTaskList incoming(int from, int to) {
         ArrayTaskList resList = new ArrayTaskList();
+        for (int i = 0; i < len ; i++) {
+            if (isIncoming( getTask(i),  from,  to)) {
+                resList.add(getTask(i));
+            }
+        }
+        /*
         for (Task elem : aTask) {
             if (isIncoming(elem,  from,  to)) {
                 resList.add(elem);
             }
-        }
+        }*/
         return resList;
     }
     /**

@@ -1,21 +1,18 @@
 package ua.edu.sumdu.j2se.Lytovka.tasks;
 
 public abstract class AbstractTaskList  {
-    private Task[] aTask = null;
+    //private Task[] aTask = null;
     private int len = 0;
     /**
      *  пустой конструктр.
      */
-    public AbstractTaskList() {
-        this.aTask = null;
-        this.len = 0;
-    }
+   public AbstractTaskList() {}
     /**
      * метод, що додає до списку задачу.
      * @param task
      * @throws IllegalArgumentException
      */
-    public abstract void add(Task task) ;
+    public abstract void add(Task task);
     /**
      * – метод, що видаляє задачу із списку
      * і повертає істину, якщо така задача була у списку.
@@ -48,7 +45,7 @@ public abstract class AbstractTaskList  {
     public abstract AbstractTaskList incoming(int from, int to);
 
     /**
-     *  задача буде виконана  деякому проміжку
+     *  задача буде виконана  деякому проміжку?
      * @param elem
      * @param from
      * @param to
