@@ -6,8 +6,6 @@ public class LinkedTaskList extends AbstractTaskList {
     private LinkedTaskListNode fistNode; //  = new LinkedTaskListNode();
     private int len; // = 0;
     private LinkedTaskListNode lastNode; // = null;
-
-    private Task[] aTask = null;
     /**
      *  пустой конструктр.
      */
@@ -69,13 +67,14 @@ public class LinkedTaskList extends AbstractTaskList {
             }
             i++;
         }
-        System.out.println("curNode.getNext()=" + curNode.getNext());
+        // System.out.println("curNode.getNext()=" + curNode.getNext());
+        // System.out.printf("index4Del %d, len %d \n",index4Del, len);
         // удаление выбранного и смещение елементов
         if (index4Del >= 0) {
-            if (index4Del == 1) { // первая
+            if (index4Del == 1) { // первый узел
                 fistNode = fistNode.getNext();
                 len--;
-            } else if (curNode.getNext() == null ) { // последний
+            } else if ( false && curNode.getNext() == null ) { // последний узел
                 // предыдущая
                 curNode = fistNode;
                 for (int j = 2; j <= len - 1 ; j++) {
@@ -85,15 +84,17 @@ public class LinkedTaskList extends AbstractTaskList {
                 curNode.setNext(null);
                 lastNode = curNode;
                 len--;
-            } else {
-                // предыдущая
+            } else  {
                 delNode = curNode; // запомним
-                // предыдущая
+                // предыдущего узла  поиск
                 curNode = fistNode;
                 for (int j = 2; j <= index4Del - 1 ; j++) {
                     curNode = curNode.getNext();
                 }
                 curNode.setNext(delNode.getNext());
+                if (delNode.getNext() == null) {
+                    lastNode = curNode;
+                }
                 len--;
             }
             return true;
@@ -133,23 +134,36 @@ public class LinkedTaskList extends AbstractTaskList {
      */
     public LinkedTaskList incoming(int from, int to) {
         LinkedTaskList resList = new LinkedTaskList();
-        for (int i = 0; i < len ; i++) {
-            if (isIncoming( getTask(i),  from,  to)) {
-                resList.add(getTask(i));
+        int nType = 3;
+        if (nType == 3) {
+            for (int i = 0; i < len; i++) {
+                Task elem = getTask(i);
+                int toTime = elem.nextTimeAfter(from);
+                if (elem.isActive() && toTime != -1 && toTime <= to) {
+                    resList.add(elem);
+                }
             }
         }
-        /*
-        LinkedTaskListNode curNode = fistNode;
-        while (true) {
-            Task elem = curNode.getData();
-            if (isIncoming(elem,  from,  to)) {
-                resList.add(elem);
+        if (nType == 2) {
+            for (int i = 0; i < len; i++) {
+                if (isIncoming(getTask(i), from, to)) {
+                    resList.add(getTask(i));
+                }
             }
-            curNode = curNode.getNext();
-            if (curNode == null) {
-                break;
+        }
+        if (nType == 1) {
+            LinkedTaskListNode curNode = fistNode;
+            while (true) {
+                Task elem = curNode.getData();
+                if (isIncoming(elem,  from,  to)) {
+                    resList.add(elem);
+                }
+                curNode = curNode.getNext();
+                if (curNode == null) {
+                    break;
+                }
             }
-        }*/
+        }
         return resList;
     }
      /**
@@ -227,3 +241,24 @@ public class LinkedTaskList extends AbstractTaskList {
         return lAdd2res;
     } */
 
+/*} else if ( false && curNode.getNext() == null ) { // последний узел
+                // предыдущая
+                curNode = fistNode;
+                for (int j = 2; j <= len - 1 ; j++) {
+                    curNode = curNode.getNext();
+                }
+                // сделаем последней
+                curNode.setNext(null);
+                lastNode = curNode;
+                len--; */
+
+            /*
+            // поиск последней
+            LinkedTaskListNode curNode = fistNode;
+            for (int j = 2; j <= len; j++) {
+                curNode = curNode.getNext();
+            }
+            //System.out.println("curNode.getNext()=" + curNode.getNext());
+            //System.out.println("curNode.getNext()=" + lastNode.getNext());
+            lastNode = curNode;
+*/

@@ -9,14 +9,16 @@ public class TestLinked {
         tasksList.add(task1);
         tasksList.add(task2);
         tasksList.add(task3);
-        tasksList.add(new Task("D", 3));
+        //tasksList.add(new Task("D", 3));
         System.out.println(tasksList);
 
-        System.out.println(tasksList.remove(task2));
+        System.out.println(tasksList.remove(task1));
         System.out.println(tasksList);
-        System.out.println(tasksList.getTask(0));
-        System.out.println(tasksList.getTask(1));
-        System.out.println(tasksList.getTask(2));
-        System.out.println(tasksList.getTask(4));
+        if (false) {
+            System.out.println(tasksList.getTask(0));
+            System.out.println(tasksList.getTask(1));
+            System.out.println(tasksList.getTask(2));
+            System.out.println(tasksList.getTask(4));
+        }
     }
 }

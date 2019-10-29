@@ -129,7 +129,6 @@ public class T3_LinkedTest {
                 create("Repeat left intersect IN 1", 0, 55, 13, true),
                 create("Repeat left intersect IN 2", 0, 60, 30, true),
                 create("Repeat left intersect OUT", 0, 55, 22, true),
-
                 create("Repeat right intersect IN", 55, 100, 20, true));
 
         TaskList tasks = new TaskList();
