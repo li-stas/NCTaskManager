@@ -1,7 +1,5 @@
 package ua.edu.sumdu.j2se.Lytovka.tasks;
 
-import java.util.Arrays;
-
 public class LinkedTaskList extends AbstractTaskList {
     private LinkedTaskListNode fistNode; //  = new LinkedTaskListNode();
     private int len; // = 0;
