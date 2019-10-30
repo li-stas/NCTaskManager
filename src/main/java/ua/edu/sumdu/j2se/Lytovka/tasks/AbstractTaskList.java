@@ -2,7 +2,7 @@ package ua.edu.sumdu.j2se.Lytovka.tasks;
 
 public abstract class AbstractTaskList  {
     //private Task[] aTask = null;
-    private int len = 0;
+    private int len; // = 0;
     /**
      *  пустой конструктр.
      */
@@ -27,6 +27,7 @@ public abstract class AbstractTaskList  {
      * @return
      */
     public abstract int size();
+    //public int size() {        return len;    }
     /**
      *  – метод, що повертає задачу, яка
      *  знаходиться на вказаному місці у списку,

@@ -5,6 +5,7 @@ import java.util.Arrays;
 public class ArrayTaskList extends AbstractTaskList {
     private Task[] aTask = null;
     private int len = 0;
+
     /**
      *  пустой конструктр.
      */

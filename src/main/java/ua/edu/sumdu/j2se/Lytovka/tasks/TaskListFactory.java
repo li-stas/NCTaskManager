@@ -2,18 +2,14 @@ package ua.edu.sumdu.j2se.Lytovka.tasks;
 
 public class TaskListFactory {
 
-    public static  ArrayTaskList createTaskList(ListTypes.types type)  {
-        //AbstractTaskList tasksList = new ArrayTaskList();
+   static AbstractTaskList createTaskList(ListTypes.types type)  {
         switch (type) {
             case ARRAY:
-                //AbstractTaskList tasksList = new ArrayTaskList();
-                break;
+                return new ArrayTaskList();
             case LINKED:
-                //AbstractTaskList tasksList = new LinkedTaskList();
-                break;
+               return new LinkedTaskList();
             default:
-                break;
+                return null;
         }
-        return null; //tasksList ;
-    }
+   }
 }

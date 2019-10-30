@@ -1,7 +1,11 @@
 package ua.edu.sumdu.j2se.Lytovka.tasks;
 
 public class Test {
+	//private static final ListTypes.types ARRAY = ;
+
 	public static void main(String[] args) {
+		//TaskListFactory.createTaskList(ARRAY);
+
 		ArrayTaskList tasksList = new ArrayTaskList();
 		Task task1 = new Task("A", 0);
 		Task task2 = new Task("B", 1);
