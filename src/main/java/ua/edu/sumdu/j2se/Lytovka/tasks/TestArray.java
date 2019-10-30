@@ -1,6 +1,6 @@
 package ua.edu.sumdu.j2se.Lytovka.tasks;
 
-public class Test {
+public class TestArray {
 	//private static final ListTypes.types ARRAY = ;
 
 	public static void main(String[] args) {
