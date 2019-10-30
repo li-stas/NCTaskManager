@@ -1,4 +1,7 @@
-package ua.edu.sumdu.j2se.Lytovka.tasks;
+package ua.edu.sumdu.j2se.Lytovka.tasks.MyTest;
+
+import ua.edu.sumdu.j2se.Lytovka.tasks.LinkedTaskList;
+import ua.edu.sumdu.j2se.Lytovka.tasks.Task;
 
 public class TestLinked {
     public static void main(String[] args) {
