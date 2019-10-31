@@ -72,10 +72,10 @@ public class LinkedTaskList extends AbstractTaskList {
             if (index4Del == 1) { // первый узел
                 fistNode = fistNode.getNext();
                 len--;
-            } else if ( false && curNode.getNext() == null ) { // последний узел
+            } else if (false && curNode.getNext() == null) { // последний узел
                 // предыдущая
                 curNode = fistNode;
-                for (int j = 2; j <= len - 1 ; j++) {
+                for (int j = 2; j <= len - 1; j++) {
                     curNode = curNode.getNext();
                 }
                 // сделаем последней
@@ -86,7 +86,7 @@ public class LinkedTaskList extends AbstractTaskList {
                 delNode = curNode; // запомним
                 // предыдущего узла  поиск
                 curNode = fistNode;
-                for (int j = 2; j <= index4Del - 1 ; j++) {
+                for (int j = 2; j <= index4Del - 1; j++) {
                     curNode = curNode.getNext();
                 }
                 curNode.setNext(delNode.getNext());
@@ -119,7 +119,7 @@ public class LinkedTaskList extends AbstractTaskList {
             throw new IndexOutOfBoundsException();
         }
         LinkedTaskListNode curNode = fistNode;
-        for (int j = 2; j <= index + 1 ; j++) {
+        for (int j = 2; j <= index + 1; j++) {
             curNode = curNode.getNext();
         }
         return curNode.getData();
@@ -132,19 +132,10 @@ public class LinkedTaskList extends AbstractTaskList {
      */
     public LinkedTaskList incoming(int from, int to) {
         LinkedTaskList resList = new LinkedTaskList();
-        int nType = 3;
-        if (nType == 3) {
-            for (int i = 0; i < len; i++) {
-                Task elem = getTask(i);
-                int toTime = elem.nextTimeAfter(from);
-                if (elem.isActive() && toTime != -1 && toTime <= to) {
-                    resList.add(elem);
-                }
-            }
-        }
+        int nType = 2;
         if (nType == 2) {
             for (int i = 0; i < len; i++) {
-                if (isIncoming(getTask(i), from, to)) {
+                if (isIncoming(getTask(i), from, to, nType)) {
                     resList.add(getTask(i));
                 }
             }
@@ -153,7 +144,7 @@ public class LinkedTaskList extends AbstractTaskList {
             LinkedTaskListNode curNode = fistNode;
             while (true) {
                 Task elem = curNode.getData();
-                if (isIncoming(elem,  from,  to)) {
+                if (isIncoming(elem,  from,  to, nType)) {
                     resList.add(elem);
                 }
                 curNode = curNode.getNext();
@@ -169,11 +160,11 @@ public class LinkedTaskList extends AbstractTaskList {
      */
     @Override
     public String toString() {
-        String cOut =  "LinkedTaskList{" +
-                "fistNode=" + fistNode +
-                ", len=" + len +
-                ", lastNode=" + lastNode +
-                '}';
+        String cOut =  "LinkedTaskList{"
+                + "fistNode=" + fistNode
+                + ", len=" + len
+                + ", lastNode=" + lastNode
+                + '}';
         if (len != 0) {
             LinkedTaskListNode curNode = fistNode;
             int i = 1;

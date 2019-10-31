@@ -105,8 +105,8 @@ public class ArrayTaskList extends AbstractTaskList {
      */
     public ArrayTaskList incoming(int from, int to) {
         ArrayTaskList resList = new ArrayTaskList();
-        for (int i = 0; i < len ; i++) {
-            if (isIncoming( getTask(i),  from,  to)) {
+        for (int i = 0; i < len; i++) {
+            if (isIncoming(getTask(i),  from,  to, 2)) {
                 resList.add(getTask(i));
             }
         }

@@ -6,7 +6,7 @@ public abstract class AbstractTaskList  {
     /**
      *  пустой конструктр.
      */
-   public AbstractTaskList() {}
+   public AbstractTaskList() { }
     /**
      * метод, що додає до списку задачу.
      * @param task
@@ -52,51 +52,60 @@ public abstract class AbstractTaskList  {
      * @param to
      * @return
      */
-    public boolean isIncoming(Task elem, int from, int to) {
+    public boolean isIncoming(Task elem, int from, int to, int typeChk ) {
         boolean lAdd2res = false;
-        if (!elem.isActive()) {
-            return false;
+        if (typeChk == 2) {
+            int toTime = elem.nextTimeAfter(from);
+            if (elem.isActive() && toTime != -1 && toTime <= to) {
+                return true;
+            }
         }
-        if (elem.isRepeated()) {
-            int testTime = 0;
-            boolean lAdd = false;
-            // начало попадает в анализируемый интервал from-to
-            if (elem.getStartTime() > from && elem.getStartTime() < to) {
-                testTime = elem.getStartTime();
-                lAdd = true;
-            } else { // точку анализа переместим в интервал from-to
-                if (elem.getStartTime() > to) { // Repeat right OUT
-                    lAdd = false;
-                } else if (elem.getEndTime() < from) { //Repeat left OUT
-                    lAdd = false;
-                } else {
-                    int i = 0;
-                    while (true) { // следующие после заданого
-                        i++;
-                        testTime = elem.getStartTime() + (elem.getRepeatInterval() * i);
-                        if (testTime > from) {
-                            lAdd = true;
-                            break; // попали в интервал
-                        }
-                        if (testTime > to) {
-                            lAdd = false;
-                            break; // вышли за интервла задания
-                        }
-                        if (testTime >= elem.getEndTime()) {
-                            lAdd = false;
-                            break;
+        if (typeChk == 1) {
+            if (!elem.isActive()) {
+                return false;
+            }
+            if (elem.isRepeated()) {
+                int testTime = 0;
+                boolean lAdd = false;
+                // начало попадает в анализируемый интервал from-to
+                if (elem.getStartTime() > from && elem.getStartTime() < to) {
+                    testTime = elem.getStartTime();
+                    lAdd = true;
+                } else { // точку анализа переместим в интервал from-to
+                    if (elem.getStartTime() > to) { // Repeat right OUT
+                        lAdd = false;
+                    } else if (elem.getEndTime() < from) { //Repeat left OUT
+                        lAdd = false;
+                    } else {
+                        int i = 0;
+                        while (true) { // следующие после заданого
+                            i++;
+                            testTime = elem.getStartTime() + (elem.getRepeatInterval() * i);
+                            if (testTime > from) {
+                                lAdd = true;
+                                break; // попали в интервал
+                            }
+                            if (testTime > to) {
+                                lAdd = false;
+                                break; // вышли за интервла задания
+                            }
+                            if (testTime >= elem.getEndTime()) {
+                                lAdd = false;
+                                break;
+                            }
                         }
                     }
                 }
+                if (lAdd && testTime + elem.getRepeatInterval() <= to) {
+                    lAdd2res = true;
+                }
+            } else {
+                if (elem.getTime() > from && elem.getTime() <= to) {
+                    lAdd2res = true;
+                }
             }
-            if (lAdd && testTime + elem.getRepeatInterval() <= to) {
-                lAdd2res = true;
-            }
-        } else {
-            if (elem.getTime() > from && elem.getTime() <= to) {
-                lAdd2res = true;
-            }
+            return lAdd2res;
         }
-        return lAdd2res;
+        return false;
     }
 }
