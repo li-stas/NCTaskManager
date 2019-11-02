@@ -5,6 +5,8 @@
  */
 package ua.edu.sumdu.j2se.Lytovka.tasks;
 
+import java.util.Objects;
+
 public class Task {
     /**
      *
@@ -18,6 +20,8 @@ public class Task {
     private int startTime; // початок заданим інтервалом
     private int endTime; // кінець заданим інтервалом
     private int interval; // заданим інтервалом
+
+    private boolean lDEBUG = true;
     /**
      * констрктор задач
      *   що не повторюються:
@@ -273,7 +277,7 @@ public class Task {
                 + "title='" + title + '\''
                 + ", active=" + active
                 + ", repeated=" + repeated;
-        if (false) {
+        if (!lDEBUG) {
             //if (repeated) {
             toString += ", startTime=" + startTime
                     + ", endTime=" + endTime
@@ -284,5 +288,24 @@ public class Task {
             toString += '}';
         }
         return toString;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true; // ссылки ==
+        if (!(o instanceof Task)) return false; // o - объект создан на основе своего класса
+        Task task = (Task) o;
+        return repeated == task.repeated &&
+                active == task.active &&
+                time == task.time &&
+                startTime == task.startTime &&
+                endTime == task.endTime &&
+                interval == task.interval &&
+                Objects.equals(title, task.title);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, repeated, active, time, startTime, endTime, interval);
     }
 }

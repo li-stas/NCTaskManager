@@ -1,10 +1,10 @@
 package ua.edu.sumdu.j2se.Lytovka.tasks;
 
-public class LinkedTaskListNode {
+public class LinkedTaskListNode1 {
     private Task data = null;
-    private LinkedTaskListNode next = null;
+    private LinkedTaskListNode1 next = null;
 
-    public LinkedTaskListNode() {
+    public LinkedTaskListNode1() {
     }
 
 
@@ -16,11 +16,11 @@ public class LinkedTaskListNode {
         this.data = data;
     }
 
-    public LinkedTaskListNode getNext() {
+    public LinkedTaskListNode1 getNext() {
         return next;
     }
 
-    public void setNext(LinkedTaskListNode next) {
+    public void setNext(LinkedTaskListNode1 next) {
         this.next = next;
     }
 }

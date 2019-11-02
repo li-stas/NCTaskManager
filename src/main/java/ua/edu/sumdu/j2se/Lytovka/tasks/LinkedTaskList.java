@@ -1,5 +1,8 @@
 package ua.edu.sumdu.j2se.Lytovka.tasks;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 public class LinkedTaskList extends AbstractTaskList {
     private LinkedTaskListNode fistNode; //  = new LinkedTaskListNode();
     private int len; // = 0;
@@ -103,9 +106,7 @@ public class LinkedTaskList extends AbstractTaskList {
      *  метод, що повертає кількість задач у списку.
      * @return
      */
-    public int size() {
-        return len;
-    }
+    public int size() {        return len;    }
     /**
      *  – метод, що повертає задачу, яка
      *  знаходиться на вказаному місці у списку,
@@ -155,6 +156,7 @@ public class LinkedTaskList extends AbstractTaskList {
         }
         return resList;
     }
+
      /**
      * toString.
      */
@@ -179,6 +181,70 @@ public class LinkedTaskList extends AbstractTaskList {
         }
         return cOut;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof LinkedTaskList)) return false;
+
+        LinkedTaskList that = (LinkedTaskList) o;
+        if (len != that.len) return false;
+        if (len == 0 && that.len == 0 ) return true;
+
+        // преведем в ArrayTaskList
+        ArrayTaskList ArrayTaskListThis = LinkedTaskList2ArrayTaskList(this);
+        ArrayTaskList ArrayTaskListThat = LinkedTaskList2ArrayTaskList(that);
+        return Arrays.equals(ArrayTaskListThis.get_aTask(), ArrayTaskListThat.get_aTask());
+    }
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(LinkedTaskList2ArrayTaskList(this).get_aTask());
+    }
+    /**
+     * перевод из одного формата в другой
+     * @param linkedTaskList
+     * @return
+     */
+    private ArrayTaskList LinkedTaskList2ArrayTaskList(LinkedTaskList linkedTaskList) {
+        LinkedTaskListNode curNode = fistNode;
+        ArrayTaskList tmp = new ArrayTaskList();
+        //int i = 1;
+        while (true) {
+            tmp.add(curNode.getData()); // добавим узел в ArrayTaskList
+            // переход на след. узел
+            curNode = curNode.getNext();
+            if (curNode == null) {
+                break;
+            }
+            //i++;
+        }
+        return tmp;
+    }
+
+    class LinkedTaskListNode {
+        private Task data = null;
+        private LinkedTaskListNode next = null;
+
+        public LinkedTaskListNode() {
+        }
+
+        public Task getData() {
+            return data;
+        }
+
+        public void setData(Task data) {
+            this.data = data;
+        }
+
+        public LinkedTaskListNode getNext() {
+            return next;
+        }
+
+        public void setNext(LinkedTaskListNode next) {
+            this.next = next;
+        }
+    }
+
 }
 
     /*

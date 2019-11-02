@@ -3,8 +3,8 @@ package ua.edu.sumdu.j2se.Lytovka.tasks;
 import java.util.Arrays;
 
 public class ArrayTaskList extends AbstractTaskList {
-    private Task[] aTask = null;
-    private int len = 0;
+    private Task[] aTask; // = null;
+    private int len;// = 0;
 
     /**
      *  пустой конструктр.
@@ -80,9 +80,7 @@ public class ArrayTaskList extends AbstractTaskList {
      *  метод, що повертає кількість задач у списку.
      * @return
      */
-	public int size() {
-	    return len;
-    }
+	public int size() {	    return len;    }
     /**
      *  – метод, що повертає задачу, яка
      *  знаходиться на вказаному місці у списку,
@@ -97,6 +95,11 @@ public class ArrayTaskList extends AbstractTaskList {
         }
         return aTask[index];
     }
+
+    public Task[] get_aTask() {
+        return aTask;
+    }
+
     /**
      * знаходити, які саме задачі будуть виконані хоча б раз у деякому проміжку
      * @param from
@@ -118,6 +121,20 @@ public class ArrayTaskList extends AbstractTaskList {
         }*/
         return resList;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ArrayTaskList)) return false;
+        ArrayTaskList that = (ArrayTaskList) o;
+        return Arrays.equals(aTask, that.aTask);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(aTask);
+    }
+
     /**
      * toString.
      */
