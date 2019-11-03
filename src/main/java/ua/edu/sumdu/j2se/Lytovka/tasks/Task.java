@@ -5,9 +5,10 @@
  */
 package ua.edu.sumdu.j2se.Lytovka.tasks;
 
+import java.io.*;
 import java.util.Objects;
 
-public class Task {
+public class Task implements Serializable, Cloneable {
     /**
      *
      */
@@ -308,4 +309,45 @@ public class Task {
     public int hashCode() {
         return Objects.hash(title, repeated, active, time, startTime, endTime, interval);
     }
+
+    /**
+     * https://habr.com/ru/post/246993/
+     * https://javarush.ru/quests/lectures/questmultithreading.level01.lecture07
+     * https://webcache.googleusercontent.com/search?q=cache:n7q2Jn3mnEkJ:https://javarush.ru/quests/lectures/questmultithreading.level01.lecture07+&cd=2&hl=ru&ct=clnk&gl=ua
+     * @return
+     * @throws CloneNotSupportedException
+     */
+    @Override
+    public Task clone() throws CloneNotSupportedException {
+        return (Task) super.clone();
+    }
+
+    /**
+     * cloneStream()
+     * https://javarush.ru/groups/posts/2022-serializacija-i-deserializacija-v-java
+     * @return
+     */
+    public Task cloneStream() {
+        try {
+            return cloneTask();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    private Task cloneTask() throws IOException, ClassNotFoundException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream ous = new ObjectOutputStream(baos);
+        // задачу  объекта в поток байтов
+        ous.writeObject(this);
+        ous.close();
+        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+        ObjectInputStream ois = new ObjectInputStream(bais);
+        //эксгумация потока в Задачу
+        //Task cloneTask = (Task) ois.readObject();
+        return (Task) ois.readObject();
+    }
+
 }

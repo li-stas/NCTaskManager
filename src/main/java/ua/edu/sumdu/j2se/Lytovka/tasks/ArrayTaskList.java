@@ -1,8 +1,9 @@
 package ua.edu.sumdu.j2se.Lytovka.tasks;
 
+import java.io.*;
 import java.util.Arrays;
 
-public class ArrayTaskList extends AbstractTaskList {
+public class ArrayTaskList extends AbstractTaskList implements Serializable, Cloneable {
     private Task[] aTask; // = null;
     private int len;// = 0;
 
@@ -126,7 +127,10 @@ public class ArrayTaskList extends AbstractTaskList {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof ArrayTaskList)) return false;
+
         ArrayTaskList that = (ArrayTaskList) o;
+        if (len == 0 && that.len == 0 ) return true;
+
         return Arrays.equals(aTask, that.aTask);
     }
 
@@ -134,6 +138,43 @@ public class ArrayTaskList extends AbstractTaskList {
     public int hashCode() {
         return Arrays.hashCode(aTask);
     }
+
+    @Override
+    public ArrayTaskList clone() throws CloneNotSupportedException {
+        ArrayTaskList tmpTaskList =  (ArrayTaskList) super.clone();
+        tmpTaskList.aTask = null;
+        tmpTaskList.len = 0;
+        for (int i = 0; i < len; i++) {
+            Task tmp = getTask(i);
+            Task tmpClone = tmp.clone();
+            tmpTaskList.add(tmpClone);
+        }
+        return tmpTaskList;
+    }
+
+    public ArrayTaskList cloneStream() {
+        try {
+            return cloneArrayTaskList();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    private ArrayTaskList cloneArrayTaskList() throws IOException, ClassNotFoundException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream ous = new ObjectOutputStream(baos);
+        // задачу  объекта в поток байтов
+        ous.writeObject(this);
+        ous.close();
+        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+        ObjectInputStream ois = new ObjectInputStream(bais);
+        //эксгумация потока в Задачу
+        //Task cloneTask = (Task) ois.readObject();
+        return (ArrayTaskList) ois.readObject();
+    }
+
 
     /**
      * toString.

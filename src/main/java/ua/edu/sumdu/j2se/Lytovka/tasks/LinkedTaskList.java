@@ -1,9 +1,10 @@
 package ua.edu.sumdu.j2se.Lytovka.tasks;
 
+import java.io.*;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class LinkedTaskList extends AbstractTaskList {
+public class LinkedTaskList extends AbstractTaskList implements Serializable {
     private LinkedTaskListNode fistNode; //  = new LinkedTaskListNode();
     private int len; // = 0;
     private LinkedTaskListNode lastNode; // = null;
@@ -221,7 +222,32 @@ public class LinkedTaskList extends AbstractTaskList {
         return tmp;
     }
 
-    class LinkedTaskListNode {
+    //public LinkedTaskList cloneStream() {
+    public LinkedTaskList clone() {
+        try {
+            return cloneLinkedTaskList();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    private LinkedTaskList cloneLinkedTaskList() throws IOException, ClassNotFoundException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream ous = new ObjectOutputStream(baos);
+        // задачу  объекта в поток байтов
+        ous.writeObject(this);
+        ous.close();
+        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+        ObjectInputStream ois = new ObjectInputStream(bais);
+        //эксгумация потока в Задачу
+        //Task cloneTask = (Task) ois.readObject();
+        return (LinkedTaskList) ois.readObject();
+    }
+
+
+    class LinkedTaskListNode implements Serializable {
         private Task data = null;
         private LinkedTaskListNode next = null;
 
