@@ -3,11 +3,18 @@ package ua.edu.sumdu.j2se.Lytovka.tasks.MyTest;
 import ua.edu.sumdu.j2se.Lytovka.tasks.ArrayTaskList;
 import ua.edu.sumdu.j2se.Lytovka.tasks.Task;
 
+import java.util.ArrayList;
+
 public class TestArray {
 	//private static final ListTypes.types ARRAY = ;
 
 	public static void main(String[] args) throws CloneNotSupportedException {
 		//TaskListFactory.createTaskList(ARRAY);
+		Task task2 = new Task("some", 10, 100, 20);
+		task2.setActive(true);
+		int next2 = task2.nextTimeAfter(85);
+		System.out.println(next2);
+		System.exit(999);
 
 		ArrayTaskList tasksList = new ArrayTaskList();
 
@@ -18,22 +25,22 @@ public class TestArray {
 		}
 
 
-		Task task2 = new Task("B", 1);
-		Task task3 = new Task("C", 2);
-		tasksList.add(task2);
-		tasksList.add(task3);
+		//Task task2 = new Task("B", 1);
+		//Task task3 = new Task("C", 2);
+		//tasksList.add(task2);
+		//tasksList.add(task3);
 
  		Task task1 = new Task("A", 0);
 		tasksList.add(task1);
 
 		// клонирование
-		ArrayTaskList tskClone =  tasksList.cloneStream();
+		ArrayTaskList tskClone =  tasksList.clone();
 		System.out.println("tasksList->"+tasksList);
 		System.out.println("tskClone->"+tskClone);
 		System.out.println("");
 		tskClone.getTask(0).setTitle("A1");
-		tskClone.getTask(1).setTitle("B1");
-		tskClone.getTask(2).setTitle("C1");
+		//tskClone.getTask(1).setTitle("B1");
+		//tskClone.getTask(2).setTitle("C1");
 		System.out.println("tasksList="+tasksList);
 		System.out.println("tskClone="+tskClone);
 		System.exit(999);

@@ -182,9 +182,48 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable {
         }
         return cOut;
     }
-
     @Override
     public boolean equals(Object o) {
+        boolean lEq = true;
+        if (this == o) return true;
+        if (!(o instanceof LinkedTaskList)) return false;
+
+        LinkedTaskList that = (LinkedTaskList) o;
+        if (len != that.len) return false;
+        if (len == 0 && that.len == 0) return true;
+
+        LinkedTaskListNode curNodeThat = that.fistNode;
+        LinkedTaskListNode curNodeThis = this.fistNode;
+
+        while (true) {
+            // Task taskThat = curNodeThat.getData();            Task taskThis = curNodeThis.getData();
+            if (!curNodeThat.getData().equals(curNodeThis.getData())) {
+                lEq = false;
+                break;
+            }
+            // переход на след. узел
+            curNodeThis = curNodeThis.getNext();
+            curNodeThat = curNodeThat.getNext();
+            if (curNodeThis == null) {
+                break;
+            }
+        }
+        return lEq;
+    }
+    @Override
+    public int hashCode() {
+        Task[] tmp = new Task[len];
+        LinkedTaskListNode curNodeThis = fistNode;
+        int i = 0;
+        while (true) {
+            tmp[i++] =  curNodeThis.data;
+            if (curNodeThis == null) {
+                break;
+            }
+        }
+        return Arrays.hashCode(tmp);
+    }
+    public boolean equals2ArrayTaskList(Object o) {
         if (this == o) return true;
         if (!(o instanceof LinkedTaskList)) return false;
 
@@ -197,8 +236,7 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable {
         ArrayTaskList ArrayTaskListThat = LinkedTaskList2ArrayTaskList(that);
         return Arrays.equals(ArrayTaskListThis.get_aTask(), ArrayTaskListThat.get_aTask());
     }
-    @Override
-    public int hashCode() {
+    public int hashCode2ArrayTaskList() {
         return Arrays.hashCode(LinkedTaskList2ArrayTaskList(this).get_aTask());
     }
     /**
@@ -242,7 +280,6 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable {
         ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
         ObjectInputStream ois = new ObjectInputStream(bais);
         //эксгумация потока в Задачу
-        //Task cloneTask = (Task) ois.readObject();
         return (LinkedTaskList) ois.readObject();
     }
 

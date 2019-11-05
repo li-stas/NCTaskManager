@@ -142,6 +142,24 @@ public class ArrayTaskList extends AbstractTaskList implements Serializable, Clo
     @Override
     public ArrayTaskList clone() throws CloneNotSupportedException {
         ArrayTaskList tmpTaskList =  (ArrayTaskList) super.clone();
+        tmpTaskList.aTask = Arrays.copyOf(this.aTask, this.len);
+        tmpTaskList.len = this.len;
+        int i = 0;
+        for ( Task tmp: this.aTask  ) {
+            Task tmpClone = tmp.clone();
+            tmpTaskList.aTask[i++] = tmpClone;
+        }
+        /*
+        for (int i = 0; i < len; i++) {
+            Task tmp = getTask(i);
+            Task tmpClone = tmp.clone();
+            tmpTaskList.aTask[i] = tmpClone;
+        } */
+        return tmpTaskList;
+    }
+
+    public ArrayTaskList cloneClear() throws CloneNotSupportedException {
+        ArrayTaskList tmpTaskList =  (ArrayTaskList) super.clone();
         tmpTaskList.aTask = null;
         tmpTaskList.len = 0;
         for (int i = 0; i < len; i++) {
