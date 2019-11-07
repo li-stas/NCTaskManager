@@ -1,6 +1,6 @@
 package ua.edu.sumdu.j2se.Lytovka.tasks;
 
-public abstract class AbstractTaskList  {
+public abstract class AbstractTaskList { //implements Iterable  {
     //private Task[] aTask = null;
     //private int len; // = 0;
     /**
@@ -44,7 +44,6 @@ public abstract class AbstractTaskList  {
      * @return
      */
     public abstract AbstractTaskList incoming(int from, int to);
-
     /**
      *  задача буде виконана  деякому проміжку?
      * @param elem

@@ -2,6 +2,7 @@ package ua.edu.sumdu.j2se.Lytovka.tasks.MyTest;
 
 import ua.edu.sumdu.j2se.Lytovka.tasks.Task;
 
+import javax.management.openmbean.ArrayType;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -10,6 +11,7 @@ public class Test4Main {
 		System.out.println("res.size()=");
 
 		//Task t = new Task();
+
 
 		ArrayList a1 = new ArrayList(Arrays.asList(new String[]{"A1", "A2"}));
 		System.out.println("a1" + a1);

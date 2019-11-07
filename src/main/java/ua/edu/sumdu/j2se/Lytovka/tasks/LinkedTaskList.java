@@ -2,9 +2,9 @@ package ua.edu.sumdu.j2se.Lytovka.tasks;
 
 import java.io.*;
 import java.util.Arrays;
-import java.util.Objects;
+import java.util.Iterator;
 
-public class LinkedTaskList extends AbstractTaskList implements Serializable {
+public class LinkedTaskList extends AbstractTaskList implements Serializable, Iterable {
     private LinkedTaskListNode fistNode; //  = new LinkedTaskListNode();
     private int len; // = 0;
     private LinkedTaskListNode lastNode; // = null;
@@ -38,7 +38,7 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable {
             len++;
         }
 
-    };
+    }
     /**
      * – метод, що видаляє задачу із списку
      * і повертає істину, якщо така задача була у списку.
@@ -157,7 +157,6 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable {
         }
         return resList;
     }
-
      /**
      * toString.
      */
@@ -182,6 +181,11 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable {
         }
         return cOut;
     }
+    /**
+     *
+     * @param o
+     * @return
+     */
     @Override
     public boolean equals(Object o) {
         boolean lEq = true;
@@ -210,6 +214,10 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable {
         }
         return lEq;
     }
+    /**
+     *
+     * @return
+     */
     @Override
     public int hashCode() {
         Task[] tmp = new Task[len];
@@ -223,44 +231,12 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable {
         }
         return Arrays.hashCode(tmp);
     }
-    public boolean equals2ArrayTaskList(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof LinkedTaskList)) return false;
-
-        LinkedTaskList that = (LinkedTaskList) o;
-        if (len != that.len) return false;
-        if (len == 0 && that.len == 0 ) return true;
-
-        // преведем в ArrayTaskList
-        ArrayTaskList ArrayTaskListThis = LinkedTaskList2ArrayTaskList(this);
-        ArrayTaskList ArrayTaskListThat = LinkedTaskList2ArrayTaskList(that);
-        return Arrays.equals(ArrayTaskListThis.get_aTask(), ArrayTaskListThat.get_aTask());
-    }
-    public int hashCode2ArrayTaskList() {
-        return Arrays.hashCode(LinkedTaskList2ArrayTaskList(this).get_aTask());
-    }
     /**
-     * перевод из одного формата в другой
-     * @param linkedTaskList
+     * //public LinkedTaskList cloneStream()
+     * https://habr.com/ru/post/246993/
+     * https://javarush.ru/groups/posts/2022-serializacija-i-deserializacija-v-java
      * @return
      */
-    private ArrayTaskList LinkedTaskList2ArrayTaskList(LinkedTaskList linkedTaskList) {
-        LinkedTaskListNode curNode = fistNode;
-        ArrayTaskList tmp = new ArrayTaskList();
-        //int i = 1;
-        while (true) {
-            tmp.add(curNode.getData()); // добавим узел в ArrayTaskList
-            // переход на след. узел
-            curNode = curNode.getNext();
-            if (curNode == null) {
-                break;
-            }
-            //i++;
-        }
-        return tmp;
-    }
-
-    //public LinkedTaskList cloneStream() {
     public LinkedTaskList clone() {
         try {
             return cloneLinkedTaskList();
@@ -272,6 +248,7 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable {
         return null;
     }
     private LinkedTaskList cloneLinkedTaskList() throws IOException, ClassNotFoundException {
+        // создаем 2 потока для сериализации объекта и сохранения его в байты (файл)
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream ous = new ObjectOutputStream(baos);
         // задачу  объекта в поток байтов
@@ -283,7 +260,14 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable {
         return (LinkedTaskList) ois.readObject();
     }
 
+    @Override
+    public Iterator iterator() {
+        return null;
+    }
 
+    /**
+     *
+     */
     class LinkedTaskListNode implements Serializable {
         private Task data = null;
         private LinkedTaskListNode next = null;
@@ -308,6 +292,29 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable {
         }
     }
 
+
+
+
+    /**
+     * перевод из одного формата в другой
+     * @param linkedTaskList
+     * @return
+     */
+    private ArrayTaskList LinkedTaskList2ArrayTaskList(LinkedTaskList linkedTaskList) {
+        LinkedTaskListNode curNode = fistNode;
+        ArrayTaskList tmp = new ArrayTaskList();
+        //int i = 1;
+        while (true) {
+            tmp.add(curNode.getData()); // добавим узел в ArrayTaskList
+            // переход на след. узел
+            curNode = curNode.getNext();
+            if (curNode == null) {
+                break;
+            }
+            //i++;
+        }
+        return tmp;
+    }
 }
 
     /*

@@ -2,10 +2,12 @@ package ua.edu.sumdu.j2se.Lytovka.tasks;
 
 import java.io.*;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-public class ArrayTaskList extends AbstractTaskList implements Serializable, Cloneable {
+public class ArrayTaskList extends AbstractTaskList implements  Cloneable, Iterable<Task> {
     private Task[] aTask; // = null;
-    private int len;// = 0;
+    private int len; // = 0;
 
     /**
      *  пустой конструктр.
@@ -59,7 +61,8 @@ public class ArrayTaskList extends AbstractTaskList implements Serializable, Clo
         }
         // удаление выбранного и смещение елементов
         if (index4Del >= 0) {
-
+            ADelAndASize(index4Del);
+            /*
             // ADEL(,index4Del)
             // удаление выбранного и смещение елементов
             for (int i = index4Del; i < len - 1; i++) {
@@ -73,6 +76,7 @@ public class ArrayTaskList extends AbstractTaskList implements Serializable, Clo
             aTask = aTmp; // замена ссылки
             len--;
             // end ASIZE
+             */
             return true;
         }
         return false;
@@ -97,10 +101,7 @@ public class ArrayTaskList extends AbstractTaskList implements Serializable, Clo
         return aTask[index];
     }
 
-    public Task[] get_aTask() {
-        return aTask;
-    }
-
+    //public Task[] get_aTask() {       return aTask;    }
     /**
      * знаходити, які саме задачі будуть виконані хоча б раз у деякому проміжку
      * @param from
@@ -109,43 +110,56 @@ public class ArrayTaskList extends AbstractTaskList implements Serializable, Clo
      */
     public ArrayTaskList incoming(int from, int to) {
         ArrayTaskList resList = new ArrayTaskList();
-        for (int i = 0; i < len; i++) {
-            if (isIncoming(getTask(i),  from,  to, 2)) {
-                resList.add(getTask(i));
+        if (true) { // fori
+            for (int i = 0; i < len; i++) {
+                if (isIncoming(getTask(i), from, to, 2)) {
+                    resList.add(getTask(i));
+                }
+            }
+        } else { // foreach
+            for (Task elem : aTask) {
+                if (isIncoming(elem, from, to, 2)) {
+                    resList.add(elem);
+                }
             }
         }
-        /*
-        for (Task elem : aTask) {
-            if (isIncoming(elem,  from,  to)) {
-                resList.add(elem);
-            }
-        }*/
         return resList;
     }
-
+    /**
+     *
+     * @param o
+     * @return
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof ArrayTaskList)) return false;
 
         ArrayTaskList that = (ArrayTaskList) o;
-        if (len == 0 && that.len == 0 ) return true;
+        if (len == 0 && that.len == 0) return true;
 
         return Arrays.equals(aTask, that.aTask);
     }
-
+    /**
+     *
+     * @return
+     */
     @Override
     public int hashCode() {
         return Arrays.hashCode(aTask);
     }
-
+    /**
+     *
+     * @return
+     * @throws CloneNotSupportedException
+     */
     @Override
     public ArrayTaskList clone() throws CloneNotSupportedException {
         ArrayTaskList tmpTaskList =  (ArrayTaskList) super.clone();
         tmpTaskList.aTask = Arrays.copyOf(this.aTask, this.len);
         tmpTaskList.len = this.len;
         int i = 0;
-        for ( Task tmp: this.aTask  ) {
+        for (Task tmp: this.aTask) {
             Task tmpClone = tmp.clone();
             tmpTaskList.aTask[i++] = tmpClone;
         }
@@ -158,7 +172,9 @@ public class ArrayTaskList extends AbstractTaskList implements Serializable, Clo
         return tmpTaskList;
     }
 
-    public ArrayTaskList cloneClear() throws CloneNotSupportedException {
+
+
+    public ArrayTaskList cloneClearArray() throws CloneNotSupportedException {
         ArrayTaskList tmpTaskList =  (ArrayTaskList) super.clone();
         tmpTaskList.aTask = null;
         tmpTaskList.len = 0;
@@ -180,6 +196,7 @@ public class ArrayTaskList extends AbstractTaskList implements Serializable, Clo
         }
         return null;
     }
+
     private ArrayTaskList cloneArrayTaskList() throws IOException, ClassNotFoundException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream ous = new ObjectOutputStream(baos);
@@ -192,8 +209,6 @@ public class ArrayTaskList extends AbstractTaskList implements Serializable, Clo
         //Task cloneTask = (Task) ois.readObject();
         return (ArrayTaskList) ois.readObject();
     }
-
-
     /**
      * toString.
      */
@@ -203,6 +218,52 @@ public class ArrayTaskList extends AbstractTaskList implements Serializable, Clo
                 + "aTask=" + Arrays.toString(aTask)
                 + ", len=" + len
                 + '}';
+    }
+
+    /**
+     * https://riptutorial.com/ru/java/example/686/%D1%81%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5-%D1%81%D0%BE%D0%B1%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-iterable-
+     * http://qaru.site/questions/77139/can-we-write-our-own-iterator-in-java
+     * @return
+     */
+    @Override
+    public Iterator<Task> iterator() {
+        return new Iterator<Task>() {
+            private int curInd = 0;
+            private boolean lCallNext = false;
+            @Override //Функция hasNext() проверяет, находится ли итератор в конце
+            public boolean hasNext() {
+                return curInd < len && aTask[curInd] != null;
+            }
+
+            @Override
+            public Task next() {
+                lCallNext = true;
+                return aTask[curInd++];
+            }
+
+            @Override
+            public void remove() {
+                if (!lCallNext) throw new IllegalStateException();
+                if (! hasNext())   throw new NoSuchElementException();
+                curInd--; // DEL текущий
+                ADelAndASize(curInd);
+            }
+
+        };
+    }
+    private void ADelAndASize(int index4Del) {
+        // ADEL(,index4Del)
+        // удаление выбранного и смещение елементов
+        for (int i = index4Del; i < len - 1; i++) {
+            aTask[i] = aTask[i + 1];
+        }
+        aTask[len - 1] = null;
+        /// end ADEL
+        // ASIZE()
+        Task[] aTmp = new Task[len - 1]; // создаем уменьшенный размер
+        System.arraycopy(aTask, 0, aTmp, 0, len - 1); // копирование в новый
+        aTask = aTmp; // замена ссылки
+        len--;
     }
 }
 /*
