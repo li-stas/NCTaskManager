@@ -228,27 +228,31 @@ public class ArrayTaskList extends AbstractTaskList implements  Cloneable, Itera
     @Override
     public Iterator<Task> iterator() {
         return new Iterator<Task>() {
-            private int curInd = 0;
-            private boolean lCallNext = false;
+            private int curInd = 0; // фокус просмотра
+            private boolean lCallNext = false; // флаг блокировки вызова Удаления без высова метода След
+
             @Override //Функция hasNext() проверяет, находится ли итератор в конце
             public boolean hasNext() {
+                // э-ты еще есть пока curInd < длины массива и элемент не пустой
                 return curInd < len && aTask[curInd] != null;
             }
 
             @Override
             public Task next() {
                 lCallNext = true;
-                return aTask[curInd++];
+                return aTask[curInd++]; // вывод текущего и перенос на следующий фокуса просмора
             }
 
             @Override
             public void remove() {
+                //"Виклик Iterator.remove без next повинен призводити до помилки"
                 if (!lCallNext) throw new IllegalStateException();
+                // удалять нечего
                 if (! hasNext())   throw new NoSuchElementException();
+                // возрат фокуса просмотра назад
                 curInd--; // DEL текущий
                 ADelAndASize(curInd);
             }
-
         };
     }
     private void ADelAndASize(int index4Del) {
