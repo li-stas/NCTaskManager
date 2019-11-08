@@ -27,7 +27,7 @@ public class T5_LinkedTaskListCloneTest {
 		return tasks;
 	}
 
-	@Test(timeout = 100)
+	@Test(timeout = 150)
 	public void part1_testClone() {
 		TaskList original = createList();
 		TaskList copy = original.clone();

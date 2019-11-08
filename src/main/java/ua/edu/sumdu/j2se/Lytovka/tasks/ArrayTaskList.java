@@ -249,7 +249,7 @@ public class ArrayTaskList extends AbstractTaskList implements  Cloneable, Itera
                 if (!lCallNext) throw new IllegalStateException();
                 // удалять нечего
                 if (! hasNext())   throw new NoSuchElementException();
-                // возрат фокуса просмотра назад
+                // возврат фокуса просмотра назад
                 curInd--; // DEL текущий
                 ADelAndASize(curInd);
             }
@@ -268,6 +268,7 @@ public class ArrayTaskList extends AbstractTaskList implements  Cloneable, Itera
         System.arraycopy(aTask, 0, aTmp, 0, len - 1); // копирование в новый
         aTask = aTmp; // замена ссылки
         len--;
+        // end ASIZE
     }
 }
 /*

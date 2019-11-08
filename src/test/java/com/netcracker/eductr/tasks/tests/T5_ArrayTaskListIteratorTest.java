@@ -60,7 +60,6 @@ public class T5_ArrayTaskListIteratorTest {
 		catch (IllegalStateException e) {
 			// OK
 		}
-		System.out.println("__LINE__"+63);
 		String actual = new Task(it.next()).getTitle();
 		String expected = etalonIt.next();
 		Assert.assertEquals("При ітерації задачі повинні зберігати порядок. Задача " + actual + " знаходиться не на своєму місці", expected, actual);

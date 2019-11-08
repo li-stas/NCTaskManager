@@ -3,6 +3,7 @@ package ua.edu.sumdu.j2se.Lytovka.tasks;
 import java.io.*;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class LinkedTaskList extends AbstractTaskList implements Serializable, Iterable {
     private LinkedTaskListNode fistNode; //  = new LinkedTaskListNode();
@@ -56,7 +57,7 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable, It
         int index4Del = -1;
 
         LinkedTaskListNode curNode = fistNode;
-        LinkedTaskListNode delNode;
+
         int i = 1;
         while (true) {
             if (cTitle.startsWith(curNode.getData().getTitle())) {
@@ -73,32 +74,37 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable, It
         // System.out.printf("index4Del %d, len %d \n",index4Del, len);
         // удаление выбранного и смещение елементов
         if (index4Del >= 0) {
-            if (index4Del == 1) { // первый узел
-                fistNode = fistNode.getNext();
-                len--;
-            } else if (false && curNode.getNext() == null) { // последний узел
-                // предыдущая
-                curNode = fistNode;
-                for (int j = 2; j <= len - 1; j++) {
-                    curNode = curNode.getNext();
-                }
-                // сделаем последней
-                curNode.setNext(null);
-                lastNode = curNode;
-                len--;
-            } else  {
-                delNode = curNode; // запомним
-                // предыдущего узла  поиск
-                curNode = fistNode;
-                for (int j = 2; j <= index4Del - 1; j++) {
-                    curNode = curNode.getNext();
-                }
-                curNode.setNext(delNode.getNext());
-                if (delNode.getNext() == null) {
+
+            ADelAndASize(index4Del, curNode);
+            /*
+            if (false) {
+                if (index4Del == 1) { // первый узел
+                    fistNode = fistNode.getNext();
+                    len--;
+                } else if (false && curNode.getNext() == null) { // последний узел
+                    // предыдущая
+                    curNode = fistNode;
+                    for (int j = 2; j <= len - 1; j++) {
+                        curNode = curNode.getNext();
+                    }
+                    // сделаем последней
+                    curNode.setNext(null);
                     lastNode = curNode;
+                    len--;
+                } else {
+                    LinkedTaskListNode delNode = curNode; // запомним
+                    // предыдущего узла  поиск
+                    curNode = fistNode;
+                    for (int j = 2; j <= index4Del - 1; j++) {
+                        curNode = curNode.getNext();
+                    }
+                    curNode.setNext(delNode.getNext());
+                    if (delNode.getNext() == null) {
+                        lastNode = curNode;
+                    }
+                    len--;
                 }
-                len--;
-            }
+            } */
             return true;
         }
         return false;
@@ -261,9 +267,86 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable, It
     }
 
     @Override
-    public Iterator iterator() {
-        return null;
+    public Iterator<Task> iterator() {
+        return new Iterator<Task>() {
+            private int curInd = 1; // фокус просмотра
+            private boolean lCallNext = false; // флаг блокировки вызова Удаления без высова метода След
+
+            @Override
+            public boolean hasNext() {
+                return len != 0 && curInd <= len;
+            }
+
+            @Override
+            public Task next() {
+                lCallNext = true;
+                LinkedTaskListNode curNode = curNode(curInd, fistNode);
+                curInd++;
+                return curNode.getData();
+            }
+
+            @Override
+            public void remove() {
+                //"Виклик Iterator.remove без next повинен призводити до помилки"
+                if (!lCallNext) throw new IllegalStateException();
+                // удалять нечего
+                if (! hasNext())   throw new NoSuchElementException();
+                // возврат фокуса просмотра назад
+                curInd--; // DEL текущий
+                LinkedTaskListNode curNode = curNode(curInd, fistNode);
+                ADelAndASize(curInd, curNode);
+            }
+        };
     }
+    private LinkedTaskListNode curNode(int curInd, LinkedTaskListNode curNode) {
+        // адрес Ноды
+        if (curInd > 1) {
+            int i = 2;
+            while (true) {
+                curNode = curNode.getNext();
+                if (curNode == null) {
+                    break;
+                }
+                if (i == curInd) {
+                    break;
+                }
+                i++;
+            }
+        }
+        return curNode;
+    }
+
+    private void  ADelAndASize(int index4Del, LinkedTaskListNode curNode) {
+        //LinkedTaskListNode curNode = fistNode;
+        //LinkedTaskListNode delNode;
+        if (index4Del == 1) { // первый узел
+            fistNode = fistNode.getNext();
+            len--;
+        } else if (false && curNode.getNext() == null) { // последний узел
+            // предыдущая
+            curNode = fistNode;
+            for (int j = 2; j <= len - 1; j++) {
+                curNode = curNode.getNext();
+            }
+            // сделаем последней
+            curNode.setNext(null);
+            lastNode = curNode;
+            len--;
+        } else {
+            LinkedTaskListNode delNode = curNode; // запомним
+            // предыдущего узла  поиск
+            curNode = fistNode;
+            for (int j = 2; j <= index4Del - 1; j++) {
+                curNode = curNode.getNext();
+            }
+            curNode.setNext(delNode.getNext());
+            if (delNode.getNext() == null) {
+                lastNode = curNode;
+            }
+            len--;
+        }
+    }
+
 
     /**
      *
