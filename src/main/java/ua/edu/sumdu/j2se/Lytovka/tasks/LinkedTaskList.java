@@ -74,37 +74,7 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable, It
         // System.out.printf("index4Del %d, len %d \n",index4Del, len);
         // удаление выбранного и смещение елементов
         if (index4Del >= 0) {
-
             ADelAndASize(index4Del, curNode);
-            /*
-            if (false) {
-                if (index4Del == 1) { // первый узел
-                    fistNode = fistNode.getNext();
-                    len--;
-                } else if (false && curNode.getNext() == null) { // последний узел
-                    // предыдущая
-                    curNode = fistNode;
-                    for (int j = 2; j <= len - 1; j++) {
-                        curNode = curNode.getNext();
-                    }
-                    // сделаем последней
-                    curNode.setNext(null);
-                    lastNode = curNode;
-                    len--;
-                } else {
-                    LinkedTaskListNode delNode = curNode; // запомним
-                    // предыдущего узла  поиск
-                    curNode = fistNode;
-                    for (int j = 2; j <= index4Del - 1; j++) {
-                        curNode = curNode.getNext();
-                    }
-                    curNode.setNext(delNode.getNext());
-                    if (delNode.getNext() == null) {
-                        lastNode = curNode;
-                    }
-                    len--;
-                }
-            } */
             return true;
         }
         return false;
@@ -265,9 +235,64 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable, It
         //эксгумация потока в Задачу
         return (LinkedTaskList) ois.readObject();
     }
-
-    @Override
+    //@Override
     public Iterator<Task> iterator() {
+        return new Iterator<Task>() {
+            private int curInd = 1; // фокус просмотра
+            private boolean lCallNext = false; // флаг блокировки вызова Удаления без высова метода След
+            private LinkedTaskListNode curNodeI = fistNode;
+
+            @Override
+            public boolean hasNext() {
+                return len != 0 && curInd <= len;
+            }
+
+            @Override
+            public Task next() {
+                lCallNext = true;
+                if (curInd != 1) {
+                    curNodeI = curNodeI.getNext();
+                }
+                curInd++;
+                return curNodeI.getData();
+            }
+
+            @Override
+            public void remove() {
+                //"Виклик Iterator.remove без next повинен призводити до помилки"
+                if (!lCallNext) throw new IllegalStateException();
+                // удалять нечего
+                if (! hasNext())   throw new NoSuchElementException();
+                // возврат фокуса просмотра назад
+                curInd--; // DEL текущий
+                if (curInd == 1) {
+                    fistNode = fistNode.getNext();
+                    len--;
+
+                    curNodeI = fistNode;
+                } else {
+                    LinkedTaskListNode curNode;
+
+                    LinkedTaskListNode delNode = curNodeI; // запомним
+                    // предыдущего узла  поиск
+                    curNode = fistNode;
+                    for (int j = 2; j <= curInd - 1; j++) {
+                        curNode = curNode.getNext();
+                    }
+                    curNode.setNext(delNode.getNext());
+                    if (delNode.getNext() == null) {
+                        lastNode = curNode;
+                    }
+                    len--;
+
+                    curNodeI = curNode;
+
+                }
+            }
+        };
+    }
+    //@Override
+    public Iterator<Task> iterator3() {
         return new Iterator<Task>() {
             private int curInd = 1; // фокус просмотра
             private boolean lCallNext = false; // флаг блокировки вызова Удаления без высова метода След
@@ -294,6 +319,7 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable, It
                 // возврат фокуса просмотра назад
                 curInd--; // DEL текущий
                 LinkedTaskListNode curNode = curNode(curInd, fistNode);
+                System.out.println(curNode.getData() +" "+curInd);
                 ADelAndASize(curInd, curNode);
             }
         };
@@ -322,7 +348,7 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable, It
         if (index4Del == 1) { // первый узел
             fistNode = fistNode.getNext();
             len--;
-        } else if (false && curNode.getNext() == null) { // последний узел
+        }  else if (false && curNode.getNext() == null) { // последний узел
             // предыдущая
             curNode = fistNode;
             for (int j = 2; j <= len - 1; j++) {
