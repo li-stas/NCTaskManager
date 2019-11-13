@@ -7,8 +7,8 @@ import java.util.NoSuchElementException;
 
 public class LinkedTaskList extends AbstractTaskList implements Serializable, Iterable {
     private LinkedTaskListNode fistNode; //  = new LinkedTaskListNode();
-    private int len; // = 0;
     private LinkedTaskListNode lastNode; // = null;
+    private int len; // = 0;
     /**
      *  пустой конструктр.
      */
@@ -109,29 +109,13 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable, It
      * @return
      */
     public LinkedTaskList incoming(int from, int to) {
-        LinkedTaskList resList = new LinkedTaskList();
-        int nType = 2;
-        if (nType == 2) {
+       AbstractTaskList resList = new LinkedTaskList();
             for (int i = 0; i < len; i++) {
-                if (isIncoming(getTask(i), from, to, nType)) {
+                if (isIncoming(getTask(i), from, to, 2)) {
                     resList.add(getTask(i));
                 }
             }
-        }
-        if (nType == 1) {
-            LinkedTaskListNode curNode = fistNode;
-            while (true) {
-                Task elem = curNode.getData();
-                if (isIncoming(elem,  from,  to, nType)) {
-                    resList.add(elem);
-                }
-                curNode = curNode.getNext();
-                if (curNode == null) {
-                    break;
-                }
-            }
-        }
-        return resList;
+        return (LinkedTaskList) resList;
     }
      /**
      * toString.
@@ -215,7 +199,16 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable, It
      */
     public LinkedTaskList clone() {
         try {
-            return cloneLinkedTaskList();
+            // создаем 2 потока для сериализации объекта и сохранения его в байты (файл)
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ObjectOutputStream ous = new ObjectOutputStream(baos);
+            // задачу  объекта в поток байтов
+            ous.writeObject(this);
+            ous.close();
+            ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+            ObjectInputStream ois = new ObjectInputStream(bais);
+            //эксгумация потока в Задачу
+            return (LinkedTaskList) ois.readObject();    //return cloneLinkedTaskList();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {

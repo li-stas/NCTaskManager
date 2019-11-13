@@ -7,6 +7,8 @@ public class TestLinked {
     public static void main(String[] args) throws CloneNotSupportedException {
         boolean lEquals;
 
+        // Task task10 = new Task();
+
         LinkedTaskList tasksList = new LinkedTaskList();
         Task task1 = new Task("A", 0);
         Task task2 = new Task("B", 1);

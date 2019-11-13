@@ -1,16 +1,20 @@
 package ua.edu.sumdu.j2se.Lytovka.tasks.MyTest;
 
 import ua.edu.sumdu.j2se.Lytovka.tasks.Task;
+import ua.edu.sumdu.j2se.Lytovka.tasks.TaskListFactory;
 
 import javax.management.openmbean.ArrayType;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static ua.edu.sumdu.j2se.Lytovka.tasks.ListTypes.types.ARRAY;
+
 public class Test4Main {
 	public static void main(String[] args) {
 		System.out.println("res.size()=");
+		TaskListFactory.createTaskList(ARRAY);
 
-		//Task t = new Task();
+		Task t ;//= new Task();
 
 
 		ArrayList a1 = new ArrayList(Arrays.asList(new String[]{"A1", "A2"}));

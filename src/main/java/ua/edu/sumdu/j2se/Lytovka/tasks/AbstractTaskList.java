@@ -2,7 +2,7 @@ package ua.edu.sumdu.j2se.Lytovka.tasks;
 
 public abstract class AbstractTaskList { //implements Iterable  {
     //private Task[] aTask = null;
-    //private int len; // = 0;
+    //protected int len; // = 0;
     /**
      *  пустой конструктр.
      */
@@ -27,7 +27,7 @@ public abstract class AbstractTaskList { //implements Iterable  {
      * @return
      */
     public abstract int size();
-    // public int size() {        return len;    }
+    //public int size() {        return len;    }
     /**
      *  – метод, що повертає задачу, яка
      *  знаходиться на вказаному місці у списку,
@@ -46,11 +46,11 @@ public abstract class AbstractTaskList { //implements Iterable  {
     public abstract AbstractTaskList incoming(int from, int to);
     /**
      *  задача буде виконана  деякому проміжку?
-     * @param elem
      * @param from
      * @param to
      * @return
      */
+
     public boolean isIncoming(Task elem, int from, int to, int typeChk ) {
         boolean lAdd2res = false;
         if (typeChk == 2) {

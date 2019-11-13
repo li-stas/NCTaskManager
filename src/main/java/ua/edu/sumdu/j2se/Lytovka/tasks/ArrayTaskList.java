@@ -84,7 +84,7 @@ public class ArrayTaskList extends AbstractTaskList implements  Cloneable, Itera
     /**
      *  метод, що повертає кількість задач у списку.
      * @return
-     */
+    */
 	public int size() {	    return len;    }
     /**
      *  – метод, що повертає задачу, яка
@@ -109,21 +109,13 @@ public class ArrayTaskList extends AbstractTaskList implements  Cloneable, Itera
      * @return
      */
     public ArrayTaskList incoming(int from, int to) {
-        ArrayTaskList resList = new ArrayTaskList();
-        if (true) { // fori
+        AbstractTaskList resList = new ArrayTaskList();
             for (int i = 0; i < len; i++) {
                 if (isIncoming(getTask(i), from, to, 2)) {
                     resList.add(getTask(i));
                 }
             }
-        } else { // foreach
-            for (Task elem : aTask) {
-                if (isIncoming(elem, from, to, 2)) {
-                    resList.add(elem);
-                }
-            }
-        }
-        return resList;
+         return (ArrayTaskList) resList;
     }
     /**
      *
@@ -272,6 +264,15 @@ public class ArrayTaskList extends AbstractTaskList implements  Cloneable, Itera
     }
 }
 /*
+
+ } else { // foreach
+            for (Task elem : aTask) {
+                if (isIncoming(elem, from, to, 2)) {
+                    resList.add(elem);
+                }
+            }
+        }
+
     public ArrayTaskList incoming(int from, int to) {
         ArrayTaskList resList = new ArrayTaskList();
         for (Task elem : aTask) {
