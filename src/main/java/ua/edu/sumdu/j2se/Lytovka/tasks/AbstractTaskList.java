@@ -30,7 +30,6 @@ public abstract class AbstractTaskList { //implements Iterable  {
      * @return
      */
     public abstract int size();
-    //public int size() {        return len;    }
     /**
      *  – метод, що повертає задачу, яка
      *  знаходиться на вказаному місці у списку,
@@ -48,7 +47,7 @@ public abstract class AbstractTaskList { //implements Iterable  {
      * @return
      */
     //public abstract AbstractTaskList incoming(int from, int to);
-    public AbstractTaskList incoming(int from, int to) {
+    public final AbstractTaskList incoming(int from, int to) {
         AbstractTaskList resList;
         if (getClass().getName().endsWith("LinkedTaskList")) {
             resList = new LinkedTaskList();
@@ -65,14 +64,17 @@ public abstract class AbstractTaskList { //implements Iterable  {
      * @return
      */
 
-    public boolean isIncoming(Task elem, int from, int to, int typeChk ) {
-        boolean lAdd2res = false;
-        if (typeChk == 2) {
-            int toTime = elem.nextTimeAfter(from);
-            if (elem.isActive() && toTime != -1 && toTime <= to) {
-                return true;
-            }
+    public boolean isIncoming(Task elem, int from, int to, int typeChk) {
+        int toTime = elem.nextTimeAfter(from);
+        if (elem.isActive() && toTime != -1 && toTime <= to) {
+            return true;
         }
+        return false;
+    }
+}
+
+/*
+        boolean lAdd2res = false;
         if (typeChk == 1) {
             if (!elem.isActive()) {
                 return false;
@@ -120,5 +122,4 @@ public abstract class AbstractTaskList { //implements Iterable  {
             return lAdd2res;
         }
         return false;
-    }
-}
+ */
