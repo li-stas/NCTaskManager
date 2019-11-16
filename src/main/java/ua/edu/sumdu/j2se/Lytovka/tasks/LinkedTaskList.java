@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.stream.Stream;
 
 public class LinkedTaskList extends AbstractTaskList implements Serializable, Iterable {
     private LinkedTaskListNode fistNode; //  = new LinkedTaskListNode();
@@ -102,6 +103,24 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable, It
         }
         return curNode.getData();
     }
+
+    /**
+     * https://habr.com/ru/company/luxoft/blog/270383/
+     * https://www.geeksforgeeks.org/stream-builder-add-method-in-java/
+     *
+     * @return
+     */
+    @Override
+    public Stream<Task> getStream( ) {
+        Stream.Builder<Task> builder = Stream.builder();
+        for (Iterator<Task> it = this.iterator(); it.hasNext();) {
+            Task t = it.next();
+            //System.out.println(t);
+            builder.add(t);
+        }
+        return (Stream<Task>) builder.build();
+    }
+
     /**
      * знаходити, які саме задачі будуть виконані хоча б раз у деякому проміжку
      * @param from

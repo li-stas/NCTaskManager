@@ -1,4 +1,4 @@
-package ua.edu.sumdu.j2se.Lytovka.tasks.MyTest;
+package ua.edu.sumdu.j2se.Lytovka.tasks.mytest;
 
 import ua.edu.sumdu.j2se.Lytovka.tasks.LinkedTaskList;
 import ua.edu.sumdu.j2se.Lytovka.tasks.Task;

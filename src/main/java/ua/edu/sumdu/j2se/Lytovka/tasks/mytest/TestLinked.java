@@ -1,7 +1,9 @@
-package ua.edu.sumdu.j2se.Lytovka.tasks.MyTest;
+package ua.edu.sumdu.j2se.Lytovka.tasks.mytest;
 
 import ua.edu.sumdu.j2se.Lytovka.tasks.LinkedTaskList;
 import ua.edu.sumdu.j2se.Lytovka.tasks.Task;
+
+import java.util.stream.Stream;
 
 public class TestLinked {
     public static void main(String[] args) throws CloneNotSupportedException {
@@ -28,6 +30,10 @@ public class TestLinked {
         tskClone.getTask(2).setTitle("C1");
         System.out.println("tasksList="+tasksList);
         System.out.println("tskClone="+tskClone);
+
+        Stream<Task> stream = tskClone.getStream();
+        System.out.println("Stream<Task> stream");
+        stream.forEach(System.out::println);
         System.exit(999);
 
         if (false) {

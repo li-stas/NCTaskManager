@@ -1,12 +1,15 @@
 package ua.edu.sumdu.j2se.Lytovka.tasks;
 
+import java.util.Iterator;
+import java.util.stream.Stream;
+
 public abstract class AbstractTaskList { //implements Iterable  {
     //private Task[] aTask = null;
     //protected int len; // = 0;
     /**
      *  пустой конструктр.
      */
-   public AbstractTaskList() { }
+   // public AbstractTaskList() { }
     /**
      * метод, що додає до списку задачу.
      * @param task
@@ -37,6 +40,7 @@ public abstract class AbstractTaskList { //implements Iterable  {
      * @throws IndexOutOfBoundsException
      */
     public abstract Task getTask(int index);
+    public abstract Stream<Task> getStream( );
     /**
      * знаходити, які саме задачі будуть виконані хоча б раз у деякому проміжку
      * @param from

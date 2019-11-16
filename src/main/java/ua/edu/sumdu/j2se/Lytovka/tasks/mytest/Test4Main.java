@@ -1,9 +1,8 @@
-package ua.edu.sumdu.j2se.Lytovka.tasks.MyTest;
+package ua.edu.sumdu.j2se.Lytovka.tasks.mytest;
 
 import ua.edu.sumdu.j2se.Lytovka.tasks.Task;
 import ua.edu.sumdu.j2se.Lytovka.tasks.TaskListFactory;
 
-import javax.management.openmbean.ArrayType;
 import java.util.ArrayList;
 import java.util.Arrays;
 

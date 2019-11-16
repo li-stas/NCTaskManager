@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.stream.Stream;
 
 public class ArrayTaskList extends AbstractTaskList implements  Cloneable, Iterable<Task> {
     private Task[] aTask; // = null;
@@ -101,7 +102,6 @@ public class ArrayTaskList extends AbstractTaskList implements  Cloneable, Itera
         return aTask[index];
     }
 
-    //public Task[] get_aTask() {       return aTask;    }
     /**
      * знаходити, які саме задачі будуть виконані хоча б раз у деякому проміжку
      * @param from
@@ -115,6 +115,15 @@ public class ArrayTaskList extends AbstractTaskList implements  Cloneable, Itera
                     resList.add(getTask(i));
                 }
             }
+
+        /*
+        Class<?> enclosingClass = getClass().getEnclosingClass();
+        if (enclosingClass != null) {
+            System.out.println(enclosingClass.getName());
+        } else {
+            System.out.println(getClass().getName());
+        }
+        */
          return (ArrayTaskList) resList;
     }
     /**
@@ -246,6 +255,11 @@ public class ArrayTaskList extends AbstractTaskList implements  Cloneable, Itera
                 ADelAndASize(curInd);
             }
         };
+    }
+
+    @Override
+    public  Stream<Task> getStream( ) {
+        return Arrays.stream(aTask);
     }
     private void ADelAndASize(int index4Del) {
         // ADEL(,index4Del)
