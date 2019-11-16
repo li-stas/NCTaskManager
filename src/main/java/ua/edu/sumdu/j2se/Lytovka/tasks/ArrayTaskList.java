@@ -108,13 +108,18 @@ public class ArrayTaskList extends AbstractTaskList implements  Cloneable, Itera
      * @param to
      * @return
      */
-    public ArrayTaskList incoming(int from, int to) {
+    public ArrayTaskList incoming1(int from, int to) {
         AbstractTaskList resList = new ArrayTaskList();
+        if (false) {
             for (int i = 0; i < len; i++) {
                 if (isIncoming(getTask(i), from, to, 2)) {
                     resList.add(getTask(i));
                 }
             }
+        } else {
+            Stream<Task> stream = this.getStream();
+            stream.filter(t->isIncoming(t, from, to, 2)).forEach( t->resList.add(t) );
+        }
 
         /*
         Class<?> enclosingClass = getClass().getEnclosingClass();

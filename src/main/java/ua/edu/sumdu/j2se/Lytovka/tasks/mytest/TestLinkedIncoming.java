@@ -1,17 +1,20 @@
 package ua.edu.sumdu.j2se.Lytovka.tasks.mytest;
 
-import ua.edu.sumdu.j2se.Lytovka.tasks.ArrayTaskList;
+import ua.edu.sumdu.j2se.Lytovka.tasks.AbstractTaskList;
+import ua.edu.sumdu.j2se.Lytovka.tasks.LinkedTaskList;
 import ua.edu.sumdu.j2se.Lytovka.tasks.Task;
 
-public class TestArrayIncoming {
+public class TestLinkedIncoming {
     public static void main(String[] args) throws CloneNotSupportedException {
-        ArrayTaskList ts = new ArrayTaskList();
-        ts.add(new Task("Simple IN", 55, true));
-        ts.add(new Task("Simple OUT", 10, true));
-        ts.add(new Task("Inactive OUT", 0, 1000, 1, false));
-        ts.add(new Task("Simple bound OUT", 50, true));
-        ts.add(new Task("Simple bound IN", 60, true));
+        LinkedTaskList ts = new LinkedTaskList();
 
+        if (true) {
+            ts.add(new Task("Simple IN", 55, true));
+            ts.add(new Task("Simple OUT", 10, true));
+            ts.add(new Task("Inactive OUT", 0, 1000, 1, false));
+            ts.add(new Task("Simple bound OUT", 50, true));
+            ts.add(new Task("Simple bound IN", 60, true));
+        }
         ts.add(new Task("Repeat inside IN", 51, 58, 2, true));
         ts.add(new Task("Repeat outside IN", 0, 100, 5, true));
         ts.add(new Task("Repeat outside OUT", 0, 100, 22, true));
@@ -24,8 +27,9 @@ public class TestArrayIncoming {
 
 
         //System.out.println(ts);
-        ArrayTaskList res1 = (ArrayTaskList) ts.incoming(50, 60);
+        LinkedTaskList res1 = (LinkedTaskList) ts.incoming(50, 60);
         System.out.println(res1);
-        System.out.println("res1.size()=" + res1.size());
+        System.out.println("res1.size()="+res1.size());
+
     }
 }

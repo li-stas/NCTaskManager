@@ -14,7 +14,7 @@ public class TestLinkedBig {
         tasksList.add(task3);
         tasksList.add(new Task("D", 2));
         System.out.println(tasksList);
-        LinkedTaskList res = tasksList.incoming(0, 1000);
+        LinkedTaskList res = (LinkedTaskList) tasksList.incoming(0, 1000);
         System.out.println("res.size()="+res.size());
 
         LinkedTaskList ts = new LinkedTaskList();
@@ -38,7 +38,7 @@ public class TestLinkedBig {
 
 
         //System.out.println(ts);
-        LinkedTaskList res1 = ts.incoming(50, 60);
+        LinkedTaskList res1 = (LinkedTaskList) ts.incoming(50, 60);
         System.out.println(res1);
         System.out.println("res1.size()="+res1.size());
 

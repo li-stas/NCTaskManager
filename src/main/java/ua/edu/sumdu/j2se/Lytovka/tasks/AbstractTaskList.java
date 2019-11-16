@@ -47,7 +47,17 @@ public abstract class AbstractTaskList { //implements Iterable  {
      * @param to
      * @return
      */
-    public abstract AbstractTaskList incoming(int from, int to);
+    //public abstract AbstractTaskList incoming(int from, int to);
+    public AbstractTaskList incoming(int from, int to) {
+        AbstractTaskList resList;
+        if (getClass().getName().endsWith("LinkedTaskList")) {
+            resList = new LinkedTaskList();
+        } else {
+            resList = new ArrayTaskList();
+        }
+        this.getStream().filter(t->isIncoming(t, from, to, 2)).forEach( t->resList.add(t) );
+        return resList;
+    }
     /**
      *  задача буде виконана  деякому проміжку?
      * @param from

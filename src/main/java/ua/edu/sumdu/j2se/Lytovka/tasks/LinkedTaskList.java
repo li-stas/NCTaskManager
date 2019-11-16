@@ -127,13 +127,19 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable, It
      * @param to
      * @return
      */
-    public LinkedTaskList incoming(int from, int to) {
-       AbstractTaskList resList = new LinkedTaskList();
+    public LinkedTaskList incoming1(int from, int to) {
+        AbstractTaskList resList = new LinkedTaskList();
+        if (false) {
+
             for (int i = 0; i < len; i++) {
                 if (isIncoming(getTask(i), from, to, 2)) {
                     resList.add(getTask(i));
                 }
             }
+        } else {
+            //Stream<Task> stream = this.getStream();
+            this.getStream().filter(t->isIncoming(t, from, to, 2)).forEach( t->resList.add(t) );
+        }
         return (LinkedTaskList) resList;
     }
      /**
