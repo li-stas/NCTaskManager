@@ -3,7 +3,7 @@
 * клас Task із наступними публічними методами
 *
  */
-package ua.edu.sumdu.j2se.Lytovka.tasks;
+package ua.edu.sumdu.j2se.lytovka.tasks;
 
 import java.io.*;
 import java.util.Objects;
@@ -311,7 +311,7 @@ public class Task implements Serializable, Cloneable {
     }
 
     /**
-     * https://habr.com/ru/post/246993/
+     * https://habr.com/ru/post/246993/ Как правильно клонировать объект?
      * https://javarush.ru/quests/lectures/questmultithreading.level01.lecture07
      * https://webcache.googleusercontent.com/search?q=cache:n7q2Jn3mnEkJ:https://javarush.ru/quests/lectures/questmultithreading.level01.lecture07+&cd=2&hl=ru&ct=clnk&gl=ua
      * @return

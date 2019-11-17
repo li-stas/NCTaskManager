@@ -1,6 +1,5 @@
-package ua.edu.sumdu.j2se.Lytovka.tasks;
+package ua.edu.sumdu.j2se.lytovka.tasks;
 
-import java.util.Iterator;
 import java.util.stream.Stream;
 
 public abstract class AbstractTaskList { //implements Iterable  {
