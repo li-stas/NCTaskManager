@@ -1,7 +1,7 @@
-package ua.edu.sumdu.j2se.Lytovka.tasks.mytest;
+package ua.edu.sumdu.j2se.lytovka.tasks.mytest;
 
-import ua.edu.sumdu.j2se.Lytovka.tasks.LinkedTaskList;
-import ua.edu.sumdu.j2se.Lytovka.tasks.Task;
+import ua.edu.sumdu.j2se.lytovka.tasks.LinkedTaskList;
+import ua.edu.sumdu.j2se.lytovka.tasks.Task;
 
 public class TestLinkedBig {
     public static void main(String[] args) {

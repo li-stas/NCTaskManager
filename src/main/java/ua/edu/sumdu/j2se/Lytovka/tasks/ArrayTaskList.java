@@ -1,4 +1,4 @@
-package ua.edu.sumdu.j2se.Lytovka.tasks;
+package ua.edu.sumdu.j2se.lytovka.tasks;
 
 import java.io.*;
 import java.util.Arrays;

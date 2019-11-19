@@ -1,7 +1,7 @@
-package ua.edu.sumdu.j2se.Lytovka.tasks.mytest;
+package ua.edu.sumdu.j2se.lytovka.tasks.mytest;
 
-import ua.edu.sumdu.j2se.Lytovka.tasks.ArrayTaskList;
-import ua.edu.sumdu.j2se.Lytovka.tasks.Task;
+import ua.edu.sumdu.j2se.lytovka.tasks.ArrayTaskList;
+import ua.edu.sumdu.j2se.lytovka.tasks.Task;
 
 import java.util.stream.Stream;
 
@@ -62,7 +62,7 @@ public class TestArray {
 
 		if (false) {
 			System.out.println(tasksList);
-			ArrayTaskList res = tasksList.incoming(0, 1000);
+			ArrayTaskList res = (ArrayTaskList) tasksList.incoming(0, 1000);
 			System.out.println("res.size()=" + res.size());
 
 		}
