@@ -2,13 +2,12 @@ package ua.edu.sumdu.j2se.lytovka.tasks;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
 
 public class Tasks {
-    public static Iterable<Task> incoming33(Iterable<Task> tasks, LocalDateTime from, LocalDateTime to)   {
+    public static Iterable<Task> incoming333(Iterable<Task> tasks, LocalDateTime from, LocalDateTime to)   {
         return new Iterable<Task>() {
             @Override
             public Iterator<Task> iterator( ) {
