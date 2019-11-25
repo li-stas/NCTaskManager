@@ -1,6 +1,7 @@
 package ua.edu.sumdu.j2se.lytovka.tasks;
 
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -61,7 +62,7 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable, It
 
         int i = 1;
         while (true) {
-            if (cTitle.startsWith(curNode.getData().getTitle())) {
+            if (cTitle.equals(curNode.getData().getTitle())) {
                 index4Del = i;
                 break;
             }
@@ -127,18 +128,18 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable, It
      * @param to
      * @return
      */
-    public LinkedTaskList incoming1(int from, int to) {
+    public LinkedTaskList incoming1(LocalDateTime from, LocalDateTime to) {
         AbstractTaskList resList = new LinkedTaskList();
         if (false) {
 
             for (int i = 0; i < len; i++) {
-                if (isIncoming(getTask(i), from, to, 2)) {
+                if (isIncoming(getTask(i), from, to)) {
                     resList.add(getTask(i));
                 }
             }
         } else {
             //Stream<Task> stream = this.getStream();
-            this.getStream().filter(t->isIncoming(t, from, to, 2)).forEach( t->resList.add(t) );
+            this.getStream().filter(t->isIncoming(t, from, to)).forEach( t->resList.add(t) );
         }
         return (LinkedTaskList) resList;
     }

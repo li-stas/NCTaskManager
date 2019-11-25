@@ -1,5 +1,6 @@
 package ua.edu.sumdu.j2se.lytovka.tasks;
 
+import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
 public abstract class AbstractTaskList { //implements Iterable  {
@@ -46,14 +47,14 @@ public abstract class AbstractTaskList { //implements Iterable  {
      * @return
      */
     //public abstract AbstractTaskList incoming(int from, int to);
-    public final AbstractTaskList incoming(int from, int to) {
+    public final AbstractTaskList incoming(LocalDateTime from, LocalDateTime to) {
         AbstractTaskList resList;
         if (getClass().getName().endsWith("LinkedTaskList")) {
             resList = new LinkedTaskList();
         } else {
             resList = new ArrayTaskList();
         }
-        this.getStream().filter(t->isIncoming(t, from, to, 2)).forEach( t->resList.add(t) );
+        this.getStream().filter(t->isIncoming(t, from, to )).forEach( t->resList.add(t) );
         return resList;
     }
     /**
@@ -63,9 +64,11 @@ public abstract class AbstractTaskList { //implements Iterable  {
      * @return
      */
 
-    public boolean isIncoming(Task elem, int from, int to, int typeChk) {
-        int toTime = elem.nextTimeAfter(from);
-        if (elem.isActive() && toTime != -1 && toTime <= to) {
+    public boolean isIncoming(Task elem, LocalDateTime from, LocalDateTime to) {
+        LocalDateTime toTime = elem.nextTimeAfter(from);
+        //if (elem.isActive() && toTime != -1 && (toTime < to || toTime == to )) {
+        if (elem.isActive() && toTime != null
+                && (toTime.compareTo(to) == -1 || toTime.compareTo(to) == 0 )) {
             return true;
         }
         return false;

@@ -1,6 +1,7 @@
 package ua.edu.sumdu.j2se.lytovka.tasks;
 
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -55,7 +56,7 @@ public class ArrayTaskList extends AbstractTaskList implements  Cloneable, Itera
         String cTitle = task.getTitle();
         int index4Del = -1;
         for (int i = 0; i < len; i++) {
-           if (cTitle.startsWith(aTask[i].getTitle())) {
+           if (cTitle.equals(aTask[i].getTitle())) {
                index4Del = i;
                break;
            }
@@ -108,17 +109,17 @@ public class ArrayTaskList extends AbstractTaskList implements  Cloneable, Itera
      * @param to
      * @return
      */
-    public ArrayTaskList incoming1(int from, int to) {
+    public ArrayTaskList incoming1(LocalDateTime from, LocalDateTime to) {
         AbstractTaskList resList = new ArrayTaskList();
         if (false) {
             for (int i = 0; i < len; i++) {
-                if (isIncoming(getTask(i), from, to, 2)) {
+                if (isIncoming(getTask(i), from, to)) {
                     resList.add(getTask(i));
                 }
             }
         } else {
             Stream<Task> stream = this.getStream();
-            stream.filter(t->isIncoming(t, from, to, 2)).forEach( t->resList.add(t) );
+            stream.filter(t->isIncoming(t, from, to)).forEach( t->resList.add(t) );
         }
 
         /*

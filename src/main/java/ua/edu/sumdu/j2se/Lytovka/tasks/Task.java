@@ -6,7 +6,9 @@
 package ua.edu.sumdu.j2se.lytovka.tasks;
 
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.Objects;
+
 
 public class Task implements Serializable, Cloneable {
     /**
@@ -16,13 +18,13 @@ public class Task implements Serializable, Cloneable {
     private boolean repeated; //повторюваності задачі
     private boolean active; //стан задачі
     //
-    private int time; //час виконання задачі
+    private LocalDateTime time; //час виконання задачі
     //
-    private int startTime; // початок заданим інтервалом
-    private int endTime; // кінець заданим інтервалом
-    private int interval; // заданим інтервалом
+    private LocalDateTime startTime; // початок заданим інтервалом
+    private LocalDateTime endTime; // кінець заданим інтервалом
+    private int interval; // заданим інтервалом (у годинах),
 
-    private boolean lDEBUG = true;
+    private boolean lDEBUG = false;
     /**
      * констрктор задач
      *   що не повторюються:
@@ -33,11 +35,8 @@ public class Task implements Serializable, Cloneable {
      * @param time
      * @throws IllegalArgumentException
      */
-    public Task(String title, int time)  throws IllegalArgumentException {
-        if (title.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        if (time < 0) {
+    public Task(String title, LocalDateTime time)  throws IllegalArgumentException {
+        if (title.isEmpty() || time == null) {
             throw new IllegalArgumentException();
         }
 
@@ -55,7 +54,7 @@ public class Task implements Serializable, Cloneable {
      * @param time
      * @param active
      */
-    public Task(String title, int time, boolean active) {
+    public Task(String title, LocalDateTime time, boolean active) {
         this.title = title;
         this.time = time;
         this.repeated = false;
@@ -75,11 +74,8 @@ public class Task implements Serializable, Cloneable {
      * @param end
      * @param interval
      */
-    public Task(String title, int start, int end, int interval) throws IllegalArgumentException {
-        if (start > end) {
-            throw new IllegalArgumentException();
-        }
-        if (start < 0 || end < 0 || interval <= 0) {
+    public Task(String title, LocalDateTime start, LocalDateTime end, int interval) throws IllegalArgumentException {
+        if (start.compareTo(end) == 1) {
             throw new IllegalArgumentException();
         }
         if (title.isEmpty()) {
@@ -92,7 +88,7 @@ public class Task implements Serializable, Cloneable {
         this.repeated = true;
         this.active = false;
         // одноазоваая задача
-        if (start == end) {
+        if (start.equals(end)) {
             this.repeated = false;
             this.time = start;
         }
@@ -107,7 +103,7 @@ public class Task implements Serializable, Cloneable {
      * @param interval
      * @param active
      */
-    public Task(String title, int start, int end, int interval, boolean active) {
+    public Task(String title, LocalDateTime start, LocalDateTime end, int interval, boolean active) {
         this.title = title;
         this.startTime = start;
         this.endTime = end;
@@ -115,7 +111,7 @@ public class Task implements Serializable, Cloneable {
         this.repeated = true;
         this.active = active;
         // одноазоваая задача
-        if (start == end) {
+        if (start.equals(end)) {
             this.repeated = false;
             this.time = start;
         }
@@ -163,7 +159,7 @@ public class Task implements Serializable, Cloneable {
      *     - у разі, якщо задача _повторюється_ метод має повертати час початку повторення;
      * @return
      */
-    public int getTime() {
+    public LocalDateTime getTime() {
         if (isRepeated()) {
             return startTime;
         }
@@ -173,12 +169,13 @@ public class Task implements Serializable, Cloneable {
      *  - у разі, якщо задача повторювалась, вона має стати такою, що не повторюється.
      * @param time
      */
-    public void setTime(int time) {
+    public void setTime(LocalDateTime time) {
         if (isRepeated()) {
             this.repeated = false;
         }
         this.time = time;
         this.startTime = this.endTime = time;
+        this.interval = 0;
     }
     /**
      *  що повторюються:
@@ -187,7 +184,7 @@ public class Task implements Serializable, Cloneable {
      *      час виконання задачі;
      * @return
      */
-    public int getStartTime() {
+    public LocalDateTime getStartTime() {
         if (!isRepeated()) {
             return time;
         }
@@ -198,7 +195,7 @@ public class Task implements Serializable, Cloneable {
      *   час виконання задачі;
      * @return
      */
-    public int getEndTime() {
+    public LocalDateTime getEndTime() {
         if (!isRepeated()) {
             return time;
         }
@@ -221,13 +218,14 @@ public class Task implements Serializable, Cloneable {
      * @param end
      * @param interval
      */
-    public void setTime(int start, int end, int interval) {
+    public void setTime(LocalDateTime start, LocalDateTime end, int interval) {
         if (!isRepeated()) {
             this.repeated = true;
         }
         this.startTime = start;
         this.endTime = end;
         this.interval = interval;
+        this.time = start;
     }
 
     /**
@@ -236,36 +234,38 @@ public class Task implements Serializable, Cloneable {
      * @param current
      * @return
      */
-    public int nextTimeAfter(int current) {
-        int currentTime;
+    public LocalDateTime nextTimeAfter(LocalDateTime current) {
+        //System.out.println("task"+this);
+        //System.out.println( current);
+        LocalDateTime currentTime;
         if (active) { // активна
             if (!repeated) { // одно разовая
-                if (current < time) { // только время ДО начала, если начло то уже -1
+                if (current.compareTo(time) == -1) { // только время ДО начала, если начло то уже -1
                     return time;
                 }
-                return -1;
+                return null;
             } else { // повторяется
-                if (current < startTime) { // время до страта
+                //if (current < startTime) { // время до страта
+                if (current.compareTo(startTime) == -1) { // время до страта
                     return startTime;
                 } else {
-                    currentTime = current + interval;
-                    if (currentTime >= endTime) { // выпадаем за интервал
-                        return -1;
-                    }
                     int i = 0;
                     while (true) { // следующие после заданого
-                        i++;
-                        currentTime = startTime + (interval * i);
-                        if (currentTime > current) {
+                        currentTime = startTime.plusSeconds(interval * i);
+                        if (currentTime.compareTo(current) == 1) {
                             break;
                         }
+                        i++;
+                    }
+                    if (currentTime.compareTo(endTime) == 1) {
+                        return null;
                     }
                     return currentTime;
                 }
             }
         }
         // не активна
-         return -1;
+         return null;
     }
     /**
      *
@@ -298,9 +298,9 @@ public class Task implements Serializable, Cloneable {
         Task task = (Task) o;
         return repeated == task.repeated &&
                 active == task.active &&
-                time == task.time &&
-                startTime == task.startTime &&
-                endTime == task.endTime &&
+                time.equals(task.time) &&
+                startTime.equals(task.startTime) &&
+                endTime.equals(task.endTime) &&
                 interval == task.interval &&
                 Objects.equals(title, task.title);
     }
@@ -311,7 +311,7 @@ public class Task implements Serializable, Cloneable {
     }
 
     /**
-     * https://habr.com/ru/post/246993/ Как правильно клонировать объект?
+     * https://habr.com/ru/post/246993/
      * https://javarush.ru/quests/lectures/questmultithreading.level01.lecture07
      * https://webcache.googleusercontent.com/search?q=cache:n7q2Jn3mnEkJ:https://javarush.ru/quests/lectures/questmultithreading.level01.lecture07+&cd=2&hl=ru&ct=clnk&gl=ua
      * @return
