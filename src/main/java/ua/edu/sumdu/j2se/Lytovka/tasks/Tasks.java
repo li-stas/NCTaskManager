@@ -24,17 +24,6 @@ public class Tasks {
         }
         return false;
     }
-    public static Iterable<Task> incoming11(Iterable<Task> tasks, LocalDateTime from, LocalDateTime to) {
-        List<Task> resList = new ArrayList<>();
-        for (Iterator<Task> it = tasks.iterator(); it.hasNext();) {
-            Task t = it.next();
-            if (isIncoming(t, from, to)) {
-                resList.add(t);
-            }
-        }
-        return (Iterable<Task>) resList;
-    }
-
 
     public static SortedMap<LocalDateTime, Set<Task>> calendar(Iterable<Task> tasks, LocalDateTime start, LocalDateTime end) {
         TreeMap res = new TreeMap<>();
@@ -60,7 +49,16 @@ public class Tasks {
         }
         return (SortedMap<LocalDateTime, Set<Task>>) res;
     }
-
-
-
 }
+/*
+public static Iterable<Task> incoming11(Iterable<Task> tasks, LocalDateTime from, LocalDateTime to) {
+        List<Task> resList = new ArrayList<>();
+        for (Iterator<Task> it = tasks.iterator(); it.hasNext();) {
+            Task t = it.next();
+            if (isIncoming(t, from, to)) {
+                resList.add(t);
+            }
+        }
+        return (Iterable<Task>) resList;
+    }
+ */

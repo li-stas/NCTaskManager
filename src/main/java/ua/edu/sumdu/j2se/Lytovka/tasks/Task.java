@@ -82,6 +82,7 @@ public class Task implements Serializable, Cloneable {
             throw new IllegalArgumentException();
         }
         this.title = title;
+        this.time = start;
         this.startTime = start;
         this.endTime = end;
         this.interval = interval;
@@ -90,7 +91,6 @@ public class Task implements Serializable, Cloneable {
         // одноазоваая задача
         if (start.equals(end)) {
             this.repeated = false;
-            this.time = start;
         }
     }
 
@@ -105,6 +105,7 @@ public class Task implements Serializable, Cloneable {
      */
     public Task(String title, LocalDateTime start, LocalDateTime end, int interval, boolean active) {
         this.title = title;
+        this.time = start;
         this.startTime = start;
         this.endTime = end;
         this.interval = interval;
@@ -113,7 +114,6 @@ public class Task implements Serializable, Cloneable {
         // одноазоваая задача
         if (start.equals(end)) {
             this.repeated = false;
-            this.time = start;
         }
     }
     /**
