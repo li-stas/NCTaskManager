@@ -49,7 +49,8 @@ public abstract class AbstractTaskList { //implements Iterable  {
     //public abstract AbstractTaskList incoming(int from, int to);
     public final AbstractTaskList incoming(LocalDateTime from, LocalDateTime to) {
         AbstractTaskList resList;
-        if (getClass().getName().endsWith("LinkedTaskList")) {
+        //if (getClass().getName().endsWith("LinkedTaskList")) {
+        if (this instanceof LinkedTaskList) {
             resList = new LinkedTaskList();
         } else {
             resList = new ArrayTaskList();
