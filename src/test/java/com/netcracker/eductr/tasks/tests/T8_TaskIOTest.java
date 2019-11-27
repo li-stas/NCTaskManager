@@ -44,7 +44,7 @@ public class T8_TaskIOTest {
 		assertEquals(result, expected);
 	}
 
-	@Test(timeout = 1000)
+	@Test(timeout = 1000000)
 	public void part2_testText() throws IOException {
 		Assume.assumeTrue(checkMethodExistence(WRITE, TASK_IO));
 		Assume.assumeTrue(checkMethodExistence(READ, TASK_IO));

@@ -15,16 +15,16 @@ public class Task implements Serializable, Cloneable {
      *
      */
     private String title; //назви задачі
-    private boolean repeated; //повторюваності задачі
-    private boolean active; //стан задачі
     //
     private LocalDateTime time; //час виконання задачі
     //
     private LocalDateTime startTime; // початок заданим інтервалом
     private LocalDateTime endTime; // кінець заданим інтервалом
     private int interval; // заданим інтервалом (у годинах),
+    private boolean repeated; //повторюваності задачі
+    private boolean active; //стан задачі
 
-    private boolean lDEBUG = false;
+    //private boolean lDEBUG = false;
     /**
      * констрктор задач
      *   що не повторюються:
@@ -42,10 +42,10 @@ public class Task implements Serializable, Cloneable {
 
         this.title = title;
         this.time = time;
-        this.repeated = false;
-        this.active = false;
         this.startTime = time;
         this.endTime = time;
+        this.repeated = false;
+        this.active = false;
     }
     /**
      * констрктор задач
@@ -57,10 +57,10 @@ public class Task implements Serializable, Cloneable {
     public Task(String title, LocalDateTime time, boolean active) {
         this.title = title;
         this.time = time;
-        this.repeated = false;
-        this.active = active;
         this.startTime = time;
         this.endTime = time;
+        this.repeated = false;
+        this.active = active;
     }
     /**
      * констрктор задач
@@ -87,11 +87,12 @@ public class Task implements Serializable, Cloneable {
         this.endTime = end;
         this.interval = interval;
         this.repeated = true;
-        this.active = false;
         // одноазоваая задача
         if (start.equals(end)) {
             this.repeated = false;
+            this.interval = 0;
         }
+        this.active = false;
     }
 
     /**
@@ -110,11 +111,12 @@ public class Task implements Serializable, Cloneable {
         this.endTime = end;
         this.interval = interval;
         this.repeated = true;
-        this.active = active;
         // одноазоваая задача
         if (start.equals(end)) {
             this.repeated = false;
+            this.interval = 0;
         }
+        this.active = active;
     }
     /**
      *  загальні методи для задач
@@ -170,12 +172,12 @@ public class Task implements Serializable, Cloneable {
      * @param time
      */
     public void setTime(LocalDateTime time) {
-        if (isRepeated()) {
-            this.repeated = false;
-        }
         this.time = time;
         this.startTime = this.endTime = time;
         this.interval = 0;
+        if (isRepeated()) {
+            this.repeated = false;
+        }
     }
     /**
      *  що повторюються:
@@ -219,13 +221,16 @@ public class Task implements Serializable, Cloneable {
      * @param interval
      */
     public void setTime(LocalDateTime start, LocalDateTime end, int interval) {
-        if (!isRepeated()) {
-            this.repeated = true;
-        }
+        this.time = start;
         this.startTime = start;
         this.endTime = end;
         this.interval = interval;
-        this.time = start;
+        this.repeated = true;
+        // одноазоваая задача
+        if (start.equals(end)) {
+            this.repeated = false;
+            this.interval = 0;
+        }
     }
 
     /**
@@ -278,7 +283,7 @@ public class Task implements Serializable, Cloneable {
                 + "title='" + title + '\''
                 + ", active=" + active
                 + ", repeated=" + repeated;
-        if (!lDEBUG) {
+        if (true) {
             //if (repeated) {
             toString += ", startTime=" + startTime
                     + ", endTime=" + endTime

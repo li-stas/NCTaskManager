@@ -1,38 +1,62 @@
 package ua.edu.sumdu.j2se.lytovka.tasks;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
+
 import java.io.*;
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.Iterator;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 
 public class TaskIO {
+    static ZoneId zoneId = ZoneId.systemDefault();
     /**
      * – записує задачі із списку у потік у бінарному форматі, описаному нижче.
+     * Классы DataOutputStream и DataInputStream позволяют записывать и считывать данные примитивных типов.
+     * https://metanit.com/java/tutorial/6.7.php
      */
     public static void write(AbstractTaskList tasks, OutputStream out) throws IOException {
+        //System.out.println(tasks);
+        //System.out.println("============= праметр ==================");
         //tasks.getStream().forEach(t->System.out.println(t));
+        //System.out.println("============= чз Стрим ==================");
+        //ZoneId zoneId = ZoneId.systemDefault();
         DataOutputStream dos = new DataOutputStream(out);
         try {
-            dos.writeInt(tasks.size());
-            tasks.getStream().forEach(t-> dosWriteInt(t,dos));
+            dos.writeInt(tasks.size()); // всего задач
+            tasks.getStream().forEach(t-> dosWriteTask(t,dos));
         } finally {
             dos.flush();
             dos.close();
         }
-
+        //System.out.println("============= dosWriteInt ==================");
     }
 
-    private static void dosWriteInt(Task t, DataOutputStream dos) {
+    /**
+     * Ввод-вывод в Java. Классы FileInputStream, FileOutputStream, BufferedInputStream
+     * https://javarush.ru/groups/posts/2020-vvod-vihvod-v-java-klassih-fileinputstream-fileoutputstream-bufferedinputstream
+     *
+     * Преобразование миллисекунд в LocalDateTime в Java 8
+     * https://howtoprogram.xyz/2017/02/11/convert-milliseconds-localdatetime-java/
+     *  @param t
+     * @param dos
+     */
+
+    private static void dosWriteTask(Task t, DataOutputStream dos) {
         try {
+            //System.out.println(t);
             dos.writeInt(t.getTitle().length());
             dos.writeUTF(t.getTitle());
             dos.writeBoolean(t.isActive());
             dos.writeInt(t.getRepeatInterval());
-            if (t.isRepeated()) {
-                dos.writeBytes(String.valueOf(t.getStartTime()));
-                dos.writeBytes(String.valueOf(t.getEndTime()));
+            if (t.getRepeatInterval() != 0) {
+                dos.writeLong(t.getStartTime().atZone(zoneId).toInstant().toEpochMilli());
+                dos.writeLong(t.getEndTime().atZone(zoneId).toInstant().toEpochMilli());
             } else {
-                dos.writeBytes(String.valueOf(t.getTime()));
+                dos.writeLong(t.getTime().atZone(zoneId).toInstant().toEpochMilli());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -42,28 +66,30 @@ public class TaskIO {
      * – зчитує задачі із потоку у даний список задач.
       */
     public static void read(AbstractTaskList tasks, InputStream in) throws IOException {
-        DataInputStream inputStream = new DataInputStream(in);
+        DataInputStream dis = new DataInputStream(in);
         try{
-            int count = inputStream.readInt();
-            for(int i = 0; i > count; i++){
+            int countTask = dis.readInt();
+            for(int i = 1; i <= countTask; i++){
                 Task task;
-                int length = inputStream.readInt();
-                String title = inputStream.readUTF();
-                boolean active = inputStream.readBoolean();
-                int interval = inputStream.readInt();
-                 LocalDateTime startTime ; //= new LocalDateTime(inputStream.readLong());
-                if (interval > 0) {
-                    LocalDateTime endTime ;//= new Date(inputStream.readLong());
-                    //task = new Task(title, startTime, endTime, interval);
+                int lenTitle = dis.readInt();
+                String title = dis.readUTF();
+                boolean active = dis.readBoolean();
+                int interval = dis.readInt();
+                LocalDateTime startTime = Instant.ofEpochMilli(dis.readLong()).atZone(zoneId).toLocalDateTime();
+                if (interval != 0) {
+                    LocalDateTime endTime  = Instant.ofEpochMilli(dis.readLong()).atZone(zoneId).toLocalDateTime();
+                    task = new Task(title, startTime, endTime, interval);
                 } else {
-                    //task = new Task(title, startTime);
+                    task = new Task(title, startTime);
                 }
-                //task.setActive(active);
-                //tasks.add(task);
+                task.setActive(active);
+                tasks.add(task);
+                //System.out.println(task);
             }
         } finally {
-            inputStream.close();
+            dis.close();
         }
+        //System.out.println("============= read ==================");
     }
     /**
      * – записує задачі із списку у файл.
@@ -89,6 +115,72 @@ public class TaskIO {
             fis.close();
         }
     }
+
+    /**
+     * Иcтoчниk: https://j4web.ru/java-json/model-dannyh-gson-java-obekty-i-json.html
+     * – записує задачі зі списку у потік в форматі JSON.
+     */
+    public static void write(AbstractTaskList tasks, Writer out) throws IOException {
+        //System.out.println(tasks);
+        //System.out.println("============= праметр ==================");
+        Gson gson;
+        gson = new Gson();
+        //gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, (JsonDeserializer<LocalDateTime>) (json, type, jsonDeserializationContext) ->
+        //        ZonedDateTime.parse(json.getAsJsonPrimitive().getAsString()).toLocalDateTime()).create();
+
+        //gson.toJson(tasks, out);
+        String sGson = gson.toJson(tasks);
+
+        //System.out.println(sGson);
+        //System.out.println("============= sGson ==================");
+
+        try {
+            out.write(sGson);
+        } finally {
+            out.flush();
+            out.close();
+        }
+    }
+
+    /**
+     * – зчитує задачі із потоку у список.
+     */
+    public static void read(AbstractTaskList tasks, Reader in) {
+        Gson gson = new Gson();
+        ArrayTaskList tasksA =  gson.fromJson(in, ArrayTaskList.class);
+        //tasks = (AbstractTaskList) tasksA;
+        tasksA.getStream().forEach(t-> tasks.add(t));
+        //System.out.println(tasks);
+        //System.out.println("============= read Json ==================");
+    }
+
+    /**
+     * – записує задачі у файл у форматі JSON
+     */
+    public static void writeText(AbstractTaskList tasks, File file) throws IOException {
+        //fileOutputStream - fos
+        FileOutputStream fos = new FileOutputStream(file);
+        try {
+            write(tasks,fos);
+        } finally {
+            fos.close();
+        }
+    }
+
+    /**
+     * – зчитує задачі із файлу.
+     */
+    public static void readText(AbstractTaskList tasks, File file) throws IOException {
+    // fis - FileInputStream
+        FileInputStream fis = new FileInputStream(file);
+        try {
+            read(tasks, fis);
+        } finally {
+            fis.close();
+        }
+    }
+
+
 }
 
 
