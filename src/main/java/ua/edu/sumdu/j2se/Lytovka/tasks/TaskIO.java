@@ -1,14 +1,14 @@
 package ua.edu.sumdu.j2se.lytovka.tasks;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializer;
+import com.google.gson.*;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
+import com.google.gson.stream.JsonWriter;
 
 import java.io.*;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.lang.reflect.Type;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 
 
 public class TaskIO {
@@ -118,9 +118,10 @@ public class TaskIO {
 
     /**
      * Иcтoчниk: https://j4web.ru/java-json/model-dannyh-gson-java-obekty-i-json.html
+     * https://stackoverflow.com/questions/39192945/serialize-java-8-localdate-as-yyyy-mm-dd-with-gson
      * – записує задачі зі списку у потік в форматі JSON.
      */
-    public static void write(AbstractTaskList tasks, Writer out) throws IOException {
+    public static void write1(AbstractTaskList tasks, Writer out) throws IOException {
         //System.out.println(tasks);
         //System.out.println("============= праметр ==================");
         Gson gson;
@@ -146,12 +147,29 @@ public class TaskIO {
      * – зчитує задачі із потоку у список.
      */
     public static void read(AbstractTaskList tasks, Reader in) {
-        Gson gson = new Gson();
+        //Gson gson = new Gson();
+        Gson gson;
+        /*gson =  new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateAdapter())
+                .create();*/
+        gson =  new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateAdapter() {
+                    @Override
+                    public void write(JsonWriter jsonWriter, LocalDateTime localDate) throws IOException {
+                        jsonWriter.value(localDate.toString());
+                    }
+                    @Override
+                    public LocalDateTime read(JsonReader jsonReader) throws IOException {
+                        return LocalDateTime.parse(jsonReader.nextString());
+                    }
+                        }
+                )
+                .create();
         ArrayTaskList tasksA =  gson.fromJson(in, ArrayTaskList.class);
-        //tasks = (AbstractTaskList) tasksA;
+       // tasks = (AbstractTaskList) tasksA;
         tasksA.getStream().forEach(t-> tasks.add(t));
-        //System.out.println(tasks);
-        //System.out.println("============= read Json ==================");
+       // System.out.println(tasks);
+       // System.out.println("============= read Json ==================");
     }
 
     /**
@@ -179,7 +197,55 @@ public class TaskIO {
             fis.close();
         }
     }
+    public static void write(AbstractTaskList tasks, Writer out) throws IOException {
+        //System.out.println(tasks);
+        //System.out.println("============= праметр ==================");
+        Gson gson;
+        gson =  new GsonBuilder()
+                        .registerTypeAdapter(LocalDateTime.class, new LocalDateAdapter())
+                        .create();
 
+
+        //gson.toJson(tasks, out);
+        String sGson = gson.toJson(tasks);
+
+        //System.out.println(sGson);
+        //System.out.println("============= sGson ==================");
+
+        try {
+            out.write(sGson);
+        } finally {
+            out.flush();
+            out.close();
+        }
+    }
+
+    private static class LocalDateAdapter extends TypeAdapter<LocalDateTime> {
+        @Override
+        public void write(JsonWriter jsonWriter, LocalDateTime localDate) throws IOException {
+            jsonWriter.value(localDate.toString());
+        }
+        @Override
+        public LocalDateTime read(JsonReader jsonReader) throws IOException {
+            return LocalDateTime.parse(jsonReader.nextString());
+        }
+    }
+    /*
+    GSON GSON = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, (JsonDeserializer<LocalDateTime>) (json, type, jsonDeserializationContext) ->
+    ZonedDateTime.parse(json.getAsJsonPrimitive().getAsString()).toLocalDateTime()).create();
+     */
+    /*
+    Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new JsonDeserializer<LocalDateTime>() {
+     @Override
+     public LocalDateTime deserialize(JsonElement json, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+           return ZonedDateTime.parse(json.getAsJsonPrimitive().getAsString()).toLocalDateTime();
+      }
+      }).create();
+    public Iterator<Task> iterator() {
+        return new Iterator<Task>() {
+        };
+    }
+     */
 
 }
 

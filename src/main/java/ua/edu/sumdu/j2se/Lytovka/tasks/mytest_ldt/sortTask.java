@@ -12,6 +12,15 @@ import java.util.*;
 
 public class sortTask {
     public static void main(String[] args) {
+        LocalDateTime dNow = LocalDateTime.now();
+        Task task1 = new Task("some1",  dNow.plusSeconds(10),true);
+        System.out.println(task1);
+        f(task1);
+        System.out.println(task1);
+
+
+
+        System.exit(999);
         /*
         java.lang.AssertionError: Missing tasks found: [
         Task{title:'A',time:2019-11-27T00:00:00.223195200,startTime:2019-11-27T00:00:00.223195200,endTime:2019-11-27T00:00:00.223195200,repeatInterval:0,active:false},
@@ -65,6 +74,14 @@ public class sortTask {
         SortedMap<LocalDateTime, Set<Task>> result1 = Tasks.calendar(new HashSet<>(Arrays.asList(daily, hourly, every3h,every3h1)), ALMOST_TODAY, TODAY_4H);
 
     }
+
+    private static void f(Task task1) {
+        //task1.setTitle("ABC");
+        LocalDateTime dNow = LocalDateTime.now();
+        Task task2 = new Task("ABC",  dNow.plusSeconds(10),true);
+        task1 = task2;
+    }
+
     public static Task create(String title, LocalDateTime start, LocalDateTime end, int interval) {
         return new Task(title, start, end, interval);
     }
