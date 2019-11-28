@@ -9,7 +9,7 @@ public abstract class AbstractTaskList { //implements Iterable  {
     /**
      *  пустой конструктр.
      */
-   // public AbstractTaskList() { }
+    public AbstractTaskList() { }
     /**
      * метод, що додає до списку задачу.
      * @param task
