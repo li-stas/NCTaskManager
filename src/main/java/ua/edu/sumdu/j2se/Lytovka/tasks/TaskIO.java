@@ -121,15 +121,13 @@ public class TaskIO {
      * https://stackoverflow.com/questions/39192945/serialize-java-8-localdate-as-yyyy-mm-dd-with-gson
      * – записує задачі зі списку у потік в форматі JSON.
      */
-    public static void write1(AbstractTaskList tasks, Writer out) throws IOException {
+    public static void write(AbstractTaskList tasks, Writer out) throws IOException {
         //System.out.println(tasks);
         //System.out.println("============= праметр ==================");
         Gson gson;
-        gson = new Gson();
-        //gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, (JsonDeserializer<LocalDateTime>) (json, type, jsonDeserializationContext) ->
-        //        ZonedDateTime.parse(json.getAsJsonPrimitive().getAsString()).toLocalDateTime()).create();
-
-        //gson.toJson(tasks, out);
+        gson =  new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateAdapter())
+                .create();
         String sGson = gson.toJson(tasks);
 
         //System.out.println(sGson);
@@ -142,6 +140,7 @@ public class TaskIO {
             out.close();
         }
     }
+
 
     /**
      * – зчитує задачі із потоку у список.
@@ -195,28 +194,6 @@ public class TaskIO {
             read(tasks, fis);
         } finally {
             fis.close();
-        }
-    }
-    public static void write(AbstractTaskList tasks, Writer out) throws IOException {
-        //System.out.println(tasks);
-        //System.out.println("============= праметр ==================");
-        Gson gson;
-        gson =  new GsonBuilder()
-                        .registerTypeAdapter(LocalDateTime.class, new LocalDateAdapter())
-                        .create();
-
-
-        //gson.toJson(tasks, out);
-        String sGson = gson.toJson(tasks);
-
-        //System.out.println(sGson);
-        //System.out.println("============= sGson ==================");
-
-        try {
-            out.write(sGson);
-        } finally {
-            out.flush();
-            out.close();
         }
     }
 
