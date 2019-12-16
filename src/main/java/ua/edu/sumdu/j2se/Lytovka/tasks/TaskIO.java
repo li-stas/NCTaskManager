@@ -36,7 +36,7 @@ public class TaskIO {
     }
 
     /**
-     * Ввод-вывод в Java. Классы FileInputStream, FileOutputStream, BufferedInputStream
+     *  Ввод-вывод в Java. Классы FileInputStream, FileOutputStream, BufferedInputStream
      * https://javarush.ru/groups/posts/2020-vvod-vihvod-v-java-klassih-fileinputstream-fileoutputstream-bufferedinputstream
      *
      * Преобразование миллисекунд в LocalDateTime в Java 8
@@ -69,7 +69,7 @@ public class TaskIO {
         DataInputStream dis = new DataInputStream(in);
         try{
             int countTask = dis.readInt();
-            for(int i = 1; i <= countTask; i++){
+            for (int i = 1; i <= countTask; i++) {
                 Task task;
                 int lenTitle = dis.readInt();
                 String title = dis.readUTF();
