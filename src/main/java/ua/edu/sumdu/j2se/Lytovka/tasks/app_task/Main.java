@@ -12,7 +12,6 @@ public class Main {
         MenuMain.processChoice();
         MenuMain.nChoice(scan);*/
         doMngTask();
-
     }
 
     private static void doMngTask() {
@@ -23,16 +22,12 @@ public class Main {
 
         while (true) {
 
-            ctrl.ShowTasks(); // вывести список задач
-
+            ctrl.ShowTasks();  // вывести список задач
             choice = view.menu00();
-            //System.out.printf("choice=%d\n",choice);
-            if (choice == 0) {
-                break;
-            }
-            RunEntry entry = (RunEntry) ctrl.CtrlMenu00().getEntries().get(choice - 1);
+            if (choice == 0) break;
+            RunEntry entry = ctrl.Menu00(choice);
             entry.run();
-            //((RunEntry) ctrl.CtrlMenu00().getEntries().get(choice - 1)).run();
+
         }
     }
 }

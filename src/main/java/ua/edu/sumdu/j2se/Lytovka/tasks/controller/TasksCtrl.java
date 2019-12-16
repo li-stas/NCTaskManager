@@ -15,6 +15,9 @@ public class TasksCtrl {
         this.model = model;
         this.view = view;
     }
+    public RunEntry Menu00(int choice) {
+        return (RunEntry) CtrlMenu00().getEntries().get(choice - 1);
+    }
 
     public CtrlListRun CtrlMenu00() {
         CtrlListRun rum4Menu00 = new CtrlListRun();
@@ -22,6 +25,7 @@ public class TasksCtrl {
             public void run() {
                 if (model.size() == 0) {
                     //view.doSrcEmptyTask();
+                    view.doSayMess("test1 run\n");
                 } else {
                     view.doSayMess("test1 run\n");
                 }
@@ -38,6 +42,7 @@ public class TasksCtrl {
             public void run() {
                 if (model.size() == 0) {
                     //view.doSrcEmptyTask();
+                    view.doSayMess("test3 run\n");
                 } else {
                     view.doSayMess("test3 run\n");
                 }
@@ -47,6 +52,7 @@ public class TasksCtrl {
             public void run() {
                 if (model.size() == 0) {
                     //view.doSrcEmptyTask();
+                    view.doSayMess("test4 un\n");
                 } else {
                     view.doSayMess("test4 un\n");
                 }
