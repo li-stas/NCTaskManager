@@ -15,6 +15,7 @@ public class TasksCtrl {
         this.model = model;
         this.view = view;
     }
+
     public RunEntry Menu00(int choice) {
         return (RunEntry) CtrlMenu00().getEntries().get(choice - 1);
     }
@@ -29,8 +30,6 @@ public class TasksCtrl {
                 } else {
                     view.doSayMess("test1 run\n");
                 }
-
-
             }
         });
         rum4Menu00.addEntry(new RunEntry(2) {
