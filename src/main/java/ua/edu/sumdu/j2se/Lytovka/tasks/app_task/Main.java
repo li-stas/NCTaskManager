@@ -21,13 +21,11 @@ public class Main {
         TasksCtrl ctrl = new TasksCtrl(model, view);
 
         while (true) {
-
             ctrl.ShowTasks();  // вывести список задач
             choice = view.menu00();
             if (choice == 0) break;
-            RunEntry entry = ctrl.Menu00(choice);
+            RunEntry entry = ctrl.Menu00(choice); // выбор методов
             entry.run();
-
         }
     }
 }
