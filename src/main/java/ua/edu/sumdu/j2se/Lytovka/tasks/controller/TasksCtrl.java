@@ -31,7 +31,7 @@ public class TasksCtrl {
         });
         rum4Menu00.addEntry(new RunEntry(2) {
             public void run() {
-                    NewTask();
+                NewTask();
             }
         });
         rum4Menu00.addEntry(new RunEntry(3) {
@@ -65,7 +65,7 @@ public class TasksCtrl {
         if (nSize == 0) {
             view.doSrcEmptyTask();
         } else {
-            view.doSayMess("Всего заданий: " + nSize.toString() +  "\n");
+            view.doSayMess("Всего заданий: " + nSize.toString() + "\n");
         }
 
 
@@ -78,7 +78,7 @@ public class TasksCtrl {
         LocalDateTime endTime = LocalDateTime.now(); // кінець заданим інтервалом
         int interval = 0; // заданим інтервалом (у годинах),
         boolean repeated = false; //повторюваності задачі
-        boolean active=false; //стан задачі
+        boolean active = false; //стан задачі
 
         int nRepite;
         boolean lExit = false;
@@ -104,20 +104,22 @@ public class TasksCtrl {
 
             // временные интервалы
             if (repeated) { // да - интервал с секундах, Начало - дата и время  Окончание - дата время
-                startTime = view.readLclDtTm(LocalDateTime.now());
-                endTime = view.readLclDtTm(startTime);
+
+                startTime = view.readStartTime();
+                endTime = view.readEndTime();
                 interval = view.readInterval();
+
             } else {    // нет  Время - дата и время
-                time = view.readLclDtTm(LocalDateTime.now());
+                time = view.readStartTime();
             }
 
-            view.doSayMess(view.toStringTask( title,  time,  startTime,  endTime, interval, repeated, active)+"\n");
+            view.doSayMess(view.toStringTask(title, time, startTime, endTime, interval, repeated, active) + "\n");
             choice = view.readDoSaveTask();
             if (choice == 1) { // сохранить
                 if (repeated) {
-                    model.add(model.CreateTaskRepite(title,  startTime,  endTime, interval));
+                    model.add(model.CreateTaskRepite(title, startTime, endTime, interval));
                 } else {
-                    model.add(model.CreateTaskOne(title,  time));
+                    model.add(model.CreateTaskOne(title, time));
                 }
                 break;
             } else if (choice == 0) { // выхоод

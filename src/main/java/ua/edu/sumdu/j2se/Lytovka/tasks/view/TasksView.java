@@ -15,31 +15,28 @@ public class TasksView {
     public int menu00() {
         int nRet;
         Menu menu = new Menu();
-        menu.addEntry(new MenuEntry("Что хотите сделать заданиями? 1 - Редактировать", true) {
+        menu.addEntry(new MenuEntry( "1 - Редактировать", true) {
             @Override
-            public void run() {
-                //System.out.println("test1 run");
+            public void run() {                //System.out.println("test1 run");
             }
         });
         menu.addEntry(new MenuEntry("2 - Добавить", true) {
             @Override
-            public void run() {
-                //System.out.println("test2 run");
+            public void run() {                //System.out.println("test2 run");
             }
         });
 
         menu.addEntry(new MenuEntry("3 - Информация о задании", true) {
             @Override
-            public void run() {
-                //System.out.println("test3 run");
+            public void run() {                //System.out.println("test3 run");
             }
         });
         menu.addEntry(new MenuEntry("4 - Календарь на период", true) {
             @Override
-            public void run() {
-                //System.out.println("test4 run");
+            public void run() {                //System.out.println("test4 run");
             }
         });
+        System.out.print("Что хотите сделать заданиями? ");
         nRet = menu.run();
         return nRet;
 
@@ -55,7 +52,7 @@ public class TasksView {
 
     public void doSrcEmptyTask() {
         doSayMess("\n");
-        doSayMess((char) 27 + "[33m" + "Список заданий пустой\n");
+        doSayMess((char) 27 + "[33m" + "Список заданий пустой"+ (char) 27 + "[37m"+"\n");
         doSayMess("\n");
     }
 
@@ -103,12 +100,12 @@ public class TasksView {
         Integer nMi = 0;
         int[] paramInt = new int[1];
         while (true) {
-            System.out.print("Год (ГГГГ): ");
+            System.out.print("    Год (ГГГГ): ");
             paramInt[0] = nYYYY;
             readNum(paramInt, dDtTm.getYear(), dDtTm.getYear() + 50);
             nYYYY = paramInt[0];
 
-            System.out.print("Месяц (ММ): ");
+            System.out.print("    Месяц (ММ): ");
             paramInt[0] = nMM;
             readNum(paramInt, 1, 12);
             nMM = paramInt[0];
@@ -116,17 +113,17 @@ public class TasksView {
             dDtTm = LocalDateTime.of(nYYYY, nMM, 01, 00, 00, 00);
             //System.out.printf("Last day of mounth=%d\n",dDtTm.plusMonths(1).minusDays(1).getDayOfMonth());
 
-            System.out.print("День (ДД) : ");
+            System.out.print("    День (ДД) : ");
             paramInt[0] = nDD;
             readNum(paramInt, 1, dDtTm.plusMonths(1).minusDays(1).getDayOfMonth());
             nDD = paramInt[0];
 
-            System.out.print("Час (ЧЧ)  : ");
+            System.out.print("    Час (ЧЧ)  : ");
             paramInt[0] = nHH;
             readNum(paramInt, 1, dDtTm.plusMonths(1).minusDays(1).getDayOfMonth());
             nHH = paramInt[0];
 
-            System.out.print("Минуты(мм): ");
+            System.out.print("    Минуты(мм): ");
             paramInt[0] = nMi;
             readNum(paramInt, 0, 59);
             nMi = paramInt[0];
@@ -142,6 +139,14 @@ public class TasksView {
         }
 
         return dDtTm;
+    }
+    public LocalDateTime readStartTime() {
+        System.out.println("Время начала: ");
+        return readLclDtTm(LocalDateTime.now());
+    }
+    public LocalDateTime readEndTime() {
+        System.out.println("Время оконончания: ");
+        return readLclDtTm(LocalDateTime.now());
     }
     public int readInterval() {
         int interval = 0;
@@ -189,11 +194,20 @@ public class TasksView {
     public String toStringTask(String title, LocalDateTime time, LocalDateTime startTime, LocalDateTime endTime,
                            int interval, boolean repeated, boolean active) {
 
-        return "Задание : " + title + (
+        return "Задание: " + title + (
                 (!repeated) ?
-                        ("\n Время : " + time + "\n") :
-                        "\n Время начала : " + startTime + "\n время конца : " + endTime + "\n"
-                                + "интервал повторения " + repeated + "\n"
+                        ("\n Время: " + time + "\n") :
+                        "\n Время начала: " + startTime + "\n время конца: " + endTime + "\n"
+                                + " интервал повторения: " + interval + "\n"
+        );
+    }
+    public String toStringTaskShort(String title, LocalDateTime time, LocalDateTime startTime, LocalDateTime endTime,
+                               int interval, boolean repeated, boolean active) {
+
+        return "Задание: " + title + (
+                (!repeated) ?
+                        (" В:" + time ) :
+                        " ВH: " + startTime + " ВК: " + endTime  + "ИП: " + repeated + "\n"
         );
     }
 }

@@ -1,4 +1,4 @@
-package ua.edu.sumdu.j2se.lytovka.tasks.app_task;
+package ua.edu.sumdu.j2se.lytovka.tasks.mytest_ldt;
 
 import java.util.Arrays;
 import java.util.Scanner;
