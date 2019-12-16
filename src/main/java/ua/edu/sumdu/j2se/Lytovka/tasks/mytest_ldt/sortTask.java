@@ -3,6 +3,7 @@ package ua.edu.sumdu.j2se.lytovka.tasks.mytest_ldt;
 import ua.edu.sumdu.j2se.lytovka.tasks.Task;
 import ua.edu.sumdu.j2se.lytovka.tasks.Tasks;
 
+import java.awt.*;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -12,11 +13,27 @@ import java.util.*;
 
 public class sortTask {
     public static void main(String[] args) {
-        LocalDateTime dNow = LocalDateTime.now();
-        Task task1 = new Task("some1",  dNow.plusSeconds(10),true);
-        System.out.println(task1);
-        f(task1);
-        System.out.println(task1);
+
+
+        setCursorPorision(0, 10);
+                System.out.println((char)27 + "[30m"+"ЧЕРНЫЙ");
+        setCursorPorision(1, 10);
+                System.out.println((char)27 + "[31mКРАСНЫЙ");
+                System.out.println((char)27 + "[32mЗЕЛЕНЫЙ");
+                System.out.println((char)27 + "[33mЖЕЛТЫЙ");
+                System.out.println((char)27 + "[34mСИНИЙ");
+                System.out.println((char)27 + "[35mПУРПУРНЫЙ");
+                System.out.println((char)27 + "[36mБИРЮЗОВЫЙ");
+                System.out.println((char)27 + "[37mБЕЛЫЙ");
+        setCursorPorision(0, 10);
+                System.out.println((char)27 + "[40m");
+                System.out.println((char)27 + "[41m");
+                System.out.println((char)27 + "[42m");
+                System.out.println((char)27 + "[43m");
+                System.out.println((char)27 + "[44m");
+                System.out.println((char)27 + "[45m");
+                System.out.println((char)27 + "[46m");
+                System.out.println((char)27 + "[47m");
 
 
 
@@ -97,4 +114,8 @@ public class sortTask {
     public static final LocalDateTime TODAY_4H = TODAY.plusHours(4);
 
 
+    public static void setCursorPorision(int x, int y) {
+        final char escCode = 0x1B;
+        System.out.print(String.format("%c[%d;%df", escCode, y, x));
+    }
 }

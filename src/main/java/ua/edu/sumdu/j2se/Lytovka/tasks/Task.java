@@ -14,10 +14,8 @@ public class Task implements Serializable, Cloneable {
     /**
      *
      */
-    private String title; //назви задачі
-    //
-    private LocalDateTime time; //час виконання задачі
-    //
+    private String title; //назви задачі    //
+    private LocalDateTime time; //час виконання задачі    //
     private LocalDateTime startTime; // початок заданим інтервалом
     private LocalDateTime endTime; // кінець заданим інтервалом
     private int interval; // заданим інтервалом (у годинах),

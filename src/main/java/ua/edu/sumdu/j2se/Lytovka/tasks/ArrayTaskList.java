@@ -264,7 +264,7 @@ public class ArrayTaskList extends AbstractTaskList implements  Cloneable, Itera
     }
 
     @Override
-    public  Stream<Task> getStream( ) {
+    public  Stream<Task> getStream() {
         return Arrays.stream(aTask);
     }
     private void ADelAndASize(int index4Del) {
@@ -281,6 +281,15 @@ public class ArrayTaskList extends AbstractTaskList implements  Cloneable, Itera
         aTask = aTmp; // замена ссылки
         len--;
         // end ASIZE
+    }
+
+    public Task CreateTaskOne(String title, LocalDateTime time) {
+        Task tmp = new Task(title,time);
+        return tmp;
+    }
+    public Task CreateTaskRepite(String title, LocalDateTime start, LocalDateTime end, int interval) {
+        Task tmp = new Task(title, start, end, interval);
+        return tmp;
     }
 }
 /*

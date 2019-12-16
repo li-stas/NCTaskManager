@@ -39,7 +39,7 @@ public abstract class AbstractTaskList { //implements Iterable  {
      * @throws IndexOutOfBoundsException
      */
     public abstract Task getTask(int index);
-    public abstract Stream<Task> getStream( );
+    public abstract Stream<Task> getStream();
     /**
      * знаходити, які саме задачі будуть виконані хоча б раз у деякому проміжку
      * @param from
