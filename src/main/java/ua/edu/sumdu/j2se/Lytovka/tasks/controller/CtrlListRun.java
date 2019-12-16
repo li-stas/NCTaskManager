@@ -1,7 +1,5 @@
 package ua.edu.sumdu.j2se.lytovka.tasks.controller;
 
-import ua.edu.sumdu.j2se.lytovka.tasks.view.menuto.MenuEntry;
-
 import java.util.ArrayList;
 import java.util.List;
 
