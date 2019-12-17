@@ -8,15 +8,16 @@ import ua.edu.sumdu.j2se.lytovka.tasks.view.TasksView;
 
 public class Main {
     public static void main(String[] args) {
-
         doMngTask();
     }
 
     private static void doMngTask() {
         int choice;
+
         ArrayTaskList model = new ArrayTaskList();
         TasksView view = new TasksView();
         TasksCtrl ctrl = new TasksCtrl(model, view);
+
         while (true) {
 
             ctrl.ShowTasks();  // вывести список задач
