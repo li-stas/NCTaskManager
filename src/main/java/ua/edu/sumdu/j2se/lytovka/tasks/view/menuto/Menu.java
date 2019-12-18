@@ -9,9 +9,16 @@ import java.util.List;
 public class Menu  {
     private List entries = new ArrayList();
     private boolean isExit = false;
+    private int nTypeMenu;
 
     public Menu() {
+        this.nTypeMenu = 0;
     }
+
+    public Menu(int nTypeMenu) {
+        this.nTypeMenu = nTypeMenu;
+    }
+
     public void addEntry(MenuEntry oMenuEntry) {
         entries.add(oMenuEntry) ;
     }
@@ -22,7 +29,7 @@ public class Menu  {
         nMaxNumElem = entries.size() ;
         // Добавляем пункт меню Exit
         //entries.add(new MenuEntry(entries.size() + 1  + " - Exit") {
-        entries.add(new MenuEntry("0 - Exit", true) {
+        entries.add(new MenuEntry("0 - Выход", true) {
             @Override
             public void run() {
                 //isExit = true;
@@ -68,10 +75,20 @@ public class Menu  {
         System.out.print((char)27 + "[37m");
         for (int i = 0; i < entries.size() - 1 ; i++) {
             MenuEntry entry = (MenuEntry) entries.get(i);
-            System.out.print(entry.getTitle()+", ");
+            if (nTypeMenu == 0) {
+                System.out.print(entry.getTitle()+", ");
+            } else {
+                System.out.println(entry.getTitle());
+            }
         }
         MenuEntry entry = (MenuEntry) entries.get(entries.size() - 1);
-        System.out.print(entry.getTitle()+": ");
+        if (nTypeMenu == 0) {
+            System.out.print(entry.getTitle() + ": ");
+        } else {
+            System.out.println(entry.getTitle());
+            System.out.println("");
+            System.out.print("Сделайте выбор" + ": ");
+        }
     }
 
 
