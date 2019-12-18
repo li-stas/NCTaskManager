@@ -1,4 +1,9 @@
-package ua.edu.sumdu.j2se.lytovka.tasks;
+package ua.edu.sumdu.j2se.lytovka.tasks.model;
+
+import ua.edu.sumdu.j2se.lytovka.tasks.model.AbstractTaskList;
+import ua.edu.sumdu.j2se.lytovka.tasks.model.ArrayTaskList;
+import ua.edu.sumdu.j2se.lytovka.tasks.model.LinkedTaskList;
+import ua.edu.sumdu.j2se.lytovka.tasks.model.ListTypes;
 
 public class TaskListFactory {
     /**

@@ -1,6 +1,6 @@
 package ua.edu.sumdu.j2se.lytovka.tasks.controller;
 
-import ua.edu.sumdu.j2se.lytovka.tasks.ArrayTaskList;
+import ua.edu.sumdu.j2se.lytovka.tasks.model.ArrayTaskList;
 import ua.edu.sumdu.j2se.lytovka.tasks.view.TasksView;
 
 import java.time.LocalDateTime;
@@ -110,12 +110,12 @@ public class TasksCtrl {
             // временные интервалы
             if (repeated) { // да - интервал с секундах, Начало - дата и время  Окончание - дата время
 
-                startTime = view.readStartTime();
-                endTime = view.readEndTime();
+                startTime = view.readStartTime(LocalDateTime.now());
+                endTime = view.readEndTime(startTime);
                 interval = view.readInterval();
 
             } else {    // нет  Время - дата и время
-                time = view.readStartTime();
+                time = view.readStartTime(LocalDateTime.now());
             }
 
             view.doSayMess(view.toStringTask(title, time, startTime, endTime, interval, repeated, active) + "\n");

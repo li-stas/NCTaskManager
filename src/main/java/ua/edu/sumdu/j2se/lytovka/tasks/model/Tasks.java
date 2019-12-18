@@ -1,5 +1,7 @@
-package ua.edu.sumdu.j2se.lytovka.tasks;
+package ua.edu.sumdu.j2se.lytovka.tasks.model;
 
+
+import ua.edu.sumdu.j2se.lytovka.tasks.model.Task;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -19,7 +21,7 @@ public class Tasks {
         LocalDateTime toTime = elem.nextTimeAfter(from);
         //if (elem.isActive() && toTime != -1 && (toTime < to || toTime == to )) {
         if (elem.isActive() && toTime != null
-                && (toTime.compareTo(to) == -1 || toTime.compareTo(to) == 0 )) {
+                && (toTime.compareTo(to) <= 0 )) {
             return true;
         }
         return false;

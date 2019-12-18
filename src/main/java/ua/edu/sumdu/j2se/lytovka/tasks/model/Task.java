@@ -3,7 +3,7 @@
 * клас Task із наступними публічними методами
 *
  */
-package ua.edu.sumdu.j2se.lytovka.tasks;
+package ua.edu.sumdu.j2se.lytovka.tasks.model;
 
 import java.io.*;
 import java.time.LocalDateTime;
@@ -73,7 +73,8 @@ public class Task implements Serializable, Cloneable {
      * @param interval
      */
     public Task(String title, LocalDateTime start, LocalDateTime end, int interval) throws IllegalArgumentException {
-        if (start.compareTo(end) == 1) {
+        //if (start.compareTo(end) == 1) {
+        if (start.compareTo(end) > 0) {
             throw new IllegalArgumentException();
         }
         if (title.isEmpty()) {
@@ -243,24 +244,28 @@ public class Task implements Serializable, Cloneable {
         LocalDateTime currentTime;
         if (active) { // активна
             if (!repeated) { // одно разовая
-                if (current.compareTo(time) == -1) { // только время ДО начала, если начло то уже -1
+                //if (current.compareTo(time) == -1) { // только время ДО начала, если начло то уже -1
+                if (current.compareTo(time) < 0) { // только время ДО начала, если начло то уже -1
                     return time;
                 }
                 return null;
             } else { // повторяется
                 //if (current < startTime) { // время до страта
-                if (current.compareTo(startTime) == -1) { // время до страта
+                //if (current.compareTo(startTime) == -1) { // время до страта
+                if (current.compareTo(startTime) < 0) { // время до страта
                     return startTime;
                 } else {
                     int i = 0;
                     while (true) { // следующие после заданого
                         currentTime = startTime.plusSeconds(interval * i);
-                        if (currentTime.compareTo(current) == 1) {
+                        //if (currentTime.compareTo(current) == 1) {
+                        if (currentTime.compareTo(current) > 0) {
                             break;
                         }
                         i++;
                     }
-                    if (currentTime.compareTo(endTime) == 1) {
+                    //if (currentTime.compareTo(endTime) == 1) {
+                    if (currentTime.compareTo(endTime) > 0) {
                         return null;
                     }
                     return currentTime;

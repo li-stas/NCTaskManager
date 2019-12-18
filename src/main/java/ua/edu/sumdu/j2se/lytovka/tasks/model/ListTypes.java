@@ -1,4 +1,4 @@
-package ua.edu.sumdu.j2se.lytovka.tasks;
+package ua.edu.sumdu.j2se.lytovka.tasks.model;
 
 public class ListTypes {
     public enum types { ARRAY, LINKED };
