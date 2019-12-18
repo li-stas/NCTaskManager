@@ -1,6 +1,7 @@
 package ua.edu.sumdu.j2se.lytovka.tasks.view;
 
 
+import ua.edu.sumdu.j2se.lytovka.tasks.model.Task;
 import ua.edu.sumdu.j2se.lytovka.tasks.view.menuto.Menu;
 import ua.edu.sumdu.j2se.lytovka.tasks.view.menuto.MenuEntry;
 
@@ -8,9 +9,49 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
+import java.util.Iterator;
 import java.util.Scanner;
 
 public class TasksView {
+    public int menuReadTast(Task t) {
+        int nRet;
+        Menu menu = new Menu(1);
+        menu.addEntry(new MenuEntry( String.format("%-25s","1 - Название") + ":" + t.getTitle(),
+                true) {
+            public void run() {                //System.out.println("test1 run");
+            }
+        });
+        menu.addEntry(new MenuEntry( String.format("%-25s","2 - Актинвная") + ":" + (t.isActive() ? "Да" : "Нет"),
+                true) {
+            public void run() {                //System.out.println("test1 run");
+            }
+        });
+        if (t.isRepeated()) {
+            menu.addEntry(new MenuEntry( String.format("%-25s","3 - Время начала") + ":" + t.getStartTime(),
+                    true) {
+                public void run() {                //System.out.println("test1 run");
+                }
+            });
+            menu.addEntry(new MenuEntry( String.format("%-25s","4 - Время окончания") + ":" + t.getEndTime(),
+                    true) {
+                public void run() {                //System.out.println("test1 run");
+                }
+            });
+            menu.addEntry(new MenuEntry( String.format("%-25s","5 - Интервал повторения") + ":" + t.getEndTime(),
+                    true) {
+                public void run() {                //System.out.println("test1 run");
+                }
+            });
+        } else {
+            menu.addEntry(new MenuEntry( String.format("%-25s","3 - Время начала") + ":" + t.getStartTime(),
+                    true) {
+                public void run() {                //System.out.println("test1 run");
+                }
+            });
+        }
+        nRet = menu.run();
+        return nRet;
+    }
 
     public int menu00() {
         int nRet;
@@ -25,8 +66,7 @@ public class TasksView {
             public void run() {                //System.out.println("test2 run");
             }
         });
-
-        menu.addEntry(new MenuEntry("3 - Информация о задании", true) {
+        menu.addEntry(new MenuEntry("3 - Удалить задание", true) {
             @Override
             public void run() {                //System.out.println("test3 run");
             }
@@ -46,13 +86,36 @@ public class TasksView {
         System.out.printf(cMess);
     }
 
-    public void doSrcTask() {
-
+    public void doSayMess_R$B(String cMess) {
+        System.out.printf((char)27 + "[31m" + cMess + (char)27 + "[37m");
     }
 
-    public void doSrcEmptyTask() {
+    public void doSrcTasks(Iterator<Task> iterator) {
         doSayMess("\n");
-        doSayMess((char) 27 + "[33m" + "Список заданий пустой"+ (char) 27 + "[37m"+"\n");
+        int i = 0;
+        for (;iterator.hasNext();) {
+            Task t = iterator.next();
+            String cMess = String.format("%2d", ++i)
+                    + ". [ "
+                    + (t.isActive() ? (char)27 + "[30m" : "")
+                    + toStringTaskShort(t.getTitle(), t.getStartTime(), t.getEndTime(), t.getTime(),
+                    t.getRepeatInterval(), t.isRepeated(), t.isActive())
+                    +  (char)27 + "[37m"
+                    + " ]";
+            doSayMess( cMess + '\n');
+        }
+        doSayMess("\n");
+    }
+    public void doSrcMaxTasks() {
+        doSayMess("\n");
+        doSayMess((char) 27 + "[31m" + "К-во задач ограничено 10" + (char)27 + "[37m"+"\n");
+        doSayMess("\n");
+    }
+
+
+    public void doSrcEmptyTasks() {
+        doSayMess("\n");
+        doSayMess((char) 27 + "[33m" + "Список заданий пустой"+ (char)27 + "[37m"+"\n");
         doSayMess("\n");
     }
 
@@ -154,6 +217,10 @@ public class TasksView {
         return readNumSayGetValid("Интервал, cек: ", 0,60 * 60 * 24);
     }
 
+    public int readWhatTaskNumber(int nMaxTask) {
+        return readNumSayGetValid("Выбирете номер задания 0 - " + nMaxTask + " (0 - Отмена):", 0,nMaxTask);
+    }
+
     public int readNumSayGetValid(String s1, int from, int to) {
         int[] paramInt = new int[1];
         paramInt[0] = 0;
@@ -188,8 +255,8 @@ public class TasksView {
                 continue;
                 //e.printStackTrace();
             } catch (NumberFormatException e) {
-                System.out.println((char) 27 + "[31mТолько цифры:"
-                        + " " + from + " - " + to + (char) 27 + "[37m");
+                System.out.println((char)27 + "[31m" + "Только цифры:"
+                        + " " + from + " - " + to + (char)27 + "[37m");
                 continue;
             }
         }
@@ -198,7 +265,7 @@ public class TasksView {
     public String toStringTask(String title, LocalDateTime time, LocalDateTime startTime, LocalDateTime endTime,
                            int interval, boolean repeated, boolean active) {
 
-        return "Задание: " + title + (
+        return "Задание: " + String.format("%-35s",title) + (
                 (!repeated) ?
                         ("\n Время: " + time + "\n") :
                         "\n Время начала: " + startTime + "\n время конца: " + endTime + "\n"
@@ -208,10 +275,10 @@ public class TasksView {
     public String toStringTaskShort(String title, LocalDateTime time, LocalDateTime startTime, LocalDateTime endTime,
                                int interval, boolean repeated, boolean active) {
 
-        return "Задание: " + title + (
+        return "Зд: " + String.format("%-15s", title) + (
                 (!repeated) ?
-                        (" В:" + time ) :
-                        " ВH: " + startTime + " ВК: " + endTime  + "ИП: " + repeated + "\n"
+                        (" Вp:" + time ) :
+                        " ВpH: " + startTime + " ВpК: " + endTime  + "ИнП: " + repeated + "\n"
         );
     }
 }

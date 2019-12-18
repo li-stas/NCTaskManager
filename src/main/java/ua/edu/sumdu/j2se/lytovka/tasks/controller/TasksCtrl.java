@@ -1,6 +1,7 @@
 package ua.edu.sumdu.j2se.lytovka.tasks.controller;
 
 import ua.edu.sumdu.j2se.lytovka.tasks.model.ArrayTaskList;
+import ua.edu.sumdu.j2se.lytovka.tasks.model.Task;
 import ua.edu.sumdu.j2se.lytovka.tasks.view.TasksView;
 
 import java.time.LocalDateTime;
@@ -9,7 +10,6 @@ import java.time.LocalDateTime;
 public class TasksCtrl {
     private ArrayTaskList model;
     private TasksView view;
-    private CtrlListRun rum4Menu00 = CtrlMenu00();
 
     public TasksCtrl(ArrayTaskList model, TasksView view) {
         this.model = model;
@@ -20,21 +20,47 @@ public class TasksCtrl {
         return (RunEntry) CtrlMenu00().getEntries().get(choice - 1);
     }
 
-    public CtrlListRun CtrlMenu00() {
+    private CtrlListRun CtrlMenu00() {
         CtrlListRun rum4Menu00 = new CtrlListRun();
         rum4Menu00.addEntry(new RunEntry(1) {
-            public void run() {
+            public void run()  {
                 if (model.size() == 0) {
-                    //view.doSrcEmptyTask();
-                    view.doSayMess("test1 run\n");
+                    //view.doSrcEmptyTask();  //view.doSayMess("test1 run\n");
                 } else {
-                    view.doSayMess("test1 run\n");
+                    //view.doSayMess("test1 run\n");
+                    int nTaskNum = view.readWhatTaskNumber(model.size());
+                    if (nTaskNum != 0) {
+
+                        //Task tmp = model.getTask(nTaskNum - 1);
+                        Task tmp = ctrlCloneTask(nTaskNum);
+
+                        while (true) {
+                            Integer choice = view.menuReadTast(model.getTask(nTaskNum - 1));
+                            if (choice == 0) {
+                                // записать или продолжить...
+                                break;
+                            }
+                            if (tmp.isRepeated()){
+                               RunEntry entry = (RunEntry) CtrlReadTaskRepite().getEntries().get(choice - 1);
+                               entry.run();
+                            } else {
+                                RunEntry entry = (RunEntry) CtrlReadTask().getEntries().get(choice - 1);
+                                entry.run();
+                            }
+
+                            //view.doSayMess("test1 run = " + choice.toString() + "\n");
+                        }
+                    }
                 }
             }
         });
         rum4Menu00.addEntry(new RunEntry(2) {
             public void run() {
-                NewTask();
+                if (model.size() < 10) {
+                    NewTask();
+                } else {
+                    view.doSrcMaxTasks();
+                }
             }
         });
         rum4Menu00.addEntry(new RunEntry(3) {
@@ -60,20 +86,25 @@ public class TasksCtrl {
         return rum4Menu00;
     }
 
-    public CtrlListRun getRum4Menu00() {
-        return rum4Menu00;
+    private Task ctrlCloneTask( int nTaskNum ) {
+        try {
+            return model.getTask(nTaskNum - 1).clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
+
 
     public void ShowTasks() {
         Integer nSize = model.size();
 
         if (nSize == 0) {
-            view.doSrcEmptyTask();
+            view.doSrcEmptyTasks();
         } else {
-            view.doSayMess("Всего заданий: " + nSize.toString() + "\n");
+            //view.doSayMess("Всего заданий: " + nSize.toString() + "\n");
+            view.doSrcTasks(model.iterator());
         }
-
-
     }
 
     public void NewTask() {
@@ -132,15 +163,55 @@ public class TasksCtrl {
             } else { // нет - хотят продолжить
                 continue;
             }
-
-
         }
-        /*
-        if (!lExit) {
-            view.doSayMess("Задача: " + title + "\n");
-            view.doSayMess("Повтор: " + (repeated ? "Да" : "Нет") + "\n");
-        }
-         */
+    }
+    public CtrlListRun CtrlReadTaskRepite() {
+        CtrlListRun rum4ReadTaskRepite = new CtrlListRun();
+        rum4ReadTaskRepite.addEntry(new RunEntry(1) {
+            public void run() {
+               view.doSayMess("test  1 run\n");
+            }
+        });
+        rum4ReadTaskRepite.addEntry(new RunEntry(2) {
+            public void run() {
+                view.doSayMess("test2 run\n");
+            }
+        });
+        rum4ReadTaskRepite.addEntry(new RunEntry(3) {
+            public void run() {
+                view.doSayMess("test3 run\n");
+            }
+        });
+        rum4ReadTaskRepite.addEntry(new RunEntry(4) {
+            public void run() {
+                view.doSayMess("test4 run\n");
+            }
+        });
+        rum4ReadTaskRepite.addEntry(new RunEntry(5) {
+            public void run() {
+                view.doSayMess("test5 run\n");
+            }
+        });
+        return rum4ReadTaskRepite;
+    }
+    public CtrlListRun CtrlReadTask() {
+        CtrlListRun rum4ReadTask = new CtrlListRun();
+        rum4ReadTask.addEntry(new RunEntry(1) {
+            public void run() {
+                view.doSayMess("test=1 run\n");
+            }
+        });
+        rum4ReadTask.addEntry(new RunEntry(2) {
+            public void run() {
+                view.doSayMess("test=2 run\n");
+            }
+        });
+        rum4ReadTask.addEntry(new RunEntry(3) {
+            public void run() {
+                view.doSayMess("test=3 run\n");
+            }
+        });
 
+        return rum4ReadTask;
     }
 }
