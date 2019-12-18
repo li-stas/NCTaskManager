@@ -98,39 +98,41 @@ public class TasksView {
         Integer nDD = 0;
         Integer nHH = 0;
         Integer nMi = 0;
-        int[] paramInt = new int[1];
+        //int[] paramInt = new int[1];
         while (true) {
-            System.out.print("    Год (ГГГГ): ");
-            paramInt[0] = nYYYY;
-            readNum(paramInt, dDtTm.getYear(), dDtTm.getYear() + 50);
-            nYYYY = paramInt[0];
 
-            System.out.print("    Месяц (ММ): ");
-            paramInt[0] = nMM;
-            readNum(paramInt, 1, 12);
-            nMM = paramInt[0];
+            //            System.out.print("    Год (ГГГГ): ");
+            //            paramInt[0] = nYYYY;
+            //            readNum(paramInt, dDtTm.getYear(), dDtTm.getYear() + 50);
+            //            nYYYY = paramInt[0];
+            nYYYY = readNumSayGetValid("    Год (ГГГГ): ", dDtTm.getYear(), dDtTm.getYear() + 50);
+            //            System.out.print("    Месяц (ММ): ");
+            //            paramInt[0] = nMM;
+            //            readNum(paramInt, 1, 12);
+            //            nMM = paramInt[0];
+            nMM = readNumSayGetValid("    Месяц (ММ): ",  1, 12);
 
             dDtTm = LocalDateTime.of(nYYYY, nMM, 01, 00, 00, 00);
-            //System.out.printf("Last day of mounth=%d\n",dDtTm.plusMonths(1).minusDays(1).getDayOfMonth());
 
-            System.out.print("    День (ДД) : ");
+            /*System.out.print("    День (ДД) : ");
             paramInt[0] = nDD;
             readNum(paramInt, 1, dDtTm.plusMonths(1).minusDays(1).getDayOfMonth());
-            nDD = paramInt[0];
-
-            System.out.print("    Час (ЧЧ)  : ");
+            nDD = paramInt[0];             */
+            nDD = readNumSayGetValid("    День (ДД) : ", 1, dDtTm.plusMonths(1).minusDays(1).getDayOfMonth());
+            /*            System.out.print("    Час (ЧЧ)  : ");
             paramInt[0] = nHH;
-            readNum(paramInt, 1, dDtTm.plusMonths(1).minusDays(1).getDayOfMonth());
-            nHH = paramInt[0];
-
-            System.out.print("    Минуты(мм): ");
+            readNum(paramInt, 0, 24);
+            nHH = paramInt[0];             */
+            nHH = readNumSayGetValid("    Час (ЧЧ)  : ", 0, 23);
+            /*System.out.print("    Минуты(мм): ");
             paramInt[0] = nMi;
             readNum(paramInt, 0, 59);
-            nMi = paramInt[0];
+            nMi = paramInt[0];     */
+            nMi = readNumSayGetValid("    Минуты(мм): ", 0, 59);
 
             //LocalDateTime  dDtTm = LocalDateTime.now();
             dDtTm = LocalDateTime.of(nYYYY, nMM, nDD, nHH, nMi, 00, 00);
-            if (dDtTm.compareTo(dValid) == -1) {
+            if (dDtTm.compareTo(dValid) < 0) {
                 System.out.println((char) 27 + "[31m" + "Дата и время уже прошли" + (char) 27 + "[37m");
                 continue;
             } else {
@@ -140,22 +142,24 @@ public class TasksView {
 
         return dDtTm;
     }
-    public LocalDateTime readStartTime() {
+    public LocalDateTime readStartTime(LocalDateTime d4Valid) {
         System.out.println("Время начала: ");
-        return readLclDtTm(LocalDateTime.now());
+        return readLclDtTm(d4Valid);
     }
-    public LocalDateTime readEndTime() {
+    public LocalDateTime readEndTime(LocalDateTime d4Valid) {
         System.out.println("Время оконончания: ");
-        return readLclDtTm(LocalDateTime.now());
+        return readLclDtTm(d4Valid);
     }
     public int readInterval() {
-        int interval = 0;
+        return readNumSayGetValid("Интервал, cек: ", 0,60 * 60 * 24);
+    }
+
+    public int readNumSayGetValid(String s1, int from, int to) {
         int[] paramInt = new int[1];
-        System.out.print("Интервал, cек: ");
-        paramInt[0] = interval;
-        readNum(paramInt, 0,60 * 60 * 24);
-        interval = paramInt[0];
-        return interval;
+        paramInt[0] = 0;
+        System.out.print(s1);
+        readNum(paramInt, from, to);
+        return paramInt[0];
     }
     /**
      * ввод чисел с проверкой диапзона
