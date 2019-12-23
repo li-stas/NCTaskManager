@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -307,7 +308,7 @@ public class TasksView {
                 (!repeated) ?
                         ("\n Время: " + dToC(time) + "\n") :
                         "\n Время начала: " + dToC(startTime) + "\n Время окончания: " + dToC(endTime) + "\n"
-                                + " Интервал повторения: " + interval + "\n"
+                                + " Интервал повторения: " + interval(interval) + "\n"
         );
     }
     public String toStringTaskShort(String title, LocalDateTime time, LocalDateTime startTime, LocalDateTime endTime,
@@ -316,7 +317,7 @@ public class TasksView {
         return "Зд: " + String.format("%-15s", title) + (
                 (!repeated) ?
                         (" Вp : " + dToC(time) ) :
-                        " ВpH: " + dToC(startTime) + " ВpК: " + dToC(endTime)  + " ИнП: " + interval // + "\n"
+                        " ВpH: " + dToC(startTime) + " ВpК: " + dToC(endTime)  + " ИнП: " + interval(interval) // + "\n"
         );
     }
 
@@ -332,6 +333,7 @@ public class TasksView {
     public void doSrcTasksCalendar(SortedMap<LocalDateTime, Set<Task>> result, LocalDateTime start, LocalDateTime end){
 
         System.out.println("    Календарь заданий в период с " + dToC(start) + " по " + dToC(end) + "\n");
+
         System.out.println("--------------------------------------------------------------");
         System.out.printf("%-15s  %s\n","Дата и время"," |            Задание");
         System.out.println("--------------------------------------------------------------");
@@ -355,4 +357,9 @@ public class TasksView {
         System.out.printf("\n");
     }
 
+    private String interval(long time) {
+        // интервал в Часах и Минутах
+        //return String.format("%02d:%02d:%02d", time / 3600, time / 60 % 60, time % 60);
+        return String.format("%02d:%02d", time / 3600, time / 60 % 60);
+    }
 }
