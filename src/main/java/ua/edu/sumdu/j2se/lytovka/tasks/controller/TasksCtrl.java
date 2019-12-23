@@ -134,8 +134,6 @@ public class TasksCtrl {
                             end = start.plusMonths(12);
                             break;
                     }
-                     view.doSayMess("test1 choice = " + choice + "\n");
-                     view.doSayMess("test1 choice = " + start + " " + end + "\n");
 
                     if (choice != 0) {
                         HashSet<Task> hsIask = new HashSet<Task>();
@@ -144,7 +142,7 @@ public class TasksCtrl {
                         }
                         SortedMap<LocalDateTime, Set<Task>> result = Tasks.calendar(hsIask, start, end);
                         //view.doSayMess("test1 choice = " + choice + "\n");
-                        view.doSrcTasksCalendar(result);
+                        view.doSrcTasksCalendar(result, start, end);
 
                     }
                 }

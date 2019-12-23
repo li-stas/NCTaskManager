@@ -57,22 +57,18 @@ public class TasksView {
         int nRet;
         Menu menu = new Menu();
         menu.addEntry(new MenuEntry( "1 - Редактировать", true) {
-            @Override
             public void run() {                //System.out.println("test1 run");
             }
         });
         menu.addEntry(new MenuEntry("2 - Добавить", true) {
-            @Override
             public void run() {                //System.out.println("test2 run");
             }
         });
         menu.addEntry(new MenuEntry("3 - Удалить задание", true) {
-            @Override
             public void run() {                //System.out.println("test3 run");
             }
         });
         menu.addEntry(new MenuEntry("4 - Календарь на период", true) {
-            @Override
             public void run() {                //System.out.println("test4 run");
             }
         });
@@ -240,7 +236,8 @@ public class TasksView {
 
     public boolean dDtTm_compare02(LocalDateTime dDtTm, LocalDateTime dValid) {
         if (dDtTm.compareTo(dValid) > 0) {
-            System.out.println((char) 27 + "[31m" + "Дата и время должна быть меньше или равна Времени окончания" + (char) 27 + "[37m");
+            System.out.println((char) 27 + "[31m"
+                    + "Дата и время должна быть меньше или равна Времени окончания" + (char) 27 + "[37m");
             return false;
         } else {
             return true;
@@ -309,8 +306,8 @@ public class TasksView {
         return "Задание: " + String.format("%-35s",title) + (
                 (!repeated) ?
                         ("\n Время: " + dToC(time) + "\n") :
-                        "\n Время начала: " + dToC(startTime) + "\n время конца: " + dToC(endTime) + "\n"
-                                + " интервал повторения: " + interval + "\n"
+                        "\n Время начала: " + dToC(startTime) + "\n Время окончания: " + dToC(endTime) + "\n"
+                                + " Интервал повторения: " + interval + "\n"
         );
     }
     public String toStringTaskShort(String title, LocalDateTime time, LocalDateTime startTime, LocalDateTime endTime,
@@ -332,8 +329,11 @@ public class TasksView {
         System.out.println((char) 27 + "[31mОшибка ввода вывода" + (char) 27 + "[37m");
     }
 
-    public void doSrcTasksCalendar(SortedMap<LocalDateTime, Set<Task>> result){
-        System.out.printf("%-15s  %s\n","Дата и время"," |   Задание");
+    public void doSrcTasksCalendar(SortedMap<LocalDateTime, Set<Task>> result, LocalDateTime start, LocalDateTime end){
+
+        System.out.println("    Календарь заданий в период с " + dToC(start) + " по " + dToC(end) + "\n");
+        System.out.println("--------------------------------------------------------------");
+        System.out.printf("%-15s  %s\n","Дата и время"," |            Задание");
         System.out.println("--------------------------------------------------------------");
         //System.out.println(result);
         int i = 1;
