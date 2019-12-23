@@ -20,10 +20,16 @@ public class TasksCtrl {
     private CtrlListRun CtrlReadTask =  CtrlReadTask();
     private CtrlListRun CtrlReadTaskRepite =  CtrlReadTaskRepite();
     private Task tmp;
+    private boolean lChkRunTask;
 
     public TasksCtrl(ArrayTaskList model, TasksView view) {
         this.model = model;
         this.view = view;
+        this.lChkRunTask = true;
+    }
+
+    public void setlChkRunTask(boolean lChkRunTask) {
+        this.lChkRunTask = lChkRunTask;
     }
 
     public RunEntry Menu00(int choice) {
@@ -155,7 +161,7 @@ public class TasksCtrl {
         try {
             return model.getTask(nTaskNum - 1).clone();
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+            // e.printStackTrace();
         }
         return null;
     }
@@ -327,4 +333,35 @@ public class TasksCtrl {
             view.doSrcIOException();
         }
     }
+
+    public void ChkRunTask(Thread thr) {
+        while (lChkRunTask) {
+            try {
+                thr.sleep(1000 * 10);
+            } catch (InterruptedException e) {
+                // e.printStackTrace();
+            }
+            view.doSayMess("\n " +
+                    (char) 27 + "[33" +
+                    " test1 run = " + "thr.sleep(1000 * 10)" +
+                    (char) 27 + "[37 " +
+                    "\n");
+        }
+    }
+    /*
+    class ChkRunTask implements Runnable {
+
+        public void run( ) {
+            try {
+                Thread.sleep(1000 * 10);
+                view.doSayMess("test1 run = " + "" + "\n");
+            } catch (InterruptedException e) {
+                //
+            }
+        }
+        public void doChkRunTask() {
+            new Thread(this).start();
+        }
+    }
+     */
 }
