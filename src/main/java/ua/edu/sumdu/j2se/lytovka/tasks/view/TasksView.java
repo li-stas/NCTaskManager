@@ -359,7 +359,7 @@ public class TasksView {
 
     private String interval(long time) {
         // интервал в Часах и Минутах
-        //return String.format("%02d:%02d:%02d", time / 3600, time / 60 % 60, time % 60);
-        return String.format("%02d:%02d", time / 3600, time / 60 % 60);
+        return String.format("%02d:%02d:%02d", time / 3600, time / 60 % 60, time % 60);
+        //return String.format("%02d:%02d", time / 3600, time / 60 % 60);
     }
 }
