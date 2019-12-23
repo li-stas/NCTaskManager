@@ -2,14 +2,22 @@ package ua.edu.sumdu.j2se.lytovka.tasks.controller;
 
 import ua.edu.sumdu.j2se.lytovka.tasks.model.ArrayTaskList;
 import ua.edu.sumdu.j2se.lytovka.tasks.model.Task;
+import ua.edu.sumdu.j2se.lytovka.tasks.model.TaskIO;
 import ua.edu.sumdu.j2se.lytovka.tasks.view.TasksView;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 
 public class TasksCtrl {
     private ArrayTaskList model;
     private TasksView view;
+    private CtrlListRun CtrlReadTask =  CtrlReadTask();
+    private CtrlListRun CtrlReadTaskRepite =  CtrlReadTaskRepite();
+    private Task tmp;
 
     public TasksCtrl(ArrayTaskList model, TasksView view) {
         this.model = model;
@@ -23,6 +31,7 @@ public class TasksCtrl {
     private CtrlListRun CtrlMenu00() {
         CtrlListRun rum4Menu00 = new CtrlListRun();
         rum4Menu00.addEntry(new RunEntry(1) {
+            //// РЕДАКТИРОВАНИЕ
             public void run()  {
                 if (model.size() == 0) {
                     //view.doSrcEmptyTask();  //view.doSayMess("test1 run\n");
@@ -31,20 +40,37 @@ public class TasksCtrl {
                     int nTaskNum = view.readWhatTaskNumber(model.size());
                     if (nTaskNum != 0) {
 
+                        Task orig = model.getTask(nTaskNum - 1);
                         //Task tmp = model.getTask(nTaskNum - 1);
-                        Task tmp = ctrlCloneTask(nTaskNum);
+                        tmp = ctrlCloneTask(nTaskNum);
+
 
                         while (true) {
-                            Integer choice = view.menuReadTast(model.getTask(nTaskNum - 1));
+                            Integer choice = view.menuReadTast(tmp);
                             if (choice == 0) {
                                 // записать или продолжить...
-                                break;
+                                choice = view.readDoSaveTask();
+                                if (choice == 1) { // сохранить
+                                    if (tmp.isRepeated()) {
+                                        orig.setTime(tmp.getStartTime(), tmp.getEndTime(), tmp.getRepeatInterval());
+                                    } else {
+                                        orig.setTitle(tmp.getTitle());
+                                        orig.setTime(tmp.getTime());
+                                    }
+                                    orig.setActive(tmp.isActive());
+                                    break;
+                                } else if (choice == 0) { // выхоод
+                                    break;
+                                } else { // нет - хотят продолжить
+                                    continue;
+                                }
+
                             }
                             if (tmp.isRepeated()){
-                               RunEntry entry = (RunEntry) CtrlReadTaskRepite().getEntries().get(choice - 1);
+                               RunEntry entry = (RunEntry) CtrlReadTaskRepite.getEntries().get(choice - 1);
                                entry.run();
                             } else {
-                                RunEntry entry = (RunEntry) CtrlReadTask().getEntries().get(choice - 1);
+                                RunEntry entry = (RunEntry) CtrlReadTask.getEntries().get(choice - 1);
                                 entry.run();
                             }
 
@@ -55,6 +81,7 @@ public class TasksCtrl {
             }
         });
         rum4Menu00.addEntry(new RunEntry(2) {
+            // ////// Новая задача
             public void run() {
                 if (model.size() < 10) {
                     NewTask();
@@ -64,12 +91,19 @@ public class TasksCtrl {
             }
         });
         rum4Menu00.addEntry(new RunEntry(3) {
+            /// удалить задачу
             public void run() {
                 if (model.size() == 0) {
-                    //view.doSrcEmptyTask();
-                    view.doSayMess("test3 run\n");
+                    //
                 } else {
-                    view.doSayMess("test3 run\n");
+                    int nTaskNum = view.readWhatTaskNumber(model.size());
+                    if (nTaskNum != 0) {
+                        int choice = view.readDoRemoveTask();
+                        if (choice == 1) { // удалить
+                            Task orig = model.getTask(nTaskNum - 1);
+                            model.remove(orig);
+                        }
+                    }
                 }
             }
         });
@@ -169,27 +203,46 @@ public class TasksCtrl {
         CtrlListRun rum4ReadTaskRepite = new CtrlListRun();
         rum4ReadTaskRepite.addEntry(new RunEntry(1) {
             public void run() {
-               view.doSayMess("test  1 run\n");
+               //view.doSayMess("test  1 run\n");
+                String title = view.readTitle();
+                tmp.setTitle(title);
             }
         });
         rum4ReadTaskRepite.addEntry(new RunEntry(2) {
             public void run() {
-                view.doSayMess("test2 run\n");
+                while (true) {
+                    int nActive = view.readIsTaskActive(); // задача Активнва?
+                    if (nActive == 0) {
+                        break;
+                    } else {
+                        tmp.setActive(nActive == 1);
+                        break;
+                    }
+                }
             }
         });
         rum4ReadTaskRepite.addEntry(new RunEntry(3) {
             public void run() {
-                view.doSayMess("test3 run\n");
+                // должны ввести и равную и большую
+                LocalDateTime startTime = view.readStartTime(tmp.getStartTime());
+                if (view.dDtTm_compare02(startTime, tmp.getEndTime())) {
+                    tmp.setTime(startTime, tmp.getEndTime(),tmp.getRepeatInterval());
+                } else {
+                    // ошибка ничего не делаем
+                }
             }
         });
         rum4ReadTaskRepite.addEntry(new RunEntry(4) {
             public void run() {
-                view.doSayMess("test4 run\n");
+                // дата окончания
+                LocalDateTime endTime = view.readEndTime(tmp.getStartTime());
+                tmp.setTime(tmp.getStartTime(), endTime,tmp.getRepeatInterval());
             }
         });
         rum4ReadTaskRepite.addEntry(new RunEntry(5) {
             public void run() {
-                view.doSayMess("test5 run\n");
+                // интеравал
+                tmp.setTime(tmp.getStartTime(), tmp.getEndTime(), view.readInterval());
             }
         });
         return rum4ReadTaskRepite;
@@ -198,20 +251,49 @@ public class TasksCtrl {
         CtrlListRun rum4ReadTask = new CtrlListRun();
         rum4ReadTask.addEntry(new RunEntry(1) {
             public void run() {
-                view.doSayMess("test=1 run\n");
+                // заголовок
+                String title = view.readTitle();
+                tmp.setTitle(title);
             }
         });
         rum4ReadTask.addEntry(new RunEntry(2) {
             public void run() {
-                view.doSayMess("test=2 run\n");
+                // Активность
+                while (true) {
+                    int nActive = view.readIsTaskActive(); // задача Активнва?
+                    if (nActive == 0) {
+                        break;
+                    } else {
+                        tmp.setActive(nActive == 1);
+                        break;
+                    }
+                }
             }
         });
         rum4ReadTask.addEntry(new RunEntry(3) {
             public void run() {
-                view.doSayMess("test=3 run\n");
+                // время старта
+                tmp.setTime(view.readStartTime(tmp.getTime()));
             }
         });
 
         return rum4ReadTask;
+    }
+
+    public void TaskIO_read(){
+        try {
+            TaskIO.read(model, new FileReader("test.json"));
+        } catch (FileNotFoundException e) {
+            // e.printStackTrace();
+        }
+    }
+
+    public void TaskIO_wite(){
+        try {
+            TaskIO.write(model, new FileWriter("test.json"));
+        } catch (IOException e) {
+            //e.printStackTrace();
+            view.doSrcIOException();
+        }
     }
 }
