@@ -30,7 +30,7 @@ public class Main {
             if (choice == 0) break;
             RunEntry entry = ctrl.Menu00(choice); // выбор методов
             entry.run();
-            //ctrl.TaskIO_wite();
+            ctrl.TaskIO_wite();
 
         }
     }
