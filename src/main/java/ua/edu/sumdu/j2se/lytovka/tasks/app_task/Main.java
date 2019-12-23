@@ -21,13 +21,21 @@ public class Main {
         TasksView view = new TasksView();
         TasksCtrl ctrl = new TasksCtrl(model, view);
 
+        Thread thr = new Thread(( ) -> ctrl.ChkRunTask(Thread.currentThread()));
+        thr.setDaemon(true);
+        thr.start();
+
         ctrl.TaskIO_read();
 
         while (true) {
 
             ctrl.ShowTasks();  // вывести список задач
             choice = view.menu00();
-            if (choice == 0) break;
+            if (choice == 0) {
+                //thr.stop();
+                //ctrl.setlChkRunTask(false);
+                break;
+            }
             RunEntry entry = ctrl.Menu00(choice); // выбор методов
             entry.run();
             ctrl.TaskIO_wite();
@@ -35,3 +43,26 @@ public class Main {
         }
     }
 }
+
+/*
+        Thread thr =  new Thread(new Runnable() {
+            public void run( ) {
+                ctrl.ChkRunTask(Thread.currentThread());
+            }
+        });
+        thr.setDaemon(true);
+        thr.start();
+         */
+
+//new Thread(( ) -> ctrl.ChkRunTask(Thread.currentThread())).start();
+        /*
+        Thread thr = ()->{return new Thread(( ) -> ctrl.ChkRunTask(Thread.currentThread()))};
+        thr.setDaemon(true);
+        thr.start();
+
+                new Thread(new Runnable() {
+            public void run( ) {
+                ctrl.ChkRunTask(Thread.currentThread());
+            }
+        }).start();
+        */

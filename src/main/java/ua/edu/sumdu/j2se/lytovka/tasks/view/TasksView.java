@@ -9,7 +9,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -93,12 +92,12 @@ public class TasksView {
     }
 
     public void doSayMess(String cMess) {
-        System.out.printf(cMess);
+        System.out.print(cMess);
     }
 
-    public void doSayMess_R$B(String cMess) {
-        System.out.printf((char)27 + "[31m" + cMess + (char)27 + "[37m");
-    }
+//    public void doSayMess_R$B(String cMess) {
+//        System.out.print((char) 27 + "[31m" + cMess + (char) 27 + "[37m");
+//    }
 
     public void doSrcTasks(Iterator<Task> iterator) {
         doSayMess("\n");
@@ -175,13 +174,13 @@ public class TasksView {
     }
 
 
-    public LocalDateTime readLclDtTm(LocalDateTime dValid) {
+    private LocalDateTime readLclDtTm(LocalDateTime dValid) {
         LocalDateTime dDtTm = LocalDateTime.now();
-        Integer nYYYY = 0;
-        Integer nMM = 0;
-        Integer nDD = 0;
-        Integer nHH = 0;
-        Integer nMi = 0;
+        int nYYYY = 0;
+        int nMM;
+        int nDD;
+        int nHH;
+        int nMi;
         //int[] paramInt = new int[1];
         while (true) {
 
@@ -196,7 +195,7 @@ public class TasksView {
             //            nMM = paramInt[0];
             nMM = readNumSayGetValid("    Месяц (ММ): ",  1, 12);
 
-            dDtTm = LocalDateTime.of(nYYYY, nMM, 01, 00, 00, 00);
+            dDtTm = LocalDateTime.of(nYYYY, nMM, 1, 0, 0, 0);
 
             /*System.out.print("    День (ДД) : ");
             paramInt[0] = nDD;
@@ -215,18 +214,16 @@ public class TasksView {
             nMi = readNumSayGetValid("    Минуты(мм): ", 0, 59);
 
             //LocalDateTime  dDtTm = LocalDateTime.now();
-            dDtTm = LocalDateTime.of(nYYYY, nMM, nDD, nHH, nMi, 00, 00);
+            dDtTm = LocalDateTime.of(nYYYY, nMM, nDD, nHH, nMi, 0, 0);
             if (dDtTm_compareTo(dDtTm, dValid)) {
                 break;
-            } else {
-                continue;
             }
 
         }
 
         return dDtTm;
     }
-    public boolean dDtTm_compareTo(LocalDateTime dDtTm, LocalDateTime dValid) {
+    private boolean dDtTm_compareTo(LocalDateTime dDtTm, LocalDateTime dValid) {
         if (dDtTm.compareTo(dValid) < 0) {
             System.out.println((char) 27 + "[31m" + "Дата и время уже прошли" + (char) 27 + "[37m");
             return false;
@@ -260,9 +257,9 @@ public class TasksView {
         return readNumSayGetValid("Выбирете номер задания 0 - " + nMaxTask + " (0 - Отмена):", 0,nMaxTask);
     }
 
-    public int readNumSayGetValid(String s1, int from, int to) {
+    private int readNumSayGetValid(String s1, int from, int to) {
         int[] paramInt = new int[1];
-        paramInt[0] = 0;
+        //paramInt[0] = 0;
         System.out.print(s1);
         readNum(paramInt, from, to);
         return paramInt[0];
