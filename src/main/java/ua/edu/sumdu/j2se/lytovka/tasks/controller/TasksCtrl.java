@@ -3,6 +3,7 @@ package ua.edu.sumdu.j2se.lytovka.tasks.controller;
 import ua.edu.sumdu.j2se.lytovka.tasks.model.ArrayTaskList;
 import ua.edu.sumdu.j2se.lytovka.tasks.model.Task;
 import ua.edu.sumdu.j2se.lytovka.tasks.model.TaskIO;
+import ua.edu.sumdu.j2se.lytovka.tasks.model.Tasks;
 import ua.edu.sumdu.j2se.lytovka.tasks.view.TasksView;
 
 import java.io.FileNotFoundException;
@@ -10,6 +11,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.*;
 
 
 public class TasksCtrl {
@@ -111,9 +113,40 @@ public class TasksCtrl {
             public void run() {
                 if (model.size() == 0) {
                     //view.doSrcEmptyTask();
-                    view.doSayMess("test4 un\n");
                 } else {
-                    view.doSayMess("test4 un\n");
+                    // view.doSayMess("test1 choice = " + choice + "\n");
+                    LocalDateTime start = LocalDateTime.now();
+                    LocalDateTime end = LocalDateTime.now();
+                    int choice = view.menu04();
+                    switch (choice){
+                        case 0:
+                            break;
+                        case 1: // добавить день
+                            end = start.plusHours(24);
+                            break;
+                        case 2: // добавить неделю
+                            end = start.plusDays(7);
+                            break;
+                        case 3: // дебавидть месяц
+                            end = start.plusMonths(1);
+                            break;
+                        case 4: // добавить 12 месяцев
+                            end = start.plusMonths(12);
+                            break;
+                    }
+                     view.doSayMess("test1 choice = " + choice + "\n");
+                     view.doSayMess("test1 choice = " + start + " " + end + "\n");
+
+                    if (choice != 0) {
+                        HashSet<Task> hsIask = new HashSet<Task>();
+                        for (Iterator<Task> iterator = model.iterator(); iterator.hasNext(); ) {
+                            hsIask.add(iterator.next());
+                        }
+                        SortedMap<LocalDateTime, Set<Task>> result = Tasks.calendar(hsIask, start, end);
+                        //view.doSayMess("test1 choice = " + choice + "\n");
+                        view.doSrcTasksCalendar(result);
+
+                    }
                 }
             }
         });

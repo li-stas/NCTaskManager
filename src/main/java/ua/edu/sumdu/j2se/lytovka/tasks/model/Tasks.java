@@ -43,7 +43,7 @@ public class Tasks {
                         res.put(timeTask, value);
                     }
                     timeTask = t.nextTimeAfter(timeTask.plusSeconds(1));
-                    if (timeTask.compareTo(end) > 0) {
+                    if (timeTask == null || timeTask.compareTo(end) > 0) {
                         break;
                     }
                 }
