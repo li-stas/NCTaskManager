@@ -10,8 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Iterator;
-import java.util.Scanner;
+import java.util.*;
 
 public class TasksView {
     public int menuReadTast(Task t) {
@@ -78,6 +77,19 @@ public class TasksView {
             }
         });
         System.out.print("Что хотите сделать заданиями? ");
+        nRet = menu.run();
+        return nRet;
+
+    }
+
+    public int menu04() {
+        int nRet;
+        Menu menu = new Menu();
+        menu.addEntry(new MenuEntry("1 - На 24 часа", true) { public void run() {}  });
+        menu.addEntry(new MenuEntry("2 - На неделю", true) { public void run() {} });
+        menu.addEntry(new MenuEntry("3 - На месяц", true) { public void run() {}  });
+        menu.addEntry(new MenuEntry("4 - На год", true) {  public void run() {}  });
+        System.out.print("На какой период построить календарь? ");
         nRet = menu.run();
         return nRet;
 
@@ -318,6 +330,29 @@ public class TasksView {
 
     public void doSrcIOException( ) {
         System.out.println((char) 27 + "[31mОшибка ввода вывода" + (char) 27 + "[37m");
+    }
+
+    public void doSrcTasksCalendar(SortedMap<LocalDateTime, Set<Task>> result){
+        System.out.printf("%-15s  %s\n","Дата и время"," |   Задание");
+        System.out.println("--------------------------------------------------------------");
+        //System.out.println(result);
+        int i = 1;
+        // перебор элементов
+        for(Map.Entry<LocalDateTime, Set<Task>> item : result.entrySet()){
+
+            String cDt = dToC(item.getKey());
+            Iterator itrTask = item.getValue().iterator();
+            while (itrTask.hasNext()) {
+                Task t = (Task) itrTask.next();
+                //System.out.print(i % 2+" "+i);
+                System.out.printf((((i % 2) == 0) ? (char)27 + "[30m" : "") + "%s | %s" + "\n", cDt, t.getTitle());
+                System.out.print((char)27 + "[37m");
+                i++;
+            }
+            //System.out.printf("Key: %s  Value: %s \n", dToC(item.getKey()), item.getValue());
+
+        }
+        System.out.printf("\n");
     }
 
 }
