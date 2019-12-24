@@ -1,6 +1,8 @@
 package ua.edu.sumdu.j2se.lytovka.tasks.view;
 
 
+import org.apache.log4j.Logger;
+
 import ua.edu.sumdu.j2se.lytovka.tasks.model.Task;
 import ua.edu.sumdu.j2se.lytovka.tasks.view.menuto.Menu;
 import ua.edu.sumdu.j2se.lytovka.tasks.view.menuto.MenuEntry;
@@ -13,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class TasksView {
+    final Logger log = Logger.getLogger(TasksView.class.getName());
     public int menuReadTast(Task t) {
         int nRet;
         Menu menu = new Menu(1);
@@ -49,7 +52,9 @@ public class TasksView {
                 }
             });
         }
+        log.info("run menuReadTast");
         nRet = menu.run();
+
         return nRet;
     }
 
@@ -73,6 +78,7 @@ public class TasksView {
             }
         });
         System.out.print("Что хотите сделать заданиями? ");
+        log.info("run menu00()");
         nRet = menu.run();
         return nRet;
 

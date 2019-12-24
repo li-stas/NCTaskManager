@@ -32,6 +32,7 @@ public class TasksCtrl {
         this.model = model;
         this.view = view;
         this.lChkRunTask = true;
+        log.info("Create TasksCtrl");
     }
 
     public void setlChkRunTask(boolean lChkRunTask) {
