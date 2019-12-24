@@ -10,7 +10,7 @@ public class CtrlListRun {
     }
 
     public void addEntry(RunEntry oRunEntry) {
-        entries.add(oRunEntry) ;
+        entries.add(oRunEntry);
     }
 
     public List getEntries() {

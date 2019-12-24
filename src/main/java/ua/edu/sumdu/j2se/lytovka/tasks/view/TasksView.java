@@ -16,34 +16,34 @@ public class TasksView {
     public int menuReadTast(Task t) {
         int nRet;
         Menu menu = new Menu(1);
-        menu.addEntry(new MenuEntry( String.format("%-25s","1 - Название") + ":" + t.getTitle(),
+        menu.addEntry(new MenuEntry(String.format("%-25s", "1 - Название") + ":" + t.getTitle(),
                 true) {
             public void run() {                //System.out.println("test1 run");
             }
         });
-        menu.addEntry(new MenuEntry( String.format("%-25s","2 - Актинвная") + ":" + (t.isActive() ? "Да" : "Нет"),
+        menu.addEntry(new MenuEntry(String.format("%-25s", "2 - Актинвная") + ":" + (t.isActive() ? "Да" : "Нет"),
                 true) {
             public void run() {                //System.out.println("test1 run");
             }
         });
         if (t.isRepeated()) {
-            menu.addEntry(new MenuEntry( String.format("%-25s","3 - Время начала") + ":" + t.getStartTime(),
+            menu.addEntry(new MenuEntry(String.format("%-25s", "3 - Время начала") + ":" + t.getStartTime(),
                     true) {
                 public void run() {                //System.out.println("test1 run");
                 }
             });
-            menu.addEntry(new MenuEntry( String.format("%-25s","4 - Время окончания") + ":" + t.getEndTime(),
+            menu.addEntry(new MenuEntry(String.format("%-25s", "4 - Время окончания") + ":" + t.getEndTime(),
                     true) {
                 public void run() {                //System.out.println("test1 run");
                 }
             });
-            menu.addEntry(new MenuEntry( String.format("%-25s","5 - Интервал повторения") + ":" + t.getRepeatInterval(),
+            menu.addEntry(new MenuEntry(String.format("%-25s", "5 - Интервал повторения") + ":" + t.getRepeatInterval(),
                     true) {
                 public void run() {                //System.out.println("test1 run");
                 }
             });
         } else {
-            menu.addEntry(new MenuEntry( String.format("%-25s","3 - Время начала") + ":" + t.getStartTime(),
+            menu.addEntry(new MenuEntry(String.format("%-25s", "3 - Время начала") + ":" + t.getStartTime(),
                     true) {
                 public void run() {                //System.out.println("test1 run");
                 }
@@ -56,7 +56,7 @@ public class TasksView {
     public int menu00() {
         int nRet;
         Menu menu = new Menu();
-        menu.addEntry(new MenuEntry( "1 - Редактировать", true) {
+        menu.addEntry(new MenuEntry("1 - Редактировать", true) {
             public void run() {                //System.out.println("test1 run");
             }
         });
@@ -81,7 +81,7 @@ public class TasksView {
     public int menu04() {
         int nRet;
         Menu menu = new Menu();
-        menu.addEntry(new MenuEntry("1 - На 24 часа", true) { public void run() {}  });
+        menu.addEntry(new MenuEntry("1 - На 24 часа", true) { public void run() {} });
         menu.addEntry(new MenuEntry("2 - На неделю", true) { public void run() {} });
         menu.addEntry(new MenuEntry("3 - На месяц", true) { public void run() {}  });
         menu.addEntry(new MenuEntry("4 - На год", true) {  public void run() {}  });
@@ -102,7 +102,7 @@ public class TasksView {
     public void doSrcTasks(Iterator<Task> iterator) {
         doSayMess("\n");
         int i = 0;
-        for (;iterator.hasNext();) {
+        for (; iterator.hasNext();) {
             Task t = iterator.next();
             String cMess = String.format("%2d", ++i)
                     + ". [ "
@@ -111,20 +111,29 @@ public class TasksView {
                     t.getRepeatInterval(), t.isRepeated(), t.isActive())
                     +  (char)27 + "[37m"
                     + " ]";
-            doSayMess( cMess + '\n');
+            doSayMess(cMess + '\n');
         }
         doSayMess("\n");
     }
     public void doSrcMaxTasks() {
         doSayMess("\n");
-        doSayMess((char) 27 + "[31m" + "К-во задач ограничено 10" + (char)27 + "[37m"+"\n");
+        doSayMess((char) 27 + "[31m" + "К-во заданий ограничено 10" + (char)27 + "[37m" + "\n");
         doSayMess("\n");
     }
 
+    public void doSrcWarningTasks(String cMess) {
+        doSayMess("\n");
+        doSayMess((char) 27
+                + "[34m" + "Чз 15 мин наступает вркмя выполнеия задания : "
+                + cMess
+                + (char)27 + "[37m"
+                + "\n");
+        doSayMess("\n");
+    }
 
     public void doSrcEmptyTasks() {
         doSayMess("\n");
-        doSayMess((char) 27 + "[33m" + "Список заданий пустой"+ (char)27 + "[37m"+"\n");
+        doSayMess((char) 27 + "[33m" + "Список заданий пустой"+ (char)27 + "[37m" + "\n");
         doSayMess("\n");
     }
 
@@ -132,7 +141,7 @@ public class TasksView {
         Scanner scan = new Scanner(System.in);
         doSayMess("Название задания: ");
         String title = "";
-        while (title.isEmpty()){
+        while (title.isEmpty()) {
             title = scan.nextLine();
         }
         return title;
@@ -215,7 +224,7 @@ public class TasksView {
 
             //LocalDateTime  dDtTm = LocalDateTime.now();
             dDtTm = LocalDateTime.of(nYYYY, nMM, nDD, nHH, nMi, 0, 0);
-            if (dDtTm_compareTo(dDtTm, dValid)) {
+            if (dDtTm_compareLess0(dDtTm, dValid)) {
                 break;
             }
 
@@ -223,7 +232,7 @@ public class TasksView {
 
         return dDtTm;
     }
-    private boolean dDtTm_compareTo(LocalDateTime dDtTm, LocalDateTime dValid) {
+    private boolean dDtTm_compareLess0(LocalDateTime dDtTm, LocalDateTime dValid) {
         if (dDtTm.compareTo(dValid) < 0) {
             System.out.println((char) 27 + "[31m" + "Дата и время уже прошли" + (char) 27 + "[37m");
             return false;
@@ -232,7 +241,7 @@ public class TasksView {
         }
     }
 
-    public boolean dDtTm_compare02(LocalDateTime dDtTm, LocalDateTime dValid) {
+    public boolean dDtTm_compareLarger0(LocalDateTime dDtTm, LocalDateTime dValid) {
         if (dDtTm.compareTo(dValid) > 0) {
             System.out.println((char) 27 + "[31m"
                     + "Дата и время должна быть меньше или равна Времени окончания" + (char) 27 + "[37m");
@@ -250,11 +259,11 @@ public class TasksView {
         return readLclDtTm(d4Valid);
     }
     public int readInterval() {
-        return readNumSayGetValid("Интервал, cек: ", 0,60 * 60 * 24);
+        return readNumSayGetValid("Интервал, cек: ", 0, 60 * 60 * 24);
     }
 
     public int readWhatTaskNumber(int nMaxTask) {
-        return readNumSayGetValid("Выбирете номер задания 0 - " + nMaxTask + " (0 - Отмена):", 0,nMaxTask);
+        return readNumSayGetValid("Выбирете номер задания 0 - " + nMaxTask + " (0 - Отмена):", 0, nMaxTask);
     }
 
     private int readNumSayGetValid(String s1, int from, int to) {
@@ -301,9 +310,8 @@ public class TasksView {
     public String toStringTask(String title, LocalDateTime time, LocalDateTime startTime, LocalDateTime endTime,
                            int interval, boolean repeated, boolean active) {
 
-        return "Задание: " + String.format("%-35s",title) + (
-                (!repeated) ?
-                        ("\n Время: " + dToC(time) + "\n") :
+        return "Задание: " + String.format("%-35s", title) + (
+                (!repeated) ? ("\n Время: " + dToC(time) + "\n") :
                         "\n Время начала: " + dToC(startTime) + "\n Время окончания: " + dToC(endTime) + "\n"
                                 + " Интервал повторения: " + interval(interval) + "\n"
         );
@@ -312,8 +320,7 @@ public class TasksView {
                                int interval, boolean repeated, boolean active) {
 
         return "Зд: " + String.format("%-15s", title) + (
-                (!repeated) ?
-                        (" Вp : " + dToC(time) ) :
+                (!repeated) ? (" Вp : " + dToC(time)) :
                         " ВpH: " + dToC(startTime) + " ВpК: " + dToC(endTime)  + " ИнП: " + interval(interval) // + "\n"
         );
     }
@@ -323,28 +330,28 @@ public class TasksView {
         return  now.format(formatter);
     }
 
-    public void doSrcIOException( ) {
+    public void doSrcIOException() {
         System.out.println((char) 27 + "[31mОшибка ввода вывода" + (char) 27 + "[37m");
     }
 
-    public void doSrcTasksCalendar(SortedMap<LocalDateTime, Set<Task>> result, LocalDateTime start, LocalDateTime end){
+    public void doSrcTasksCalendar(SortedMap<LocalDateTime, Set<Task>> result, LocalDateTime start, LocalDateTime end) {
 
         System.out.println("    Календарь заданий в период с " + dToC(start) + " по " + dToC(end) + "\n");
 
         System.out.println("--------------------------------------------------------------");
-        System.out.printf("%-15s  %s\n","Дата и время"," |            Задание");
+        System.out.printf("%-15s  %s\n", "Дата и время", " |            Задание");
         System.out.println("--------------------------------------------------------------");
         //System.out.println(result);
         int i = 1;
         // перебор элементов
-        for(Map.Entry<LocalDateTime, Set<Task>> item : result.entrySet()){
+        for (Map.Entry<LocalDateTime, Set<Task>> item : result.entrySet()) {
 
             String cDt = dToC(item.getKey());
             Iterator itrTask = item.getValue().iterator();
             while (itrTask.hasNext()) {
                 Task t = (Task) itrTask.next();
                 //System.out.print(i % 2+" "+i);
-                System.out.printf((((i % 2) == 0) ? (char)27 + "[30m" : "") + "%s | %s" + "\n", cDt, t.getTitle());
+                System.out.printf((((i % 2) == 0) ? (char) 27 + "[30m" : "") + "%s | %s" + "\n", cDt, t.getTitle());
                 System.out.print((char)27 + "[37m");
                 i++;
             }
