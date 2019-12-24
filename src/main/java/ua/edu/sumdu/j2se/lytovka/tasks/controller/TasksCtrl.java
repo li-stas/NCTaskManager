@@ -11,10 +11,14 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 
 
+
+
 public class TasksCtrl {
+    private static ZoneId zoneId = ZoneId.systemDefault();
     private ArrayTaskList model;
     private TasksView view;
     private CtrlListRun CtrlReadTask =  CtrlReadTask();
@@ -262,7 +266,7 @@ public class TasksCtrl {
             public void run() {
                 // должны ввести и равную и большую
                 LocalDateTime startTime = view.readStartTime(tmp.getStartTime());
-                if (view.dDtTm_compare02(startTime, tmp.getEndTime())) {
+                if (view.dDtTm_compareLarger0(startTime, tmp.getEndTime())) {
                     tmp.setTime(startTime, tmp.getEndTime(),tmp.getRepeatInterval());
                 } else {
                     // ошибка ничего не делаем
@@ -337,15 +341,30 @@ public class TasksCtrl {
     public void ChkRunTask(Thread thr) {
         while (lChkRunTask) {
             try {
-                thr.sleep(1000 * 10);
+                thr.sleep(1000 * 60);
             } catch (InterruptedException e) {
+                //log.info("Start!");
                 // e.printStackTrace();
             }
-            view.doSayMess("\n " +
-                    (char) 27 + "[33" +
-                    " test1 run = " + "thr.sleep(1000 * 10)" +
-                    (char) 27 + "[37 " +
-                    "\n");
+            for (Iterator<Task> iterator = model.iterator(); iterator.hasNext(); ) {
+                Task t = iterator.next();
+
+                LocalDateTime dCur = LocalDateTime.now();
+
+                LocalDateTime dChek = dCur.plusMinutes(15); // текущая дата + 30 мин
+                LocalDateTime dTime = t.nextTimeAfter(dCur);
+
+                if (dTime != null) {
+                    long nChek = dChek.atZone(zoneId).toInstant().toEpochMilli();
+                    long nTime = dTime.atZone(zoneId).toInstant().toEpochMilli();
+                    long nCtrlInt = Math.abs(nChek - nTime);
+                    if (nCtrlInt >= 0 && nCtrlInt <= 60000) {
+                        view.doSrcWarningTasks(t.getTitle());
+                    }
+
+                }
+            }
+
         }
     }
     /*

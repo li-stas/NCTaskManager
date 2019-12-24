@@ -1,5 +1,7 @@
 package ua.edu.sumdu.j2se.lytovka.tasks.app_task;
 
+import org.apache.log4j.Logger;
+import org.testng.annotations.Test;
 import ua.edu.sumdu.j2se.lytovka.tasks.model.ArrayTaskList;
 import ua.edu.sumdu.j2se.lytovka.tasks.controller.RunEntry;
 import ua.edu.sumdu.j2se.lytovka.tasks.controller.TasksCtrl;
@@ -11,6 +13,8 @@ import java.io.FileReader;
 
 public class Main {
     public static void main(String[] args) {
+        final Logger log = Logger.getLogger(Test.class);
+        log.info("Start!");
         doMngTask();
     }
 
@@ -21,7 +25,7 @@ public class Main {
         TasksView view = new TasksView();
         TasksCtrl ctrl = new TasksCtrl(model, view);
 
-        Thread thr = new Thread(( ) -> ctrl.ChkRunTask(Thread.currentThread()));
+        Thread thr = new Thread(() -> ctrl.ChkRunTask(Thread.currentThread()));
         thr.setDaemon(true);
         thr.start();
 
