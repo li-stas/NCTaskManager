@@ -1,5 +1,6 @@
 package ua.edu.sumdu.j2se.lytovka.tasks.controller;
 
+import org.apache.log4j.Logger;
 import ua.edu.sumdu.j2se.lytovka.tasks.model.ArrayTaskList;
 import ua.edu.sumdu.j2se.lytovka.tasks.model.Task;
 import ua.edu.sumdu.j2se.lytovka.tasks.model.TaskIO;
@@ -18,6 +19,7 @@ import java.util.*;
 
 
 public class TasksCtrl {
+    final Logger log = Logger.getLogger(TasksCtrl.class.getName());
     private static ZoneId zoneId = ZoneId.systemDefault();
     private ArrayTaskList model;
     private TasksView view;
@@ -42,6 +44,7 @@ public class TasksCtrl {
 
     private CtrlListRun CtrlMenu00() {
         CtrlListRun rum4Menu00 = new CtrlListRun();
+        log.info("return rum4Menu00");
         rum4Menu00.addEntry(new RunEntry(1) {
             //// РЕДАКТИРОВАНИЕ
             public void run()  {
@@ -158,6 +161,7 @@ public class TasksCtrl {
                 }
             }
         });
+
         return rum4Menu00;
     }
 
