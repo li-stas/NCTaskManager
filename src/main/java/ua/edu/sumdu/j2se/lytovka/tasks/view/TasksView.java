@@ -344,9 +344,6 @@ public class TasksView {
 
         System.out.println("    Календарь заданий в период с " + dToC(start) + " по " + dToC(end) + "\n");
 
-        System.out.println("--------------------------------------------------------------");
-        System.out.printf("%-15s  %s\n", "Дата и время", " |            Задание");
-        System.out.println("--------------------------------------------------------------");
         //System.out.println(result);
         int i = 1;
         // перебор элементов
@@ -357,12 +354,24 @@ public class TasksView {
             while (itrTask.hasNext()) {
                 Task t = (Task) itrTask.next();
                 //System.out.print(i % 2+" "+i);
+                //                         шапка
+                if (i == 1){
+                    System.out.println("--------------------------------------------------------------");
+                    System.out.printf("%-15s  %s\n", "Дата и время", " |            Задание");
+                    System.out.println("--------------------------------------------------------------");
+                }
+                //                         таблица
                 System.out.printf((((i % 2) == 0) ? (char) 27 + "[30m" : "") + "%s | %s" + "\n", cDt, t.getTitle());
                 System.out.print((char)27 + "[37m");
+
                 i++;
             }
+
             //System.out.printf("Key: %s  Value: %s \n", dToC(item.getKey()), item.getValue());
 
+        }
+        if (i == 1) {
+            doSrcEmptyTasks();
         }
         System.out.printf("\n");
     }

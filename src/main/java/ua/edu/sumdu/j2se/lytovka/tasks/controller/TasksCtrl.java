@@ -344,9 +344,11 @@ public class TasksCtrl {
     }
 
     public void ChkRunTask(Thread thr) {
+        //thr.setDaemon(true);
         while (lChkRunTask) {
             try {
                 thr.sleep(1000 * 60);
+                //log.info("Start отслеживания заданий!");
             } catch (InterruptedException e) {
                 //log.info("Start!");
                 // e.printStackTrace();

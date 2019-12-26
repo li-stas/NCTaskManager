@@ -24,9 +24,23 @@ public class Main {
         TasksView view = new TasksView();
         TasksCtrl ctrl = new TasksCtrl(model, view);
 
-        Thread thr = new Thread(() -> ctrl.ChkRunTask(Thread.currentThread()));
+        /*
+        Runnable rnb1 = new Runnable() {
+            public void run( ) {
+                ctrl.ChkRunTask(Thread.currentThread());
+            }
+        };
+        Thread thr1 = new Thread(rnb1,"thr1");
+
+        Runnable rnb0 = () -> {ctrl.ChkRunTask(Thread.currentThread())};
+        Thread thr0 = new Thread(rnb0,"thr1");
+         */
+
+        Thread thr = new Thread(() -> ctrl.ChkRunTask(Thread.currentThread())); //, "thr"
         thr.setDaemon(true);
         thr.start();
+
+        //new Thread(( ) -> ctrl.ChkRunTask(Thread.currentThread())).start();
 
         ctrl.TaskIO_read();
 
