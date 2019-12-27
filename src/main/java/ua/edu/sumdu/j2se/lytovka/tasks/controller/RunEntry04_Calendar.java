@@ -10,10 +10,19 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedMap;
 
+/**
+ * построение клалендаря заданий не выбранный переиод
+ */
+
 public class RunEntry04_Calendar {
     private ArrayTaskList model;
     private TasksView view;
 
+    /**
+     * метдот построение клалендаря заданий не выбранный переиод
+     * @param model
+     * @param view
+     */
     public RunEntry04_Calendar(ArrayTaskList model, TasksView view) {
         this.model = model;
         this.view = view;

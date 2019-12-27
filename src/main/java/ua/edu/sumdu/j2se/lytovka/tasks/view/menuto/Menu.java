@@ -59,12 +59,10 @@ public class Menu  {
 
             } catch (IOException e) {
                 System.out.println((char)27 + "[31m" + "Ошибка ввода вывода"+ (char) 27 + "[37m");
-                continue;
             }
             catch (NumberFormatException e) {
                 System.out.println((char)27 + "[31m" + "Только цифры:"
                         + " 1-" + nMaxNumElem + ", 0" + (char) 27 + "[37m");
-                continue;
             }
         }
 

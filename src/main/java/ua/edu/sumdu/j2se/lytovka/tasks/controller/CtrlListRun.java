@@ -3,6 +3,9 @@ package ua.edu.sumdu.j2se.lytovka.tasks.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * контейнер, который будет в хранить все медоды обработки меню
+ */
 public class CtrlListRun {
     private List<RunEntry> entries = new ArrayList();
 

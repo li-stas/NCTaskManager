@@ -5,7 +5,7 @@ import ua.edu.sumdu.j2se.lytovka.tasks.model.Task;
 import ua.edu.sumdu.j2se.lytovka.tasks.view.TasksView;
 
 /**
- *  Удалить задание
+ *  Обработка п. меную "Удалить" задание
  */
 
 public class RunEntry03_Del {

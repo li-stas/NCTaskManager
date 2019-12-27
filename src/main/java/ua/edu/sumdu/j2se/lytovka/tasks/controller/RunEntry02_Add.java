@@ -4,7 +4,8 @@ import ua.edu.sumdu.j2se.lytovka.tasks.model.ArrayTaskList;
 import ua.edu.sumdu.j2se.lytovka.tasks.view.TasksView;
 
 /**
- *  Ввод новой задачи
+ *
+ *  обработака п. меню Добавить (добавить новое задание)
  */
 public class RunEntry02_Add {
     private ArrayTaskList model;
