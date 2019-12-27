@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CtrlListRun {
-    private List entries = new ArrayList();
+    private List<RunEntry> entries = new ArrayList();
 
     public CtrlListRun() {
     }
