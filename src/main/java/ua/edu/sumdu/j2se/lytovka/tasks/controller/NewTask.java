@@ -5,10 +5,19 @@ import ua.edu.sumdu.j2se.lytovka.tasks.view.TasksView;
 
 import java.time.LocalDateTime;
 
+/**
+ * класс обработки ввода нового задания
+ */
+
 public class NewTask {
     private ArrayTaskList model;
     private TasksView view;
 
+    /**
+     *  ввод и контроль ввода при добавлении нового задания)
+     * @param model
+     * @param view
+     */
     public NewTask(ArrayTaskList model, TasksView view) {
         this.model = model;
         this.view = view;
@@ -33,7 +42,6 @@ public class NewTask {
             } else {
                 repeated = (nRepite == 1);
             }
-
             // временные интервалы
             if (repeated) { // да - интервал с секундах, Начало - дата и время  Окончание - дата время
 
@@ -56,8 +64,6 @@ public class NewTask {
                 break;
             } else if (choice == 0) { // выхоод
                 break;
-            } else { // нет - хотят продолжить
-                continue;
             }
         }
     }

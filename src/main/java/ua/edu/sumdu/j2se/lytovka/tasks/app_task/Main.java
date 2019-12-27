@@ -6,6 +6,9 @@ import ua.edu.sumdu.j2se.lytovka.tasks.controller.RunEntry;
 import ua.edu.sumdu.j2se.lytovka.tasks.controller.TasksCtrl;
 import ua.edu.sumdu.j2se.lytovka.tasks.view.TasksView;
 
+/**
+ * приложение контроя заданий
+ */
 
 public class Main {
     public static void main(String[] args) {
@@ -14,6 +17,9 @@ public class Main {
         doMngTask();
     }
 
+    /**
+     * основной метод запуска приложения
+     */
     private static void doMngTask() {
         int choice;
 
@@ -32,10 +38,9 @@ public class Main {
             ctrl.ShowTasks();  // вывести список задач
             choice = view.menu00();
             if (choice == 0) {
-                //thr.stop();                //ctrl.setlChkRunTask(false);
                 break;
             }
-            RunEntry entry = ctrl.Menu00(choice); // выбор методов
+            RunEntry entry = ctrl.MethodContainerForMenu00(choice); // выбор методов
             entry.run();
             ctrl.TaskIO_wite();
 

@@ -12,18 +12,29 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+/**
+ * контроллер приложения
+ */
+
 public class TasksCtrl {
-    final Logger log = Logger.getLogger(TasksCtrl.class.getName());
+    private final Logger log = Logger.getLogger(TasksCtrl.class.getName());
     private static ZoneId zoneId = ZoneId.systemDefault();
     private ArrayTaskList model;
     private TasksView view;
     private CtrlListRun ctrlReadTask =  CtrlReadTask();
     private CtrlListRun ctrlReadTaskRepite =  CtrlReadTaskRepite();
+    private CtrlListRun methodContainerForMenu00 =  MethodContainerForMenu00();
     private Task tempTask;
     private boolean lChkRunTask;
 
+    /**
+     * конструктор
+     * @param model
+     * @param view
+     */
     public TasksCtrl(ArrayTaskList model, TasksView view) {
         this.model = model;
         this.view = view;
@@ -31,15 +42,20 @@ public class TasksCtrl {
         log.info("Create TasksCtrl");
     }
 
-    public void setlChkRunTask(boolean lChkRunTask) {
-        this.lChkRunTask = lChkRunTask;
+    /**
+     * возрад медода обработки выбранного п. меню
+     * @param choice
+     * @return
+     */
+    public RunEntry MethodContainerForMenu00(int choice) {
+        return (RunEntry) methodContainerForMenu00.getEntries().get(choice - 1);
     }
 
-    public RunEntry Menu00(int choice) {
-        return (RunEntry) CtrlMenu00().getEntries().get(choice - 1);
-    }
-
-    private CtrlListRun CtrlMenu00() {
+    /**
+     * наполение контейнера методами соответвующего п. Основного меню
+     * @return
+     */
+    private CtrlListRun MethodContainerForMenu00() {
         CtrlListRun rum4Menu00 = new CtrlListRun();
         log.info("return rum4Menu00");
 
@@ -86,7 +102,7 @@ public class TasksCtrl {
             }
         });
         rum4Menu00.addEntry(new RunEntry(2) {
-            // ////// Новая задача
+            // ////// Новая задание
             public void run() { new RunEntry02_Add( model,  view); }
         });
         rum4Menu00.addEntry(new RunEntry(3) {
@@ -101,25 +117,11 @@ public class TasksCtrl {
         return rum4Menu00;
     }
 
-    private Task ctrlCloneTask( int nTaskNum ) {
-        try {
-            return model.getTask(nTaskNum - 1).clone();
-        } catch (CloneNotSupportedException e) {
-            log.error("CloneNotSupportedException", e);
-        }
-        return null;
-    }
-
-    public void ShowTasks() {
-       int nSize = model.size();
-        if (nSize == 0) {
-            view.doSrcEmptyTasks();
-        } else {
-            view.doSrcTasks(model.iterator());
-        }
-    }
-
-    public CtrlListRun CtrlReadTaskRepite() {
+    /**
+     * наполение контейнера методами соответвующего п. меню Редактироания задания (переиодического)
+     * @return
+     */
+     private CtrlListRun CtrlReadTaskRepite( ) {
         CtrlListRun rum4ReadTaskRepite = new CtrlListRun();
         rum4ReadTaskRepite.addEntry(new RunEntry(1) {
             public void run() {
@@ -155,7 +157,12 @@ public class TasksCtrl {
         });
         return rum4ReadTaskRepite;
     }
-    public CtrlListRun CtrlReadTask() {
+
+    /**
+     * заполение контейнера методами соответвующего п. меню Редактироания задания (одноразового)
+     * @return
+     */
+    private CtrlListRun CtrlReadTask( ) {
         CtrlListRun rum4ReadTask = new CtrlListRun();
         rum4ReadTask.addEntry(new RunEntry(1) {
             public void run() {
@@ -177,6 +184,9 @@ public class TasksCtrl {
         return rum4ReadTask;
     }
 
+    /**
+     * чтение списка заданий с файла
+     */
     public void TaskIO_read(){
         try {
             TaskIO.read(model, new FileReader("test.json"));
@@ -185,6 +195,9 @@ public class TasksCtrl {
         }
     }
 
+    /**
+     * запись списка заданий в файл
+     */
     public void TaskIO_wite(){
         try {
             TaskIO.write(model, new FileWriter("test.json"));
@@ -194,15 +207,43 @@ public class TasksCtrl {
         }
     }
 
+    /**
+     * Создание времменого Задания чз клонирование
+     * @param nTaskNum
+     * @return
+     */
+    private Task ctrlCloneTask( int nTaskNum ) {
+        try {
+            return model.getTask(nTaskNum - 1).clone();
+        } catch (CloneNotSupportedException e) {
+            log.error("CloneNotSupportedException", e);
+        }
+        return null;
+    }
+
+    /**
+     * обработка запроса -Показасть список заданий
+     */
+    public void ShowTasks() {
+        int nSize = model.size();
+        if (nSize == 0) {
+            view.doSrcEmptyTasks();
+        } else {
+            view.doSrcTasks(model.iterator());
+        }
+    }
+
+    /**
+     * фоновый процесс анализа сроков начала Выполнения задания
+     * @param thr
+     */
     public void ChkRunTask(Thread thr) {
         int nIntervalChk_SS = 60 * 15; // интервал "Заскакое время проверять"
         int nIntervaSleep = 30; // проверки
         while (lChkRunTask) {
             try {
                 thr.sleep(1000 * nIntervaSleep);
-                for (Iterator<Task> iterator = model.iterator(); iterator.hasNext(); ) {
-                    Task t = iterator.next();
-
+                for (Task t : model) {
                     LocalDateTime dCur = LocalDateTime.now();
                     LocalDateTime dChek;
                     LocalDateTime dTime;
@@ -210,18 +251,15 @@ public class TasksCtrl {
                     dChek = dCur.plusSeconds(nIntervalChk_Cur);
                     dTime = t.nextTimeAfter(dCur);
 
-                    /*System.out.println("");
-                    System.out.println("dCur " + view.dToC(dCur));
-                    System.out.println("dChek " + view.dToC(dChek));
-                    System.out.println("dTime " + view.dToC(dTime));*/
+                    log.error("ВрТекущие dCur " + dToC(dCur)); //System.out.println("dCur " + view.dToC(dCur));
+                    log.error("ВрПроверки dChek " + dToC(dChek));//  System.out.println("dChek " + view.dToC(dChek));
+                    log.error("Вр_nextTimeAfter(dCur) dTime " + dToC(dTime)); //System.out.println("dTime " + view.dToC(dTime));
 
                     if (dTime != null) {
                         long nChek = dChek.atZone(zoneId).toInstant().toEpochMilli();
                         long nTime = dTime.atZone(zoneId).toInstant().toEpochMilli();
                         long nCtrlInt = Math.abs(nChek - nTime);
-
-                        /*System.out.println("nCtrlInt " + nCtrlInt);
-                        */
+                        log.error("Math.abs(nChek - nTime)->nCtrlInt " + nCtrlInt); //System.out.println("nCtrlInt " + nCtrlInt);
                         if (nCtrlInt >= 0 && nCtrlInt <= 30000) {
                             view.doSrcWarningTasks(t.getTitle(), nIntervalChk_Cur);
                         }
@@ -234,5 +272,15 @@ public class TasksCtrl {
 
         }
     }
+    /**
+     * преобразование Даты в символьную струку формата yyyy-MM-dd HH:mm
+     * @param now
+     * @return
+     */
+    private String dToC(LocalDateTime now) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        return  now == null ? "null" : now.format(formatter);
+    }
+
 
 }
