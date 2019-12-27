@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 import ua.edu.sumdu.j2se.lytovka.tasks.model.ArrayTaskList;
 import ua.edu.sumdu.j2se.lytovka.tasks.model.Task;
 import ua.edu.sumdu.j2se.lytovka.tasks.model.TaskIO;
-import ua.edu.sumdu.j2se.lytovka.tasks.model.Tasks;
 import ua.edu.sumdu.j2se.lytovka.tasks.view.TasksView;
 
 import java.io.FileNotFoundException;
@@ -15,17 +14,14 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
 
-
-
-
 public class TasksCtrl {
     final Logger log = Logger.getLogger(TasksCtrl.class.getName());
     private static ZoneId zoneId = ZoneId.systemDefault();
     private ArrayTaskList model;
     private TasksView view;
-    private CtrlListRun CtrlReadTask =  CtrlReadTask();
-    private CtrlListRun CtrlReadTaskRepite =  CtrlReadTaskRepite();
-    private Task tmp;
+    private CtrlListRun ctrlReadTask =  CtrlReadTask();
+    private CtrlListRun ctrlReadTaskRepite =  CtrlReadTaskRepite();
+    private Task tempTask;
     private boolean lChkRunTask;
 
     public TasksCtrl(ArrayTaskList model, TasksView view) {
@@ -46,51 +42,44 @@ public class TasksCtrl {
     private CtrlListRun CtrlMenu00() {
         CtrlListRun rum4Menu00 = new CtrlListRun();
         log.info("return rum4Menu00");
+
         rum4Menu00.addEntry(new RunEntry(1) {
             //// РЕДАКТИРОВАНИЕ
             public void run()  {
-                if (model.size() == 0) {
-                    //view.doSrcEmptyTask();  //view.doSayMess("test1 run\n");
-                } else {
-                    //view.doSayMess("test1 run\n");
+                if (model.size() != 0) {
                     int nTaskNum = view.readWhatTaskNumber(model.size());
                     if (nTaskNum != 0) {
 
                         Task orig = model.getTask(nTaskNum - 1);
-                        //Task tmp = model.getTask(nTaskNum - 1);
-                        tmp = ctrlCloneTask(nTaskNum);
-
+                        tempTask = ctrlCloneTask(nTaskNum);
 
                         while (true) {
-                            Integer choice = view.menuReadTast(tmp);
+                           int choice = view.menuReadTast(tempTask);
                             if (choice == 0) {
                                 // записать или продолжить...
                                 choice = view.readDoSaveTask();
                                 if (choice == 1) { // сохранить
-                                    if (tmp.isRepeated()) {
-                                        orig.setTime(tmp.getStartTime(), tmp.getEndTime(), tmp.getRepeatInterval());
+                                    orig.setTitle(tempTask.getTitle());
+                                    orig.setActive(tempTask.isActive());
+                                    if (tempTask.isRepeated()) {
+                                        orig.setTime(tempTask.getStartTime(), tempTask.getEndTime(), tempTask.getRepeatInterval());
                                     } else {
-                                        orig.setTitle(tmp.getTitle());
-                                        orig.setTime(tmp.getTime());
+                                        orig.setTime(tempTask.getTime());
                                     }
-                                    orig.setActive(tmp.isActive());
                                     break;
                                 } else if (choice == 0) { // выхоод
                                     break;
                                 } else { // нет - хотят продолжить
                                     continue;
                                 }
-
                             }
-                            if (tmp.isRepeated()){
-                               RunEntry entry = (RunEntry) CtrlReadTaskRepite.getEntries().get(choice - 1);
+                            if (tempTask.isRepeated()){
+                               RunEntry entry = (RunEntry) ctrlReadTaskRepite.getEntries().get(choice - 1);
                                entry.run();
                             } else {
-                                RunEntry entry = (RunEntry) CtrlReadTask.getEntries().get(choice - 1);
+                                RunEntry entry = (RunEntry) ctrlReadTask.getEntries().get(choice - 1);
                                 entry.run();
                             }
-
-                            //view.doSayMess("test1 run = " + choice.toString() + "\n");
                         }
                     }
                 }
@@ -98,69 +87,15 @@ public class TasksCtrl {
         });
         rum4Menu00.addEntry(new RunEntry(2) {
             // ////// Новая задача
-            public void run() {
-                if (model.size() < 10) {
-                    NewTask();
-                } else {
-                    view.doSrcMaxTasks();
-                }
-            }
+            public void run() { new RunEntry02_Add( model,  view); }
         });
         rum4Menu00.addEntry(new RunEntry(3) {
             /// удалить задачу
-            public void run() {
-                if (model.size() == 0) {
-                    //
-                } else {
-                    int nTaskNum = view.readWhatTaskNumber(model.size());
-                    if (nTaskNum != 0) {
-                        int choice = view.readDoRemoveTask();
-                        if (choice == 1) { // удалить
-                            Task orig = model.getTask(nTaskNum - 1);
-                            model.remove(orig);
-                        }
-                    }
-                }
-            }
+            public void run() {new RunEntry03_Del(model, view);}
         });
         rum4Menu00.addEntry(new RunEntry(4) {
-            public void run() {
-                if (model.size() == 0) {
-                    //view.doSrcEmptyTask();
-                } else {
-                    // view.doSayMess("test1 choice = " + choice + "\n");
-                    LocalDateTime start = LocalDateTime.now();
-                    LocalDateTime end = LocalDateTime.now();
-                    int choice = view.menu04();
-                    switch (choice){
-                        case 0:
-                            break;
-                        case 1: // добавить день
-                            end = start.plusHours(24);
-                            break;
-                        case 2: // добавить неделю
-                            end = start.plusDays(7);
-                            break;
-                        case 3: // дебавидть месяц
-                            end = start.plusMonths(1);
-                            break;
-                        case 4: // добавить 12 месяцев
-                            end = start.plusMonths(12);
-                            break;
-                    }
-
-                    if (choice != 0) {
-                        HashSet<Task> hsIask = new HashSet<Task>();
-                        for (Iterator<Task> iterator = model.iterator(); iterator.hasNext(); ) {
-                            hsIask.add(iterator.next());
-                        }
-                        SortedMap<LocalDateTime, Set<Task>> result = Tasks.calendar(hsIask, start, end);
-                        //view.doSayMess("test1 choice = " + choice + "\n");
-                        view.doSrcTasksCalendar(result, start, end);
-
-                    }
-                }
-            }
+            // календарь задач
+            public void run() {new RunEntry04_Calendar( model,  view); }
         });
 
         return rum4Menu00;
@@ -170,125 +105,52 @@ public class TasksCtrl {
         try {
             return model.getTask(nTaskNum - 1).clone();
         } catch (CloneNotSupportedException e) {
-            // e.printStackTrace();
+            log.error("CloneNotSupportedException", e);
         }
         return null;
     }
 
-
     public void ShowTasks() {
-        Integer nSize = model.size();
-
+       int nSize = model.size();
         if (nSize == 0) {
             view.doSrcEmptyTasks();
         } else {
-            //view.doSayMess("Всего заданий: " + nSize.toString() + "\n");
             view.doSrcTasks(model.iterator());
         }
     }
 
-    public void NewTask() {
-        String title = "";         //назви задачі    //
-        LocalDateTime time = LocalDateTime.now(); //час виконання задачі    //
-        LocalDateTime startTime = LocalDateTime.now(); // початок заданим інтервалом
-        LocalDateTime endTime = LocalDateTime.now(); // кінець заданим інтервалом
-        int interval = 0; // заданим інтервалом (у годинах),
-        boolean repeated = false; //повторюваності задачі
-        boolean active = false; //стан задачі
-
-        int nRepite;
-        boolean lExit = false;
-        int choice;
-
-        while (true) {
-
-            title = view.readTitle();// Название задачи:
-
-            nRepite = view.readIsTaskRepit(); // задача повторяется?
-            if (nRepite == 0) {
-                lExit = true;
-                break;
-            } else {
-                repeated = (nRepite == 1);
-            }
-
-            /*
-            view.doSayMess( time.toString()+'\n');
-            time = view.readLclDtTm(time);
-            view.doSayMess( time.toString()+"\n");
-            */
-
-            // временные интервалы
-            if (repeated) { // да - интервал с секундах, Начало - дата и время  Окончание - дата время
-
-                startTime = view.readStartTime(LocalDateTime.now());
-                endTime = view.readEndTime(startTime);
-                interval = view.readInterval();
-
-            } else {    // нет  Время - дата и время
-                time = view.readStartTime(LocalDateTime.now());
-            }
-
-            view.doSayMess(view.toStringTask(title, time, startTime, endTime, interval, repeated, active) + "\n");
-            choice = view.readDoSaveTask();
-            if (choice == 1) { // сохранить
-                if (repeated) {
-                    model.add(model.CreateTaskRepite(title, startTime, endTime, interval));
-                } else {
-                    model.add(model.CreateTaskOne(title, time));
-                }
-                break;
-            } else if (choice == 0) { // выхоод
-                break;
-            } else { // нет - хотят продолжить
-                continue;
-            }
-        }
-    }
     public CtrlListRun CtrlReadTaskRepite() {
         CtrlListRun rum4ReadTaskRepite = new CtrlListRun();
         rum4ReadTaskRepite.addEntry(new RunEntry(1) {
             public void run() {
-               //view.doSayMess("test  1 run\n");
-                String title = view.readTitle();
-                tmp.setTitle(title);
+                new RunEntryTitle(view,tempTask);
             }
         });
         rum4ReadTaskRepite.addEntry(new RunEntry(2) {
             public void run() {
-                while (true) {
-                    int nActive = view.readIsTaskActive(); // задача Активнва?
-                    if (nActive == 0) {
-                        break;
-                    } else {
-                        tmp.setActive(nActive == 1);
-                        break;
-                    }
-                }
+                new RunEntryActive(view,tempTask);
             }
         });
         rum4ReadTaskRepite.addEntry(new RunEntry(3) {
             public void run() {
                 // должны ввести и равную и большую
-                LocalDateTime startTime = view.readStartTime(tmp.getStartTime());
-                if (view.dDtTm_compareLarger0(startTime, tmp.getEndTime())) {
-                    tmp.setTime(startTime, tmp.getEndTime(),tmp.getRepeatInterval());
-                } else {
-                    // ошибка ничего не делаем
+                LocalDateTime startTime = view.readStartTime(tempTask.getStartTime());
+                if (view.dDtTm_compareLarger0(startTime, tempTask.getEndTime())) {
+                    tempTask.setTime(startTime, tempTask.getEndTime(),tempTask.getRepeatInterval());
                 }
             }
         });
         rum4ReadTaskRepite.addEntry(new RunEntry(4) {
             public void run() {
                 // дата окончания
-                LocalDateTime endTime = view.readEndTime(tmp.getStartTime());
-                tmp.setTime(tmp.getStartTime(), endTime,tmp.getRepeatInterval());
+                LocalDateTime endTime = view.readEndTime(tempTask.getStartTime());
+                tempTask.setTime(tempTask.getStartTime(), endTime,tempTask.getRepeatInterval());
             }
         });
         rum4ReadTaskRepite.addEntry(new RunEntry(5) {
             public void run() {
                 // интеравал
-                tmp.setTime(tmp.getStartTime(), tmp.getEndTime(), view.readInterval());
+                tempTask.setTime(tempTask.getStartTime(), tempTask.getEndTime(), view.readInterval());
             }
         });
         return rum4ReadTaskRepite;
@@ -297,29 +159,18 @@ public class TasksCtrl {
         CtrlListRun rum4ReadTask = new CtrlListRun();
         rum4ReadTask.addEntry(new RunEntry(1) {
             public void run() {
-                // заголовок
-                String title = view.readTitle();
-                tmp.setTitle(title);
+                new RunEntryTitle(view,tempTask);  // заголовок
             }
         });
         rum4ReadTask.addEntry(new RunEntry(2) {
             public void run() {
-                // Активность
-                while (true) {
-                    int nActive = view.readIsTaskActive(); // задача Активнва?
-                    if (nActive == 0) {
-                        break;
-                    } else {
-                        tmp.setActive(nActive == 1);
-                        break;
-                    }
-                }
+                new RunEntryActive(view,tempTask);
             }
         });
         rum4ReadTask.addEntry(new RunEntry(3) {
             public void run() {
                 // время старта
-                tmp.setTime(view.readStartTime(tmp.getTime()));
+                tempTask.setTime(view.readStartTime(tempTask.getTime()));
             }
         });
 
@@ -330,7 +181,7 @@ public class TasksCtrl {
         try {
             TaskIO.read(model, new FileReader("test.json"));
         } catch (FileNotFoundException e) {
-            // e.printStackTrace();
+            log.error("FileNotFoundException " +  "test.json", e  );
         }
     }
 
@@ -338,56 +189,50 @@ public class TasksCtrl {
         try {
             TaskIO.write(model, new FileWriter("test.json"));
         } catch (IOException e) {
-            //e.printStackTrace();
+            log.error("IOException", e);
             view.doSrcIOException();
         }
     }
 
     public void ChkRunTask(Thread thr) {
-        //thr.setDaemon(true);
+        int nIntervalChk_SS = 60 * 15; // интервал "Заскакое время проверять"
+        int nIntervaSleep = 30; // проверки
         while (lChkRunTask) {
             try {
-                thr.sleep(1000 * 60);
-                //log.info("Start отслеживания заданий!");
-            } catch (InterruptedException e) {
-                //log.info("Start!");
-                // e.printStackTrace();
-            }
-            for (Iterator<Task> iterator = model.iterator(); iterator.hasNext(); ) {
-                Task t = iterator.next();
+                thr.sleep(1000 * nIntervaSleep);
+                for (Iterator<Task> iterator = model.iterator(); iterator.hasNext(); ) {
+                    Task t = iterator.next();
 
-                LocalDateTime dCur = LocalDateTime.now();
+                    LocalDateTime dCur = LocalDateTime.now();
+                    LocalDateTime dChek;
+                    LocalDateTime dTime;
+                    int nIntervalChk_Cur = Math.min(t.getRepeatInterval(), nIntervalChk_SS);
+                    dChek = dCur.plusSeconds(nIntervalChk_Cur);
+                    dTime = t.nextTimeAfter(dCur);
 
-                LocalDateTime dChek = dCur.plusMinutes(15); // текущая дата + 30 мин
-                LocalDateTime dTime = t.nextTimeAfter(dCur);
+                    /*System.out.println("");
+                    System.out.println("dCur " + view.dToC(dCur));
+                    System.out.println("dChek " + view.dToC(dChek));
+                    System.out.println("dTime " + view.dToC(dTime));*/
 
-                if (dTime != null) {
-                    long nChek = dChek.atZone(zoneId).toInstant().toEpochMilli();
-                    long nTime = dTime.atZone(zoneId).toInstant().toEpochMilli();
-                    long nCtrlInt = Math.abs(nChek - nTime);
-                    if (nCtrlInt >= 0 && nCtrlInt <= 60000) {
-                        view.doSrcWarningTasks(t.getTitle());
+                    if (dTime != null) {
+                        long nChek = dChek.atZone(zoneId).toInstant().toEpochMilli();
+                        long nTime = dTime.atZone(zoneId).toInstant().toEpochMilli();
+                        long nCtrlInt = Math.abs(nChek - nTime);
+
+                        /*System.out.println("nCtrlInt " + nCtrlInt);
+                        */
+                        if (nCtrlInt >= 0 && nCtrlInt <= 30000) {
+                            view.doSrcWarningTasks(t.getTitle(), nIntervalChk_Cur);
+                        }
                     }
-
                 }
-            }
 
-        }
-    }
-    /*
-    class ChkRunTask implements Runnable {
-
-        public void run( ) {
-            try {
-                Thread.sleep(1000 * 10);
-                view.doSayMess("test1 run = " + "" + "\n");
             } catch (InterruptedException e) {
-                //
+                log.error("Interrupted Exception", e);
             }
-        }
-        public void doChkRunTask() {
-            new Thread(this).start();
+
         }
     }
-     */
+
 }

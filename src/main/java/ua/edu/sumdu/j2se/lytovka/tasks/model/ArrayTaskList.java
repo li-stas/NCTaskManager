@@ -285,10 +285,12 @@ public class ArrayTaskList extends AbstractTaskList implements  Cloneable, Itera
 
     public Task CreateTaskOne(String title, LocalDateTime time) {
         Task tmp = new Task(title,time);
+        tmp.setActive(true);
         return tmp;
     }
     public Task CreateTaskRepite(String title, LocalDateTime start, LocalDateTime end, int interval) {
         Task tmp = new Task(title, start, end, interval);
+        tmp.setActive(true);
         return tmp;
     }
 }

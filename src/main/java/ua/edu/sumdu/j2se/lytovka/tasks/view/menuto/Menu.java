@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Menu  {
-    private List entries = new ArrayList();
+    private List<MenuEntry> entries = new ArrayList();
     private boolean isExit = false;
     private int nTypeMenu;
 
@@ -28,7 +28,6 @@ public class Menu  {
         int choice = 0;
         nMaxNumElem = entries.size();
         // Добавляем пункт меню Exit
-        //entries.add(new MenuEntry(entries.size() + 1  + " - Exit") {
         entries.add(new MenuEntry("0 - Выход", true) {
             @Override
             public void run() {
@@ -43,23 +42,24 @@ public class Menu  {
                 String line = reader.readLine();
                 choice = Integer.parseInt(line);
 
-                if (choice == 0) {
-                    choice = nMaxNumElem + 1;
-                }
-                if (choice < 0 || choice > nMaxNumElem + 1) {
+                if (choice < 0 || choice > nMaxNumElem) {
                     System.out.println((char)27 + "[31mЦифровое значение в не диапазовна"
                             + " 1-" + nMaxNumElem + ", 0" + (char) 27 + "[37m");
                     continue;
                 }
+
+                if (choice == 0) {
+                    choice = nMaxNumElem + 1;
+                }
+
                 // Выбираем нажатый пункт меню и выполняем его код
-                MenuEntry entry = (MenuEntry) entries.get(choice - 1);
+                MenuEntry entry =  entries.get(choice - 1);
                 entry.run();
                 isExit = entry.islExit();
 
             } catch (IOException e) {
                 System.out.println((char)27 + "[31m" + "Ошибка ввода вывода"+ (char) 27 + "[37m");
                 continue;
-                //e.printStackTrace();
             }
             catch (NumberFormatException e) {
                 System.out.println((char)27 + "[31m" + "Только цифры:"
@@ -67,21 +67,21 @@ public class Menu  {
                 continue;
             }
         }
-        //System.out.printf("choice %d nMaxNumElem %d",choice , nMaxNumElem);
+
         return choice - 1 == nMaxNumElem  ? 0 : choice;
     }
 
     private void printMenu() {
         System.out.print((char)27 + "[37m");
         for (int i = 0; i < entries.size() - 1; i++) {
-            MenuEntry entry = (MenuEntry) entries.get(i);
+            MenuEntry entry =  entries.get(i);
             if (nTypeMenu == 0) {
                 System.out.print(entry.getTitle() + ", ");
             } else {
                 System.out.println(entry.getTitle());
             }
         }
-        MenuEntry entry = (MenuEntry) entries.get(entries.size() - 1);
+        MenuEntry entry = entries.get(entries.size() - 1);
         if (nTypeMenu == 0) {
             System.out.print(entry.getTitle() + ": ");
         } else {
