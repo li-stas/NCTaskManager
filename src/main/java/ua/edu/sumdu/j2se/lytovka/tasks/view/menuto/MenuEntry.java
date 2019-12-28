@@ -1,5 +1,8 @@
 package ua.edu.sumdu.j2se.lytovka.tasks.view.menuto;
 
+/**
+ * элементы меню
+ */
 public abstract class MenuEntry {
     private String title;
     private boolean lExit;
