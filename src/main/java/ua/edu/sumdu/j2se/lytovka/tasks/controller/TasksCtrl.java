@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+
 
 /**
  * контроллер приложения
@@ -24,10 +24,8 @@ public class TasksCtrl {
     private static ZoneId zoneId = ZoneId.systemDefault();
     private ArrayTaskList model;
     private TasksView view;
-    private CtrlListRun ctrlReadTask =  CtrlReadTask();
-    private CtrlListRun ctrlReadTaskRepite =  CtrlReadTaskRepite();
     private CtrlListRun methodContainerForMenu00 =  MethodContainerForMenu00();
-    private Task tempTask;
+
     private boolean lChkRunTask;
 
     /**
@@ -61,45 +59,7 @@ public class TasksCtrl {
 
         rum4Menu00.addEntry(new RunEntry(1) {
             //// РЕДАКТИРОВАНИЕ
-            public void run()  {
-                if (model.size() != 0) {
-                    int nTaskNum = view.readWhatTaskNumber(model.size());
-                    if (nTaskNum != 0) {
-
-                        Task orig = model.getTask(nTaskNum - 1);
-                        tempTask = ctrlCloneTask(nTaskNum);
-
-                        while (true) {
-                           int choice = view.menuReadTast(tempTask);
-                            if (choice == 0) {
-                                // записать или продолжить...
-                                choice = view.readDoSaveTask();
-                                if (choice == 1) { // сохранить
-                                    orig.setTitle(tempTask.getTitle());
-                                    orig.setActive(tempTask.isActive());
-                                    if (tempTask.isRepeated()) {
-                                        orig.setTime(tempTask.getStartTime(), tempTask.getEndTime(), tempTask.getRepeatInterval());
-                                    } else {
-                                        orig.setTime(tempTask.getTime());
-                                    }
-                                    break;
-                                } else if (choice == 0) { // выхоод
-                                    break;
-                                } else { // нет - хотят продолжить
-                                    continue;
-                                }
-                            }
-                            if (tempTask.isRepeated()){
-                               RunEntry entry = (RunEntry) ctrlReadTaskRepite.getEntries().get(choice - 1);
-                               entry.run();
-                            } else {
-                                RunEntry entry = (RunEntry) ctrlReadTask.getEntries().get(choice - 1);
-                                entry.run();
-                            }
-                        }
-                    }
-                }
-            }
+            public void run()  { new RunEntry01_Edit( model,  view);  }
         });
         rum4Menu00.addEntry(new RunEntry(2) {
             // ////// Новая задание
@@ -115,73 +75,6 @@ public class TasksCtrl {
         });
 
         return rum4Menu00;
-    }
-
-    /**
-     * наполение контейнера методами соответвующего п. меню Редактироания задания (переиодического)
-     * @return
-     */
-     private CtrlListRun CtrlReadTaskRepite( ) {
-        CtrlListRun rum4ReadTaskRepite = new CtrlListRun();
-        rum4ReadTaskRepite.addEntry(new RunEntry(1) {
-            public void run() {
-                new RunEntryTitle(view,tempTask);
-            }
-        });
-        rum4ReadTaskRepite.addEntry(new RunEntry(2) {
-            public void run() {
-                new RunEntryActive(view,tempTask);
-            }
-        });
-        rum4ReadTaskRepite.addEntry(new RunEntry(3) {
-            public void run() {
-                // должны ввести и равную и большую
-                LocalDateTime startTime = view.readStartTime(tempTask.getStartTime());
-                if (view.dDtTm_compareLarger0(startTime, tempTask.getEndTime())) {
-                    tempTask.setTime(startTime, tempTask.getEndTime(),tempTask.getRepeatInterval());
-                }
-            }
-        });
-        rum4ReadTaskRepite.addEntry(new RunEntry(4) {
-            public void run() {
-                // дата окончания
-                LocalDateTime endTime = view.readEndTime(tempTask.getStartTime());
-                tempTask.setTime(tempTask.getStartTime(), endTime,tempTask.getRepeatInterval());
-            }
-        });
-        rum4ReadTaskRepite.addEntry(new RunEntry(5) {
-            public void run() {
-                // интеравал
-                tempTask.setTime(tempTask.getStartTime(), tempTask.getEndTime(), view.readInterval());
-            }
-        });
-        return rum4ReadTaskRepite;
-    }
-
-    /**
-     * заполение контейнера методами соответвующего п. меню Редактироания задания (одноразового)
-     * @return
-     */
-    private CtrlListRun CtrlReadTask( ) {
-        CtrlListRun rum4ReadTask = new CtrlListRun();
-        rum4ReadTask.addEntry(new RunEntry(1) {
-            public void run() {
-                new RunEntryTitle(view,tempTask);  // заголовок
-            }
-        });
-        rum4ReadTask.addEntry(new RunEntry(2) {
-            public void run() {
-                new RunEntryActive(view,tempTask);
-            }
-        });
-        rum4ReadTask.addEntry(new RunEntry(3) {
-            public void run() {
-                // время старта
-                tempTask.setTime(view.readStartTime(tempTask.getTime()));
-            }
-        });
-
-        return rum4ReadTask;
     }
 
     /**
@@ -205,20 +98,6 @@ public class TasksCtrl {
             log.error("IOException", e);
             view.doSrcIOException();
         }
-    }
-
-    /**
-     * Создание времменого Задания чз клонирование
-     * @param nTaskNum
-     * @return
-     */
-    private Task ctrlCloneTask( int nTaskNum ) {
-        try {
-            return model.getTask(nTaskNum - 1).clone();
-        } catch (CloneNotSupportedException e) {
-            log.error("CloneNotSupportedException", e);
-        }
-        return null;
     }
 
     /**

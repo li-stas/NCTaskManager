@@ -15,8 +15,6 @@ import java.util.SortedMap;
  */
 
 public class RunEntry04_Calendar {
-    private ArrayTaskList model;
-    private TasksView view;
 
     /**
      * метдот построение клалендаря заданий не выбранный переиод
@@ -24,8 +22,6 @@ public class RunEntry04_Calendar {
      * @param view
      */
     public RunEntry04_Calendar(ArrayTaskList model, TasksView view) {
-        this.model = model;
-        this.view = view;
         if (model.size() != 0) {
             LocalDateTime start = LocalDateTime.now();
             LocalDateTime end = LocalDateTime.now();

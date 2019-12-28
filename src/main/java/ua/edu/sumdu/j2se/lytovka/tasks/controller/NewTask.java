@@ -10,8 +10,6 @@ import java.time.LocalDateTime;
  */
 
 public class NewTask {
-    private ArrayTaskList model;
-    private TasksView view;
 
     /**
      *  ввод и контроль ввода при добавлении нового задания)
@@ -19,8 +17,6 @@ public class NewTask {
      * @param view
      */
     public NewTask(ArrayTaskList model, TasksView view) {
-        this.model = model;
-        this.view = view;
         String title = "";         //назви задачі    //
         LocalDateTime time = LocalDateTime.now(); //час виконання задачі    //
         LocalDateTime startTime = LocalDateTime.now(); // початок заданим інтервалом
