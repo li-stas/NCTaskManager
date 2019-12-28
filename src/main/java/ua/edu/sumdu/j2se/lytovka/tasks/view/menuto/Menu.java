@@ -6,6 +6,15 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * контейнер хранения элементов меню
+ * и запуск выбора п. меню
+ * nTypeMenu - 0 - горизонтальное меню, 1- вертикальное меню
+ * isExit - что делать после успешного выбора п.меню,
+ *      true - выход и возврат номера п. меню
+ *      fasls - меню зацикливается и если есть методы для п.меню, то выполнятся.
+ *      п.0 - выполняет выход (добавляется автоматически последним)
+ */
 public class Menu  {
     private List<MenuEntry> entries = new ArrayList();
     private boolean isExit = false;
