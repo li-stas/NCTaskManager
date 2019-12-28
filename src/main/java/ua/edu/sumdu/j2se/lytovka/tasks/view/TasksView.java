@@ -26,25 +26,25 @@ public class TasksView {
      * @param t
      * @return номер выбранного п.меню
      */
-    public int menuReadTast(Task t) {
+    public int menuReadTask(Task t) {
         int nRet;
         Menu menu = new Menu(1);
         menu.addEntry(new MenuEntry(String.format("%-25s", "1 - Название") + ":" + t.getTitle(),
                 true) { public void run() {} });
-        menu.addEntry(new MenuEntry(String.format("%-25s", "2 - Актинвная") + ":" + (t.isActive() ? "Да" : "Нет"),
+        menu.addEntry(new MenuEntry(String.format("%-25s", "2 - Актинвное") + ":" + (t.isActive() ? "Да" : "Нет"),
                 true) {public void run() {} });
         if (t.isRepeated()) {
             menu.addEntry(new MenuEntry(String.format("%-25s", "3 - Время начала") + ":" + t.getStartTime(),
                     true) {public void run() {} });
             menu.addEntry(new MenuEntry(String.format("%-25s", "4 - Время окончания") + ":" + t.getEndTime(),
                     true) {public void run() {} });
-            menu.addEntry(new MenuEntry(String.format("%-25s", "5 - Интервал повторения") + ":" + t.getRepeatInterval(),
+            menu.addEntry(new MenuEntry(String.format("%-25s", "5 - Интервал повторения") + ":" + intervalHHMM(t.getRepeatInterval()),
                     true) { public void run() {}   });
         } else {
             menu.addEntry(new MenuEntry(String.format("%-25s", "3 - Время начала") + ":" + t.getStartTime(),
                     true) { public void run() {} });
         }
-        log.info("run menuReadTast");
+        log.info("run menuReadTask");
         nRet = menu.run();
         return nRet;
     }
@@ -84,7 +84,7 @@ public class TasksView {
     }
 
     /**
-     *  меню запроса Да/Нет/Отмена
+     *   GET|READ меню запроса Да/Нет/Отмена
      * @return номер выбранно п. меню
      */
     private int readYesNo() {
@@ -111,7 +111,7 @@ public class TasksView {
     public void doSrcTasks(Iterator<Task> iterator) {
         doSayMess("\n");
         int i = 0;
-        for (; iterator.hasNext();) {
+        while (iterator.hasNext()) {
             Task t = iterator.next();
             String cMess = String.format("%2d", ++i)
                     + ". [ "
@@ -242,7 +242,7 @@ public class TasksView {
         return readYesNo();
     }
     /**
-     * ввод, контроль, вывод Запроса о "Задание Активно?
+     *  GET|READ  Запроса о "Задание Активно?
      * @return 1 - Да 2- Нет 0 - отмена
      */
     public int readIsTaskActive() {

@@ -9,12 +9,8 @@ import ua.edu.sumdu.j2se.lytovka.tasks.view.TasksView;
  */
 
 public class RunEntry03_Del {
-    private ArrayTaskList model;
-    private TasksView view;
 
     public RunEntry03_Del(ArrayTaskList model, TasksView view) {
-        this.model = model;
-        this.view = view;
         if (model.size() != 0) {
             int nTaskNum = view.readWhatTaskNumber(model.size());
             if (nTaskNum != 0) {
