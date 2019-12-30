@@ -27,7 +27,7 @@ public class doSrcTasks {
     }
     private String toStringTaskShort(String title, LocalDateTime time, LocalDateTime startTime, LocalDateTime endTime,
                                      int interval, boolean repeated, boolean active) {
-        return new toStringTaskShort().geeSrcTaskShort( title,  time,  startTime,  endTime,
+        return new toStringTaskShort().geеSrcTaskShort( title,  time,  startTime,  endTime,
          interval,  repeated,  active);
     }
 }
