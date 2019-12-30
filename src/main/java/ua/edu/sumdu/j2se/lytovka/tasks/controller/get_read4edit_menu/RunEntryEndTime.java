@@ -1,4 +1,4 @@
-package ua.edu.sumdu.j2se.lytovka.tasks.controller;
+package ua.edu.sumdu.j2se.lytovka.tasks.controller.get_read4edit_menu;
 
 import ua.edu.sumdu.j2se.lytovka.tasks.model.Task;
 import ua.edu.sumdu.j2se.lytovka.tasks.view.TasksView;

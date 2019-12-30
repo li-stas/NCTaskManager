@@ -1,6 +1,12 @@
 package ua.edu.sumdu.j2se.lytovka.tasks.controller;
 
 import org.apache.log4j.Logger;
+import ua.edu.sumdu.j2se.lytovka.tasks.controller.creat_list_exe_methods.CtrlListRun;
+import ua.edu.sumdu.j2se.lytovka.tasks.controller.creat_list_exe_methods.RunEntry;
+import ua.edu.sumdu.j2se.lytovka.tasks.controller.main_menu_methods.RunEntry01_Edit;
+import ua.edu.sumdu.j2se.lytovka.tasks.controller.main_menu_methods.elem_menu02_add.RunEntry02_Add;
+import ua.edu.sumdu.j2se.lytovka.tasks.controller.main_menu_methods.RunEntry03_Del;
+import ua.edu.sumdu.j2se.lytovka.tasks.controller.main_menu_methods.RunEntry04_Calendar;
 import ua.edu.sumdu.j2se.lytovka.tasks.model.ArrayTaskList;
 import ua.edu.sumdu.j2se.lytovka.tasks.model.Task;
 import ua.edu.sumdu.j2se.lytovka.tasks.model.TaskIO;
@@ -105,6 +111,7 @@ public class TasksCtrl {
      */
     public void ShowTasks() {
         int nSize = model.size();
+        //view.doSayMess((char)27 + "[40m");
         if (nSize == 0) {
             view.doSrcEmptyTasks();
         } else {

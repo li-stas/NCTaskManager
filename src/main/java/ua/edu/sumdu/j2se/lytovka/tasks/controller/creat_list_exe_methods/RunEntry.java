@@ -1,4 +1,4 @@
-package ua.edu.sumdu.j2se.lytovka.tasks.controller;
+package ua.edu.sumdu.j2se.lytovka.tasks.controller.creat_list_exe_methods;
 
 /**
  *  поле curNumEntry, а также абстрактный метод run.

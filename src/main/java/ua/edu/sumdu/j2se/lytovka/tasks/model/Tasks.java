@@ -1,15 +1,11 @@
 package ua.edu.sumdu.j2se.lytovka.tasks.model;
 
-
-import ua.edu.sumdu.j2se.lytovka.tasks.model.Task;
-
 import java.time.LocalDateTime;
 import java.util.*;
 
-
 public class Tasks {
     public static Iterable<Task> incoming(Iterable<Task> tasks, LocalDateTime from, LocalDateTime to) {
-        List resList = new ArrayList();
+        List<Task> resList = new ArrayList();
         for (Task t : tasks) {
             if (isIncoming(t, from, to)) {
                 resList.add(t);
@@ -28,7 +24,7 @@ public class Tasks {
     }
 
     public static SortedMap<LocalDateTime, Set<Task>> calendar(Iterable<Task> tasks, LocalDateTime start, LocalDateTime end) {
-        TreeMap res = new TreeMap<>();
+        TreeMap<LocalDateTime, Set<Task>> res = new TreeMap<>();
         for (Task t : tasks) {
             if (isIncoming(t, start, end)) {
                 // размножаем задачи
@@ -49,18 +45,6 @@ public class Tasks {
                 }
             }
         }
-        return (SortedMap<LocalDateTime, Set<Task>>) res;
+        return res;
     }
 }
-/*
-public static Iterable<Task> incoming11(Iterable<Task> tasks, LocalDateTime from, LocalDateTime to) {
-        List<Task> resList = new ArrayList<>();
-        for (Iterator<Task> it = tasks.iterator(); it.hasNext();) {
-            Task t = it.next();
-            if (isIncoming(t, from, to)) {
-                resList.add(t);
-            }
-        }
-        return (Iterable<Task>) resList;
-    }
- */

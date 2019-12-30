@@ -46,7 +46,6 @@ public abstract class AbstractTaskList { //implements Iterable  {
      * @param to
      * @return
      */
-    //public abstract AbstractTaskList incoming(int from, int to);
     public final AbstractTaskList incoming(LocalDateTime from, LocalDateTime to) {
         AbstractTaskList resList;
         //if (getClass().getName().endsWith("LinkedTaskList")) {

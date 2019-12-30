@@ -4,8 +4,15 @@ package ua.edu.sumdu.j2se.lytovka.tasks.view;
 import org.apache.log4j.Logger;
 
 import ua.edu.sumdu.j2se.lytovka.tasks.model.Task;
-import ua.edu.sumdu.j2se.lytovka.tasks.view.menuto.Menu;
-import ua.edu.sumdu.j2se.lytovka.tasks.view.menuto.MenuEntry;
+import ua.edu.sumdu.j2se.lytovka.tasks.view.elems_menu.menu00;
+import ua.edu.sumdu.j2se.lytovka.tasks.view.elems_menu.menu04;
+import ua.edu.sumdu.j2se.lytovka.tasks.view.elems_menu.menuReadTask;
+import ua.edu.sumdu.j2se.lytovka.tasks.view.elems_menu.readYesNo;
+import ua.edu.sumdu.j2se.lytovka.tasks.view.getread.*;
+import ua.edu.sumdu.j2se.lytovka.tasks.view.screens.doSrcMaxTasks;
+import ua.edu.sumdu.j2se.lytovka.tasks.view.screens.doSrcTasks;
+import ua.edu.sumdu.j2se.lytovka.tasks.view.screens.doSrcTasksCalendar;
+import ua.edu.sumdu.j2se.lytovka.tasks.view.screens.doSrcWarningTasks;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,84 +30,39 @@ public class TasksView {
     /**
      * формирование, вывод меню и выбор и возврат выбранного п. меню
      * для редактирования задания
-     * @param t
+     * @param t - задание
      * @return номер выбранного п.меню
      */
     public int menuReadTask(Task t) {
-        int nRet;
-        Menu menu = new Menu(1);
-        menu.addEntry(new MenuEntry(String.format("%-25s", "1 - Название") + ":" + t.getTitle(),
-                true) { public void run() {} });
-        menu.addEntry(new MenuEntry(String.format("%-25s", "2 - Актинвное") + ":" + (t.isActive() ? "Да" : "Нет"),
-                true) {public void run() {} });
-        if (t.isRepeated()) {
-            menu.addEntry(new MenuEntry(String.format("%-25s", "3 - Время начала") + ":" + t.getStartTime(),
-                    true) {public void run() {} });
-            menu.addEntry(new MenuEntry(String.format("%-25s", "4 - Время окончания") + ":" + t.getEndTime(),
-                    true) {public void run() {} });
-            menu.addEntry(new MenuEntry(String.format("%-25s", "5 - Интервал повторения") + ":" + intervalHHMM(t.getRepeatInterval()),
-                    true) { public void run() {}   });
-        } else {
-            menu.addEntry(new MenuEntry(String.format("%-25s", "3 - Время начала") + ":" + t.getStartTime(),
-                    true) { public void run() {} });
-        }
-        log.info("run menuReadTask");
-        nRet = menu.run();
-        return nRet;
+        return new menuReadTask(t).getnRet();
     }
-
     /**
      * Главное меню
      * фаормирование, вывод меню и выбор и возврат выбранного п. меню
      * @return номер выбранно п. меню
      */
     public int menu00() {
-        int nRet;
-        Menu menu = new Menu();
-        menu.addEntry(new MenuEntry("1 - Редактировать", true) {public void run( ) {} });
-        menu.addEntry(new MenuEntry("2 - Добавить", true) { public void run() {}  });
-        menu.addEntry(new MenuEntry("3 - Удалить задание", true) {public void run() {} });
-        menu.addEntry(new MenuEntry("4 - Календарь на период", true) { public void run() {} });
-        System.out.print("Что хотите сделать заданиями? ");
-        log.info("run menu00()");
-        nRet = menu.run();
-        return nRet;
+        return new menu00().getnRet();
     }
-
     /**
      * Меню запроса для построения календаря
      * @return номер выбранно п. меню
      */
     public int menu04() {
-        int nRet;
-        Menu menu = new Menu();
-        menu.addEntry(new MenuEntry("1 - На 24 часа", true) { public void run() {} });
-        menu.addEntry(new MenuEntry("2 - На неделю", true) { public void run() {} });
-        menu.addEntry(new MenuEntry("3 - На месяц", true) { public void run() {} });
-        menu.addEntry(new MenuEntry("4 - На год", true) {  public void run() {} });
-        System.out.print("На какой период построить календарь? ");
-        nRet = menu.run();
-        return nRet;
+        return new menu04().getnRet();
     }
-
     /**
      *   GET|READ меню запроса Да/Нет/Отмена
      * @return номер выбранно п. меню
      */
     private int readYesNo() {
-        int nRet;
-        Menu menu = new Menu();
-        menu.addEntry(new MenuEntry("1 - Да", true) {public void run() {}  });
-        menu.addEntry(new MenuEntry("2 - Нет", true) {public void run() {} });
-        nRet = menu.run();
-        return nRet;
+        return new readYesNo().getnRet();
     }
-
     /**
      * вывод сообщения
      * @param cMess
      */
-    public void doSayMess(String cMess) {
+    public static void doSayMess(String cMess) {
         System.out.print(cMess);
     }
 
@@ -109,51 +71,28 @@ public class TasksView {
      * @param iterator
      */
     public void doSrcTasks(Iterator<Task> iterator) {
-        doSayMess("\n");
-        int i = 0;
-        while (iterator.hasNext()) {
-            Task t = iterator.next();
-            String cMess = String.format("%2d", ++i)
-                    + ". [ "
-                    + (t.isActive() ? (char)27 + "[30m" : "")
-                    + toStringTaskShort(t.getTitle(), t.getTime(), t.getStartTime(), t.getEndTime(),
-                    t.getRepeatInterval(), t.isRepeated(), t.isActive())
-                    +  (char)27 + "[37m"
-                    + " ]";
-            doSayMess(cMess + '\n');
-        }
-        doSayMess("\n");
+        new doSrcTasks().Screen(iterator);
     }
 
     /**
      * вывод сообщения о привышении максимального к-ва задний
      */
     public void doSrcMaxTasks() {
-        doSayMess("\n");
-        doSayMess((char) 27 + "[31m" + "К-во заданий ограничено 10" + (char)27 + "[37m" + "\n");
-        doSayMess("\n");
+        new doSrcMaxTasks().Screen();
     }
-
     /**
      * ввыод сообщения на начале выполния задания
      * @param cMess
      * @param nIntervalChk_SS
      */
     public void doSrcWarningTasks(String cMess, int nIntervalChk_SS) {
-        doSayMess("\n");
-        doSayMess((char) 27 + "[34m"
-                + "Чз " + String.format("%4.1f", (float) nIntervalChk_SS/60)
-                + " мин наступает вркмя выполнеия задания : "
-                + cMess
-                + (char)27 + "[37m"
-                + "\n");
-        doSayMess("\n");
+        new doSrcWarningTasks().Screen( cMess, nIntervalChk_SS);
     }
 
     /**
      * вывод сообщцния о пустом списке заданий
      */
-    public void doSrcEmptyTasks() {
+    public static void doSrcEmptyTasks() {
         doSayMess("\n");
         doSayMess((char) 27 + "[33m" + "Список заданий пустой"+ (char)27 + "[37m" + "\n");
         doSayMess("\n");
@@ -173,32 +112,7 @@ public class TasksView {
      * @param end конечная дата
      */
     public void doSrcTasksCalendar(SortedMap<LocalDateTime, Set<Task>> result, LocalDateTime start, LocalDateTime end) {
-
-        System.out.println("    Календарь заданий в период с " + dToC(start) + " по " + dToC(end) + "\n");
-
-        int i = 1;
-        // перебор элементов
-        for (Map.Entry<LocalDateTime, Set<Task>> item : result.entrySet()) {
-
-            String cDt = dToC(item.getKey());
-            for (Task t : item.getValue()) {
-                //                         шапка
-                if (i == 1) {
-                    System.out.println("--------------------------------------------------------------");
-                    System.out.printf("%-15s  %s\n", "Дата и время", " |            Задание");
-                    System.out.println("--------------------------------------------------------------");
-                }
-                //                         таблица
-                System.out.printf((((i % 2) == 0) ? (char) 27 + "[30m" : "") + "%s | %s" + "\n", cDt, t.getTitle());
-                System.out.print((char) 27 + "[37m");
-
-                i++;
-            }
-        }
-        if (i == 1) {
-            doSrcEmptyTasks();
-        }
-        System.out.printf("\n");
+        new doSrcTasksCalendar().Screen(result,  start,  end);
     }
 
     /**
@@ -206,48 +120,35 @@ public class TasksView {
      * @return название задания
      */
     public String readTitle() {
-        Scanner scan = new Scanner(System.in);
-        doSayMess("Название задания: ");
-        String title = "";
-        while (title.isEmpty()) {
-            title = scan.nextLine();
-        }
-        return title;
+       return new readTitle().getTitle();
     }
-
     /**
      * GET|READ Запроса Записи Задания
-     * @return 1 - записать 2- не записывать 0 - отмена
+     * @return 1 - Да 2- Нет 0 - отмена
      */
     public int readDoSaveTask() {
-        System.out.print("Задание записать? ");
-        return readYesNo();
+        return new readDoSaveTask().getnRet();
     }
-
     /**
      * GET|READ Удалени задания
-     * @return 1 - записать 2- не записывать 0 - отмена
+     * @return 1 - Да 2- Нет 0 - отмена
      */
     public int readDoRemoveTask() {
-        System.out.print("Задание удалить? ");
-        return readYesNo();
+        return new readDoRemoveTask().getnRet();
     }
-
     /**
      * GET|READ Запроса о "Задание Повторяется?"
      * @return 1 - Да 2- Нет 0 - отмена
      */
     public int readIsTaskRepit() {
-        System.out.print("Задание Повторяется? ");
-        return readYesNo();
+        return new readIsTaskRepit().getnRet();
     }
     /**
      *  GET|READ  Запроса о "Задание Активно?
      * @return 1 - Да 2- Нет 0 - отмена
      */
     public int readIsTaskActive() {
-        System.out.print("Задание Активно? ");
-        return readYesNo();
+        return new readIsTaskActive().getnRet();
     }
 
     /**
@@ -432,8 +333,8 @@ public class TasksView {
      * @param active
      * @return
      */
-    private String toStringTaskShort(String title, LocalDateTime time, LocalDateTime startTime, LocalDateTime endTime,
-                                     int interval, boolean repeated, boolean active) {
+    public static String toStringTaskShort(String title, LocalDateTime time, LocalDateTime startTime, LocalDateTime endTime,
+                                           int interval, boolean repeated, boolean active) {
         return "Зд: " + String.format("%-15s", title) + (
                 (!repeated) ? (" Вp : " + dToC(time)) :
                         " ВpH: " + dToC(startTime) + " ВpК: " + dToC(endTime)  + " ИнП: " + intervalHHMM(interval) // + "\n"
@@ -444,7 +345,7 @@ public class TasksView {
      * @param now
      * @return
      */
-    private String dToC(LocalDateTime now) {
+    public static String dToC(LocalDateTime now) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         return  now == null ? "null" : now.format(formatter);
     }
@@ -455,7 +356,7 @@ public class TasksView {
      * @param time
      * @return
      */
-    private String intervalHHMM(long time) {
+    private static String intervalHHMM(long time) {
         return String.format("%02d:%02d:%02d", time / 3600, time / 60 % 60, time % 60);
     }
  }

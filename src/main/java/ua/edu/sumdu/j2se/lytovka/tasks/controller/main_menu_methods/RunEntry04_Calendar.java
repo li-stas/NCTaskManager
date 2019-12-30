@@ -1,4 +1,4 @@
-package ua.edu.sumdu.j2se.lytovka.tasks.controller;
+package ua.edu.sumdu.j2se.lytovka.tasks.controller.main_menu_methods;
 
 import ua.edu.sumdu.j2se.lytovka.tasks.model.ArrayTaskList;
 import ua.edu.sumdu.j2se.lytovka.tasks.model.Task;
