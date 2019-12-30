@@ -137,15 +137,15 @@ public class TasksCtrl {
                     dChek = dCur.plusSeconds(nIntervalChk_Cur);
                     dTime = t.nextTimeAfter(dCur);
 
-                    log.error("ВрТекущие dCur " + dToC(dCur)); //System.out.println("dCur " + view.dToC(dCur));
-                    log.error("ВрПроверки dChek " + dToC(dChek));//  System.out.println("dChek " + view.dToC(dChek));
-                    log.error("Вр_nextTimeAfter(dCur) dTime " + dToC(dTime)); //System.out.println("dTime " + view.dToC(dTime));
+                    log.debug("ВрТекущие dCur " + dToC(dCur)); //System.out.println("dCur " + view.dToC(dCur));
+                    log.debug("ВрПроверки dChek " + dToC(dChek));//  System.out.println("dChek " + view.dToC(dChek));
+                    log.debug("Вр_nextTimeAfter(dCur) dTime " + dToC(dTime)); //System.out.println("dTime " + view.dToC(dTime));
 
                     if (dTime != null) {
                         long nChek = dChek.atZone(zoneId).toInstant().toEpochMilli();
                         long nTime = dTime.atZone(zoneId).toInstant().toEpochMilli();
                         long nCtrlInt = Math.abs(nChek - nTime);
-                        log.error("Math.abs(nChek - nTime)->nCtrlInt " + nCtrlInt); //System.out.println("nCtrlInt " + nCtrlInt);
+                        log.debug("Math.abs(nChek - nTime)->nCtrlInt " + nCtrlInt); //System.out.println("nCtrlInt " + nCtrlInt);
                         if (nCtrlInt >= 0 && nCtrlInt <= 30000) {
                             view.doSrcWarningTasks(t.getTitle(), nIntervalChk_Cur);
                         }
