@@ -1,12 +1,17 @@
-package ua.edu.sumdu.j2se.lytovka.tasks.controller;
+package ua.edu.sumdu.j2se.lytovka.tasks.controller.main_menu_methods;
 
 import org.apache.log4j.Logger;
+import ua.edu.sumdu.j2se.lytovka.tasks.controller.creat_list_exe_methods.CtrlListRun;
+import ua.edu.sumdu.j2se.lytovka.tasks.controller.creat_list_exe_methods.RunEntry;
+import ua.edu.sumdu.j2se.lytovka.tasks.controller.TasksCtrl;
+import ua.edu.sumdu.j2se.lytovka.tasks.controller.get_read4edit_menu.*;
 import ua.edu.sumdu.j2se.lytovka.tasks.model.ArrayTaskList;
 import ua.edu.sumdu.j2se.lytovka.tasks.model.Task;
 import ua.edu.sumdu.j2se.lytovka.tasks.view.TasksView;
 
-import java.time.LocalDateTime;
-
+/**
+ * обработака п. меню Редактировать
+ */
 public class RunEntry01_Edit {
     private final Logger log = Logger.getLogger(TasksCtrl.class.getName());
     private ArrayTaskList model;

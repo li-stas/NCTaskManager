@@ -321,9 +321,11 @@ public class Task implements Serializable, Cloneable {
     /**
      * https://habr.com/ru/post/246993/
      * https://javarush.ru/quests/lectures/questmultithreading.level01.lecture07
-     * https://webcache.googleusercontent.com/search?q=cache:n7q2Jn3mnEkJ:https://javarush.ru/quests/lectures/questmultithreading.level01.lecture07+&cd=2&hl=ru&ct=clnk&gl=ua
      * @return
      * @throws CloneNotSupportedException
+     */
+    /*
+    https://webcache.googleusercontent.com/search?q=cache:n7q2Jn3mnEkJ:https://javarush.ru/quests/lectures/questmultithreading.level01.lecture07+&cd=2&hl=ru&ct=clnk&gl=ua
      */
     @Override
     public Task clone() throws CloneNotSupportedException {
@@ -338,9 +340,7 @@ public class Task implements Serializable, Cloneable {
     public Task cloneStream() {
         try {
             return cloneTask();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return null;

@@ -2,7 +2,7 @@ package ua.edu.sumdu.j2se.lytovka.tasks.app_task;
 
 import org.apache.log4j.Logger;
 import ua.edu.sumdu.j2se.lytovka.tasks.model.ArrayTaskList;
-import ua.edu.sumdu.j2se.lytovka.tasks.controller.RunEntry;
+import ua.edu.sumdu.j2se.lytovka.tasks.controller.creat_list_exe_methods.RunEntry;
 import ua.edu.sumdu.j2se.lytovka.tasks.controller.TasksCtrl;
 import ua.edu.sumdu.j2se.lytovka.tasks.view.TasksView;
 

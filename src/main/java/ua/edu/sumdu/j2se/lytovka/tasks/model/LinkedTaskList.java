@@ -130,17 +130,7 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable, It
      */
     public LinkedTaskList incoming1(LocalDateTime from, LocalDateTime to) {
         AbstractTaskList resList = new LinkedTaskList();
-        if (false) {
-
-            for (int i = 0; i < len; i++) {
-                if (isIncoming(getTask(i), from, to)) {
-                    resList.add(getTask(i));
-                }
-            }
-        } else {
-            //Stream<Task> stream = this.getStream();
-            this.getStream().filter(t->isIncoming(t, from, to)).forEach( t->resList.add(t) );
-        }
+        this.getStream().filter(t -> isIncoming(t, from, to)).forEach(t -> resList.add(t));
         return (LinkedTaskList) resList;
     }
      /**
@@ -153,11 +143,13 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable, It
                 + ", len=" + len
                 + ", lastNode=" + lastNode
                 + '}';
+        StringBuffer strBuffer = new StringBuffer(cOut);
         if (len != 0) {
             LinkedTaskListNode curNode = fistNode;
             int i = 1;
             while (true) {
-                cOut +=  curNode.getData() + " node=" + i;
+                strBuffer.append(curNode.getData() + " node=" + i);
+                //cOut +=  curNode.getData() + " node=" + i;
                 curNode = curNode.getNext();
                 if (curNode == null) {
                     break;
@@ -165,6 +157,7 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable, It
                 i++;
             }
         }
+        cOut = strBuffer.toString();
         return cOut;
     }
     /**
@@ -367,17 +360,7 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable, It
         if (index4Del == 1) { // первый узел
             fistNode = fistNode.getNext();
             len--;
-        }  else if (false && curNode.getNext() == null) { // последний узел
-            // предыдущая
-            curNode = fistNode;
-            for (int j = 2; j <= len - 1; j++) {
-                curNode = curNode.getNext();
-            }
-            // сделаем последней
-            curNode.setNext(null);
-            lastNode = curNode;
-            len--;
-        } else {
+        }   else {
             LinkedTaskListNode delNode = curNode; // запомним
             // предыдущего узла  поиск
             curNode = fistNode;
