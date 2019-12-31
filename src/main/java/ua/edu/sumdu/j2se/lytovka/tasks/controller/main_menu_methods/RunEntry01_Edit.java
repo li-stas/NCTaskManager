@@ -114,14 +114,11 @@ public class RunEntry01_Edit {
             public void run() {  new RunEntryTitle(view,tempTask); } // заголовок
         });
         rum4ReadTask.addEntry(new RunEntry(2) {
-            public void run() {
-                new RunEntryActive(view,tempTask);
-            }
+            public void run() {new RunEntryActive(view,tempTask);  }
         });
         rum4ReadTask.addEntry(new RunEntry(3) {
             public void run() {new RunEntryTime(view, tempTask);  } // время старта
         });
-
         return rum4ReadTask;
     }
 

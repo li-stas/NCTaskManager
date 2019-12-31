@@ -4,9 +4,6 @@ import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 
 import com.google.gson.stream.JsonWriter;
-import ua.edu.sumdu.j2se.lytovka.tasks.model.AbstractTaskList;
-import ua.edu.sumdu.j2se.lytovka.tasks.model.ArrayTaskList;
-import ua.edu.sumdu.j2se.lytovka.tasks.model.Task;
 
 import java.io.*;
 

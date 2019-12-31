@@ -129,9 +129,9 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable, It
      * @return
      */
     public LinkedTaskList incoming1(LocalDateTime from, LocalDateTime to) {
-        AbstractTaskList resList = new LinkedTaskList();
+        LinkedTaskList resList = new LinkedTaskList();
         this.getStream().filter(t -> isIncoming(t, from, to)).forEach(t -> resList.add(t));
-        return (LinkedTaskList) resList;
+        return resList;
     }
      /**
      * toString.
@@ -143,12 +143,12 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable, It
                 + ", len=" + len
                 + ", lastNode=" + lastNode
                 + '}';
-        StringBuffer strBuffer = new StringBuffer(cOut);
+        StringBuilder strBuffer = new StringBuilder(cOut);
         if (len != 0) {
             LinkedTaskListNode curNode = fistNode;
             int i = 1;
             while (true) {
-                strBuffer.append(curNode.getData() + " node=" + i);
+                strBuffer.append(curNode.getData()).append(" node=").append(i);
                 //cOut +=  curNode.getData() + " node=" + i;
                 curNode = curNode.getNext();
                 if (curNode == null) {
@@ -228,9 +228,7 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable, It
             ObjectInputStream ois = new ObjectInputStream(bais);
             //эксгумация потока в Задачу
             return (LinkedTaskList) ois.readObject();    //return cloneLinkedTaskList();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return null;
@@ -379,7 +377,7 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable, It
     /**
      *
      */
-    class LinkedTaskListNode implements Serializable {
+    static class LinkedTaskListNode implements Serializable {
         private Task data = null;
         private LinkedTaskListNode next = null;
 

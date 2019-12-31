@@ -16,12 +16,9 @@ public class Tasks {
      private static boolean isIncoming(Task elem, LocalDateTime from, LocalDateTime to) {
         LocalDateTime toTime = elem.nextTimeAfter(from);
         //if (elem.isActive() && toTime != -1 && (toTime < to || toTime == to )) {
-        if (elem.isActive() && toTime != null
-                && (toTime.compareTo(to) <= 0 )) {
-            return true;
-        }
-        return false;
-    }
+         return elem.isActive() && toTime != null
+                 && (toTime.compareTo(to) <= 0);
+     }
 
     public static SortedMap<LocalDateTime, Set<Task>> calendar(Iterable<Task> tasks, LocalDateTime start, LocalDateTime end) {
         TreeMap<LocalDateTime, Set<Task>> res = new TreeMap<>();
@@ -29,7 +26,7 @@ public class Tasks {
             if (isIncoming(t, start, end)) {
                 // размножаем задачи
                 LocalDateTime timeTask = t.nextTimeAfter(start);
-                while (true) {
+                do {
                     if (timeTask.compareTo(start) >= 0 && timeTask.compareTo(end) <= 0) {
                         HashSet<Task> value = (HashSet<Task>) res.get(timeTask);
                         if (value == null) { //  нет значений  для ключа
@@ -39,10 +36,7 @@ public class Tasks {
                         res.put(timeTask, value);
                     }
                     timeTask = t.nextTimeAfter(timeTask.plusSeconds(1));
-                    if (timeTask == null || timeTask.compareTo(end) > 0) {
-                        break;
-                    }
-                }
+                } while (timeTask != null && timeTask.compareTo(end) <= 0);
             }
         }
         return res;

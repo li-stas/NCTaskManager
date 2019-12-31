@@ -1,10 +1,12 @@
 package ua.edu.sumdu.j2se.lytovka.tasks.view;
 
-
 import java.time.LocalDateTime;
 
+/**
+ * * фармирование строки короткой формы задания
+ */
 public class toStringTaskShort {
-    public String geеSrcTaskShort(String title, LocalDateTime time, LocalDateTime startTime, LocalDateTime endTime,
+    public String Screen(String title, LocalDateTime time, LocalDateTime startTime, LocalDateTime endTime,
                                   int interval, boolean repeated, boolean active){
 
             return "Зд: " + String.format("%-15s", title) + (

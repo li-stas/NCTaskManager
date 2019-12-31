@@ -1,4 +1,4 @@
-package ua.edu.sumdu.j2se.lytovka.tasks.view.elems_menu;
+package ua.edu.sumdu.j2se.lytovka.tasks.view.getread;
 
 import ua.edu.sumdu.j2se.lytovka.tasks.view.menuto.Menu;
 import ua.edu.sumdu.j2se.lytovka.tasks.view.menuto.MenuEntry;

@@ -7,18 +7,14 @@ import ua.edu.sumdu.j2se.lytovka.tasks.model.Task;
 import ua.edu.sumdu.j2se.lytovka.tasks.view.elems_menu.menu00;
 import ua.edu.sumdu.j2se.lytovka.tasks.view.elems_menu.menu04;
 import ua.edu.sumdu.j2se.lytovka.tasks.view.elems_menu.menuReadTask;
-import ua.edu.sumdu.j2se.lytovka.tasks.view.elems_menu.readYesNo;
+import ua.edu.sumdu.j2se.lytovka.tasks.view.getread.readYesNo;
 import ua.edu.sumdu.j2se.lytovka.tasks.view.getread.*;
-import ua.edu.sumdu.j2se.lytovka.tasks.view.screens.doSrcMaxTasks;
-import ua.edu.sumdu.j2se.lytovka.tasks.view.screens.doSrcTasks;
-import ua.edu.sumdu.j2se.lytovka.tasks.view.screens.doSrcTasksCalendar;
-import ua.edu.sumdu.j2se.lytovka.tasks.view.screens.doSrcWarningTasks;
+import ua.edu.sumdu.j2se.lytovka.tasks.view.screens.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -62,7 +58,7 @@ public class TasksView {
      * вывод сообщения
      * @param cMess
      */
-    public static void doSayMess(String cMess) {
+    public void doSayMess(String cMess) {
         System.out.print(cMess);
     }
 
@@ -92,10 +88,8 @@ public class TasksView {
     /**
      * вывод сообщцния о пустом списке заданий
      */
-    public static void doSrcEmptyTasks() {
-        doSayMess("\n");
-        doSayMess((char) 27 + "[33m" + "Список заданий пустой"+ (char)27 + "[37m" + "\n");
-        doSayMess("\n");
+    public void doSrcEmptyTasks() {
+        new doSrcEmptyTasks().Screen();
     }
 
     /**
@@ -287,21 +281,16 @@ public class TasksView {
                 } else {
                     System.out.println((char) 27 + "[31mДиапазон: "
                             + " " + from + " - " + to + (char) 27 + "[37m");
-                    continue;
                 }
             } catch (IOException e) {
                 log.error("IOException", e);
                 doSrcIOException();
-                continue;
             } catch (NumberFormatException e) {
                 System.out.println((char)27 + "[31m" + "Только цифры:"
                         + " " + from + " - " + to + (char)27 + "[37m");
-                continue;
             }
         }
     }
-
-
     /**
      * фармирование строки развернутой формы задания
      * @param title
@@ -315,48 +304,7 @@ public class TasksView {
      */
     public String toStringTask(String title, LocalDateTime time, LocalDateTime startTime, LocalDateTime endTime,
                                int interval, boolean repeated, boolean active) {
-        return "Задание: " + String.format("%-35s", title) + (
-                (!repeated) ? ("\n Время: " + dToC(time) + "\n") :
-                        "\n Время начала: " + dToC(startTime) + "\n Время окончания: " + dToC(endTime) + "\n"
-                                + " Интервал повторения: " + intervalHHMM(interval) + "\n"
-        );
+        return new toStringTask().Sreen(title, time, startTime, endTime, interval, repeated, active);
     }
 
-    /**
-     * фармирование строки короткой формы задания
-     * @param title
-     * @param time
-     * @param startTime
-     * @param endTime
-     * @param interval
-     * @param repeated
-     * @param active
-     * @return
-     */
-    public static String toStringTaskShort(String title, LocalDateTime time, LocalDateTime startTime, LocalDateTime endTime,
-                                           int interval, boolean repeated, boolean active) {
-        return "Зд: " + String.format("%-15s", title) + (
-                (!repeated) ? (" Вp : " + dToC(time)) :
-                        " ВpH: " + dToC(startTime) + " ВpК: " + dToC(endTime)  + " ИнП: " + intervalHHMM(interval) // + "\n"
-        );
-    }
-    /**
-     * преобразование Даты в символьную струку формата yyyy-MM-dd HH:mm
-     * @param now
-     * @return
-     */
-    public static String dToC(LocalDateTime now) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        return  now == null ? "null" : now.format(formatter);
-    }
-
-    /**
-     *  Преобразование интервала выраженного  сек в
-     *    интервал в Часах и Минутах
-     * @param time
-     * @return
-     */
-    private static String intervalHHMM(long time) {
-        return String.format("%02d:%02d:%02d", time / 3600, time / 60 % 60, time % 60);
-    }
  }
