@@ -16,7 +16,7 @@ public class CtrlListRun {
         entries.add(oRunEntry);
     }
 
-    public List getEntries() {
+    public List<RunEntry> getEntries() {
         return entries;
     }
 }

@@ -50,6 +50,7 @@ public class NewTask {
             }
 
             view.doSayMess(view.toStringTask(title, time, startTime, endTime, interval, repeated, active) + "\n");
+
             choice = view.readDoSaveTask();
             if (choice == 1) { // сохранить
                 if (repeated) {

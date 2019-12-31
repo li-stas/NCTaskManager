@@ -11,6 +11,7 @@ import ua.edu.sumdu.j2se.lytovka.tasks.model.ArrayTaskList;
 import ua.edu.sumdu.j2se.lytovka.tasks.model.Task;
 import ua.edu.sumdu.j2se.lytovka.tasks.model.TaskIO;
 import ua.edu.sumdu.j2se.lytovka.tasks.view.TasksView;
+import ua.edu.sumdu.j2se.lytovka.tasks.view.dToc;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -18,7 +19,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
+
 
 
 /**
@@ -52,7 +53,7 @@ public class TasksCtrl {
      * @return
      */
     public RunEntry MethodContainerForMenu00(int choice) {
-        return (RunEntry) methodContainerForMenu00.getEntries().get(choice - 1);
+        return methodContainerForMenu00.getEntries().get(choice - 1);
     }
 
     /**
@@ -111,7 +112,6 @@ public class TasksCtrl {
      */
     public void ShowTasks() {
         int nSize = model.size();
-        //view.doSayMess((char)27 + "[40m");
         if (nSize == 0) {
             view.doSrcEmptyTasks();
         } else {
@@ -128,7 +128,7 @@ public class TasksCtrl {
         int nIntervaSleep = 30; // проверки
         while (lChkRunTask) {
             try {
-                thr.sleep(1000 * nIntervaSleep);
+                Thread.sleep(1000 * nIntervaSleep);
                 for (Task t : model) {
                     LocalDateTime dCur = LocalDateTime.now();
                     LocalDateTime dChek;
@@ -164,9 +164,6 @@ public class TasksCtrl {
      * @return
      */
     private String dToC(LocalDateTime now) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        return  now == null ? "null" : now.format(formatter);
+        return new dToc().get_dToC(now);
     }
-
-
 }

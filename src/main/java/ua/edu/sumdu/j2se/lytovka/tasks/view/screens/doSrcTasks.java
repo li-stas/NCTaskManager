@@ -15,8 +15,6 @@ public class doSrcTasks {
             String cMess = String.format("%2d", ++i)
                     + ". [ "
                     + (t.isActive() ? (char)27 + "[30m" : "")
-                    /*+ TasksView.toStringTaskShort(t.getTitle(), t.getTime(), t.getStartTime(), t.getEndTime(),
-                    t.getRepeatInterval(), t.isRepeated(), t.isActive())*/
                     + toStringTaskShort(t.getTitle(), t.getTime(), t.getStartTime(), t.getEndTime(),
                     t.getRepeatInterval(), t.isRepeated(), t.isActive())
                     +  (char)27 + "[37m"
@@ -27,7 +25,7 @@ public class doSrcTasks {
     }
     private String toStringTaskShort(String title, LocalDateTime time, LocalDateTime startTime, LocalDateTime endTime,
                                      int interval, boolean repeated, boolean active) {
-        return new toStringTaskShort().geеSrcTaskShort( title,  time,  startTime,  endTime,
+        return new toStringTaskShort().Screen( title,  time,  startTime,  endTime,
          interval,  repeated,  active);
     }
 }

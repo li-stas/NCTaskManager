@@ -64,21 +64,6 @@ public class ArrayTaskList extends AbstractTaskList implements  Cloneable, Itera
         // удаление выбранного и смещение елементов
         if (index4Del >= 0) {
             ADelAndASize(index4Del);
-            /*
-            // ADEL(,index4Del)
-            // удаление выбранного и смещение елементов
-            for (int i = index4Del; i < len - 1; i++) {
-                aTask[i] = aTask[i + 1];
-            }
-            aTask[len - 1] = null;
-            /// end ADEL
-            // ASIZE()
-            Task[] aTmp = new Task[len - 1]; // создаем уменьшенный размер
-            System.arraycopy(aTask, 0, aTmp, 0, len - 1); // копирование в новый
-            aTask = aTmp; // замена ссылки
-            len--;
-            // end ASIZE
-             */
             return true;
         }
         return false;
@@ -110,27 +95,10 @@ public class ArrayTaskList extends AbstractTaskList implements  Cloneable, Itera
      * @return
      */
     public ArrayTaskList incoming1(LocalDateTime from, LocalDateTime to) {
-        AbstractTaskList resList = new ArrayTaskList();
-        if (false) {
-            for (int i = 0; i < len; i++) {
-                if (isIncoming(getTask(i), from, to)) {
-                    resList.add(getTask(i));
-                }
-            }
-        } else {
-            Stream<Task> stream = this.getStream();
-            stream.filter(t->isIncoming(t, from, to)).forEach( t->resList.add(t) );
-        }
-
-        /*
-        Class<?> enclosingClass = getClass().getEnclosingClass();
-        if (enclosingClass != null) {
-            System.out.println(enclosingClass.getName());
-        } else {
-            System.out.println(getClass().getName());
-        }
-        */
-         return (ArrayTaskList) resList;
+        ArrayTaskList resList = new ArrayTaskList();
+        Stream<Task> stream = this.getStream();
+        stream.filter(t -> isIncoming(t, from, to)).forEach(t -> resList.add(t));
+        return resList;
     }
     /**
      *
@@ -170,38 +138,7 @@ public class ArrayTaskList extends AbstractTaskList implements  Cloneable, Itera
             Task tmpClone = tmp.clone();
             tmpTaskList.aTask[i++] = tmpClone;
         }
-        /*
-        for (int i = 0; i < len; i++) {
-            Task tmp = getTask(i);
-            Task tmpClone = tmp.clone();
-            tmpTaskList.aTask[i] = tmpClone;
-        } */
         return tmpTaskList;
-    }
-
-
-
-    public ArrayTaskList cloneClearArray() throws CloneNotSupportedException {
-        ArrayTaskList tmpTaskList =  (ArrayTaskList) super.clone();
-        tmpTaskList.aTask = null;
-        tmpTaskList.len = 0;
-        for (int i = 0; i < len; i++) {
-            Task tmp = getTask(i);
-            Task tmpClone = tmp.clone();
-            tmpTaskList.add(tmpClone);
-        }
-        return tmpTaskList;
-    }
-
-    public ArrayTaskList cloneStream() {
-        try {
-            return cloneArrayTaskList();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     private ArrayTaskList cloneArrayTaskList() throws IOException, ClassNotFoundException {

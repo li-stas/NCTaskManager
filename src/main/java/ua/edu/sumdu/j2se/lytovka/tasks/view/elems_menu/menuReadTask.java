@@ -3,6 +3,7 @@ package ua.edu.sumdu.j2se.lytovka.tasks.view.elems_menu;
 import org.apache.log4j.Logger;
 import ua.edu.sumdu.j2se.lytovka.tasks.model.Task;
 import ua.edu.sumdu.j2se.lytovka.tasks.view.TasksView;
+import ua.edu.sumdu.j2se.lytovka.tasks.view.intervalHHMM;
 import ua.edu.sumdu.j2se.lytovka.tasks.view.menuto.Menu;
 import ua.edu.sumdu.j2se.lytovka.tasks.view.menuto.MenuEntry;
 
@@ -43,6 +44,6 @@ public class menuReadTask {
      * @return
      */
     private String intervalHHMM(long time) {
-        return String.format("%02d:%02d:%02d", time / 3600, time / 60 % 60, time % 60);
+        return new intervalHHMM().get_intervalHHMM(time);
     }
 }
