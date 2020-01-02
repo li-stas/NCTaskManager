@@ -1,9 +1,13 @@
 package ua.edu.sumdu.j2se.lytovka.tasks.view.elems_menu;
 
-import ua.edu.sumdu.j2se.lytovka.tasks.view.menuto.Menu;
-import ua.edu.sumdu.j2se.lytovka.tasks.view.menuto.MenuEntry;
+import ua.edu.sumdu.j2se.lytovka.tasks.view.lib.menuto.Menu;
+import ua.edu.sumdu.j2se.lytovka.tasks.view.lib.menuto.MenuEntry;
 
 public class menu04 {
+    /**
+     * мендю запроса формирования календаря
+     * @return
+     */
     public int getnRet() {
         int nRet;
         Menu menu = new Menu();

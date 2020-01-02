@@ -3,9 +3,9 @@ package ua.edu.sumdu.j2se.lytovka.tasks.view.elems_menu;
 import org.apache.log4j.Logger;
 import ua.edu.sumdu.j2se.lytovka.tasks.model.Task;
 import ua.edu.sumdu.j2se.lytovka.tasks.view.TasksView;
-import ua.edu.sumdu.j2se.lytovka.tasks.view.intervalHHMM;
-import ua.edu.sumdu.j2se.lytovka.tasks.view.menuto.Menu;
-import ua.edu.sumdu.j2se.lytovka.tasks.view.menuto.MenuEntry;
+import ua.edu.sumdu.j2se.lytovka.tasks.view.lib.intervalHHMM;
+import ua.edu.sumdu.j2se.lytovka.tasks.view.lib.menuto.Menu;
+import ua.edu.sumdu.j2se.lytovka.tasks.view.lib.menuto.MenuEntry;
 
 public class menuReadTask {
     final Logger log = Logger.getLogger(TasksView.class.getName());
@@ -15,6 +15,10 @@ public class menuReadTask {
         this.t = t;
     }
 
+    /**
+     * меню редактирования задания
+     * @return
+     */
     public int getnRet() {
         int nRet;
         Menu menu = new Menu(1);

@@ -1,4 +1,4 @@
-package ua.edu.sumdu.j2se.lytovka.tasks.view;
+package ua.edu.sumdu.j2se.lytovka.tasks.view.lib;
 
 import java.time.LocalDateTime;
 

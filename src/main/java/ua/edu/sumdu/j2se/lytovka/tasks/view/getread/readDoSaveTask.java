@@ -1,7 +1,11 @@
 package ua.edu.sumdu.j2se.lytovka.tasks.view.getread;
 
 public class readDoSaveTask {
-    public int getnRet() {
+    /**
+     * запрос на запись
+     * @return
+     */
+    public int getnread() {
         System.out.print("Задание записать? ");
         return new readYesNo().getnRet();
     }

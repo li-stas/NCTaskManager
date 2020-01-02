@@ -11,7 +11,7 @@ import ua.edu.sumdu.j2se.lytovka.tasks.model.ArrayTaskList;
 import ua.edu.sumdu.j2se.lytovka.tasks.model.Task;
 import ua.edu.sumdu.j2se.lytovka.tasks.model.TaskIO;
 import ua.edu.sumdu.j2se.lytovka.tasks.view.TasksView;
-import ua.edu.sumdu.j2se.lytovka.tasks.view.dToc;
+import ua.edu.sumdu.j2se.lytovka.tasks.view.lib.dToc;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;

@@ -1,9 +1,16 @@
 package ua.edu.sumdu.j2se.lytovka.tasks.view.getread;
 
-import ua.edu.sumdu.j2se.lytovka.tasks.view.menuto.Menu;
-import ua.edu.sumdu.j2se.lytovka.tasks.view.menuto.MenuEntry;
-
+import ua.edu.sumdu.j2se.lytovka.tasks.view.lib.menuto.Menu;
+import ua.edu.sumdu.j2se.lytovka.tasks.view.lib.menuto.MenuEntry;
+/**
+ *   GET|READ меню запроса Да/Нет/Отмена
+ * @return номер выбранно п. меню
+ */
 public class readYesNo {
+    /**
+     *   GET|READ меню запроса Да/Нет/Отмена
+     * @return номер выбранно п. меню
+     */
     public int getnRet() {
         int nRet;
         Menu menu = new Menu();

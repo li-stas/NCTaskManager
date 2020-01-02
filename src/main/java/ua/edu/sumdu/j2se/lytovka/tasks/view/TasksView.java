@@ -1,19 +1,14 @@
 package ua.edu.sumdu.j2se.lytovka.tasks.view;
 
-
-import org.apache.log4j.Logger;
-
 import ua.edu.sumdu.j2se.lytovka.tasks.model.Task;
 import ua.edu.sumdu.j2se.lytovka.tasks.view.elems_menu.menu00;
 import ua.edu.sumdu.j2se.lytovka.tasks.view.elems_menu.menu04;
 import ua.edu.sumdu.j2se.lytovka.tasks.view.elems_menu.menuReadTask;
-import ua.edu.sumdu.j2se.lytovka.tasks.view.getread.readYesNo;
 import ua.edu.sumdu.j2se.lytovka.tasks.view.getread.*;
+import ua.edu.sumdu.j2se.lytovka.tasks.view.lib.dDtTm_compareLarger0;
+import ua.edu.sumdu.j2se.lytovka.tasks.view.lib.toStringTask;
 import ua.edu.sumdu.j2se.lytovka.tasks.view.screens.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -21,8 +16,6 @@ import java.util.*;
  *  Отображение информации о Задании
  */
 public class TasksView {
-    final Logger log = Logger.getLogger(TasksView.class.getName());
-
     /**
      * формирование, вывод меню и выбор и возврат выбранного п. меню
      * для редактирования задания
@@ -47,13 +40,7 @@ public class TasksView {
     public int menu04() {
         return new menu04().getnRet();
     }
-    /**
-     *   GET|READ меню запроса Да/Нет/Отмена
-     * @return номер выбранно п. меню
-     */
-    private int readYesNo() {
-        return new readYesNo().getnRet();
-    }
+
     /**
      * вывод сообщения
      * @param cMess
@@ -96,7 +83,7 @@ public class TasksView {
      * вывода сообщения о Ошибка ввода вывода
      */
     public void doSrcIOException() {
-        System.out.println((char) 27 + "[31m" + "Ошибка ввода вывода" + (char) 27 + "[37m");
+        new doSrcIOException().Screen();
     }
 
     /**
@@ -114,35 +101,35 @@ public class TasksView {
      * @return название задания
      */
     public String readTitle() {
-       return new readTitle().getTitle();
+       return new readTitle().getread();
     }
     /**
      * GET|READ Запроса Записи Задания
      * @return 1 - Да 2- Нет 0 - отмена
      */
     public int readDoSaveTask() {
-        return new readDoSaveTask().getnRet();
+        return new readDoSaveTask().getnread();
     }
     /**
      * GET|READ Удалени задания
      * @return 1 - Да 2- Нет 0 - отмена
      */
     public int readDoRemoveTask() {
-        return new readDoRemoveTask().getnRet();
+        return new readDoRemoveTask().getread();
     }
     /**
      * GET|READ Запроса о "Задание Повторяется?"
      * @return 1 - Да 2- Нет 0 - отмена
      */
     public int readIsTaskRepit() {
-        return new readIsTaskRepit().getnRet();
+        return new readIsTaskRepit().getread();
     }
     /**
      *  GET|READ  Запроса о "Задание Активно?
      * @return 1 - Да 2- Нет 0 - отмена
      */
     public int readIsTaskActive() {
-        return new readIsTaskActive().getnRet();
+        return new readIsTaskActive().getread();
     }
 
     /**
@@ -150,51 +137,10 @@ public class TasksView {
      * @param dValid
      * @return
      */
-    private LocalDateTime readLclDtTm(LocalDateTime dValid) {
-        LocalDateTime dDtTm = LocalDateTime.now();
-        int nYYYY = 0;
-        int nMM;
-        int nDD;
-        int nHH;
-        int nMi;
-
-        while (true) {
-
-            nYYYY = readNumSayGetValid("    Год (ГГГГ): ", dDtTm.getYear(), dDtTm.getYear() + 50);
-
-            nMM = readNumSayGetValid("    Месяц (ММ): ",  1, 12);
-
-            dDtTm = LocalDateTime.of(nYYYY, nMM, 1, 0, 0, 0);
-
-            nDD = readNumSayGetValid("    День (ДД) : ", 1, dDtTm.plusMonths(1).minusDays(1).getDayOfMonth());
-
-            nHH = readNumSayGetValid("    Час (ЧЧ)  : ", 0, 23);
-
-            nMi = readNumSayGetValid("    Минуты(мм): ", 0, 59);
-
-
-            dDtTm = LocalDateTime.of(nYYYY, nMM, nDD, nHH, nMi, 0, 0);
-            if (dDtTm_compareLess0(dDtTm, dValid)) {
-                break;
-            }
-        }
-        return dDtTm;
+    public static LocalDateTime readLclDtTm(LocalDateTime dValid) {
+        return new readLclDtTm().getread(dValid);
     }
 
-    /**
-     * проверка и вывод сообщения о том что Одна дата, меньше другой
-     * @param dDtTm
-     * @param dValid
-     * @return логичекое значение false - "Дата и время уже прошли"
-     */
-    private boolean dDtTm_compareLess0(LocalDateTime dDtTm, LocalDateTime dValid) {
-        if (dDtTm.compareTo(dValid) < 0) {
-            System.out.println((char) 27 + "[31m" + "Дата и время уже прошли" + (char) 27 + "[37m");
-            return false;
-        } else {
-            return true;
-        }
-    }
     /**
      * проверка и вывод сообщения о том что Одна дата, меньше другой
      * @param dDtTm
@@ -202,13 +148,7 @@ public class TasksView {
      * @return логичекое значение false если "Дата и время должна быть меньше или равна Времени окончания"
      */
     public boolean dDtTm_compareLarger0(LocalDateTime dDtTm, LocalDateTime dValid) {
-        if (dDtTm.compareTo(dValid) > 0) {
-            System.out.println((char) 27 + "[31m"
-                    + "Дата и время должна быть меньше или равна Времени окончания" + (char) 27 + "[37m");
-            return false;
-        } else {
-            return true;
-        }
+        return new dDtTm_compareLarger0().valid(dDtTm, dValid);
     }
 
     /**
@@ -217,8 +157,7 @@ public class TasksView {
      * @return
      */
     public LocalDateTime readStartTime(LocalDateTime d4Valid) {
-        System.out.println("Время начала: ");
-        return readLclDtTm(d4Valid);
+        return new readStartTime().getread(d4Valid);
     }
 
     /**
@@ -227,8 +166,7 @@ public class TasksView {
      * @return
      */
     public LocalDateTime readEndTime(LocalDateTime d4Valid) {
-        System.out.println("Время оконончания: ");
-        return readLclDtTm(d4Valid);
+        return new readEndTime().getread(d4Valid);
     }
 
     /**
@@ -236,7 +174,7 @@ public class TasksView {
      * @return
      */
     public int readInterval() {
-        return readNumSayGetValid("Интервал, cек: ", 0, 60 * 60 * 24);
+        return new readNumSayGetValid().getread("Интервал, cек: ", 0, 60 * 60 * 24);
     }
 
     /**
@@ -245,52 +183,9 @@ public class TasksView {
      * @return
      */
     public int readWhatTaskNumber(int nMaxTask) {
-        return readNumSayGetValid("Выбирете номер задания 0 - " + nMaxTask + " (0 - Отмена):", 0, nMaxTask);
+        return new readNumSayGetValid().getread("Выбирете номер задания 0 - " + nMaxTask + " (0 - Отмена):", 0, nMaxTask);
     }
 
-    /**
-     * GET|READ - числовых значений с проверкой вхождения в диапазон
-     * @param s1
-     * @param from
-     * @param to
-     * @return
-     */
-    private int readNumSayGetValid(String s1, int from, int to) {
-        int[] paramInt = new int[1];
-        System.out.print(s1);
-        readNum(paramInt, from, to);
-        return paramInt[0];
-    }
-    /**
-     * ввод чисел с проверкой диапзона
-     *
-     * @param nNumParam
-     * @param from
-     * @param to
-     */
-    private void readNum(int[] nNumParam, int from, int to) {
-        int nNum;
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        while (true) {
-            try {
-                String line = reader.readLine();
-                nNum = Integer.parseInt(line);
-                if (nNum >= from && nNum <= to) {
-                    nNumParam[0] = nNum;
-                    break;
-                } else {
-                    System.out.println((char) 27 + "[31mДиапазон: "
-                            + " " + from + " - " + to + (char) 27 + "[37m");
-                }
-            } catch (IOException e) {
-                log.error("IOException", e);
-                doSrcIOException();
-            } catch (NumberFormatException e) {
-                System.out.println((char)27 + "[31m" + "Только цифры:"
-                        + " " + from + " - " + to + (char)27 + "[37m");
-            }
-        }
-    }
     /**
      * фармирование строки развернутой формы задания
      * @param title
