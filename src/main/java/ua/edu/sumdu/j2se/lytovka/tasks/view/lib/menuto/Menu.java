@@ -1,4 +1,4 @@
-package ua.edu.sumdu.j2se.lytovka.tasks.view.menuto;
+package ua.edu.sumdu.j2se.lytovka.tasks.view.lib.menuto;
 
 import java.io.BufferedReader;
 import java.io.IOException;

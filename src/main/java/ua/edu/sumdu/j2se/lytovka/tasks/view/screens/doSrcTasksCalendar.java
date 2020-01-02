@@ -1,7 +1,7 @@
 package ua.edu.sumdu.j2se.lytovka.tasks.view.screens;
 
 import ua.edu.sumdu.j2se.lytovka.tasks.model.Task;
-import ua.edu.sumdu.j2se.lytovka.tasks.view.dToc;
+import ua.edu.sumdu.j2se.lytovka.tasks.view.lib.dToc;
 
 import java.time.LocalDateTime;
 import java.util.Map;
