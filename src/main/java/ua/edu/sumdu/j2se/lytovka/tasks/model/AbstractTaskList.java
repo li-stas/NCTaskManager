@@ -4,8 +4,6 @@ import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
 public abstract class AbstractTaskList { //implements Iterable  {
-    //private Task[] aTask = null;
-    //protected int len; // = 0;
     /**
      *  пустой конструктр.
      */
@@ -48,7 +46,7 @@ public abstract class AbstractTaskList { //implements Iterable  {
      */
     public final AbstractTaskList incoming(LocalDateTime from, LocalDateTime to) {
         AbstractTaskList resList;
-        //if (getClass().getName().endsWith("LinkedTaskList")) {
+
         if (this instanceof LinkedTaskList) {
             resList = new LinkedTaskList();
         } else {
@@ -66,62 +64,9 @@ public abstract class AbstractTaskList { //implements Iterable  {
 
     public boolean isIncoming(Task elem, LocalDateTime from, LocalDateTime to) {
         LocalDateTime toTime = elem.nextTimeAfter(from);
-        //if (elem.isActive() && toTime != -1 && (toTime < to || toTime == to )) {
-        if (elem.isActive() && toTime != null
-                && (toTime.compareTo(to) <= 0)) {
-            return true;
-        }
-        return false;
+
+        return elem.isActive() && toTime != null
+                && (toTime.compareTo(to) <= 0);
     }
 }
 
-/*
-        boolean lAdd2res = false;
-        if (typeChk == 1) {
-            if (!elem.isActive()) {
-                return false;
-            }
-            if (elem.isRepeated()) {
-                int testTime = 0;
-                boolean lAdd = false;
-                // начало попадает в анализируемый интервал from-to
-                if (elem.getStartTime() > from && elem.getStartTime() < to) {
-                    testTime = elem.getStartTime();
-                    lAdd = true;
-                } else { // точку анализа переместим в интервал from-to
-                    if (elem.getStartTime() > to) { // Repeat right OUT
-                        lAdd = false;
-                    } else if (elem.getEndTime() < from) { //Repeat left OUT
-                        lAdd = false;
-                    } else {
-                        int i = 0;
-                        while (true) { // следующие после заданого
-                            i++;
-                            testTime = elem.getStartTime() + (elem.getRepeatInterval() * i);
-                            if (testTime > from) {
-                                lAdd = true;
-                                break; // попали в интервал
-                            }
-                            if (testTime > to) {
-                                lAdd = false;
-                                break; // вышли за интервла задания
-                            }
-                            if (testTime >= elem.getEndTime()) {
-                                lAdd = false;
-                                break;
-                            }
-                        }
-                    }
-                }
-                if (lAdd && testTime + elem.getRepeatInterval() <= to) {
-                    lAdd2res = true;
-                }
-            } else {
-                if (elem.getTime() > from && elem.getTime() <= to) {
-                    lAdd2res = true;
-                }
-            }
-            return lAdd2res;
-        }
-        return false;
- */

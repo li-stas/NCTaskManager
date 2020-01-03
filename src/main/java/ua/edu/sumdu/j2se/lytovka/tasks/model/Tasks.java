@@ -15,7 +15,7 @@ public class Tasks {
     }
      private static boolean isIncoming(Task elem, LocalDateTime from, LocalDateTime to) {
         LocalDateTime toTime = elem.nextTimeAfter(from);
-        //if (elem.isActive() && toTime != -1 && (toTime < to || toTime == to )) {
+
          return elem.isActive() && toTime != null
                  && (toTime.compareTo(to) <= 0);
      }

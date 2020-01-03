@@ -19,11 +19,7 @@ public class TaskIO {
      * https://metanit.com/java/tutorial/6.7.php
      */
     public static void write(AbstractTaskList tasks, OutputStream out) throws IOException {
-        //System.out.println(tasks);
-        //System.out.println("============= праметр ==================");
-        //tasks.getStream().forEach(t->System.out.println(t));
-        //System.out.println("============= чз Стрим ==================");
-        //ZoneId zoneId = ZoneId.systemDefault();
+
         DataOutputStream dos = new DataOutputStream(out);
         try {
             dos.writeInt(tasks.size()); // всего задач
@@ -47,7 +43,7 @@ public class TaskIO {
 
     private static void dosWriteTask(Task t, DataOutputStream dos) {
         try {
-            //System.out.println(t);
+
             dos.writeInt(t.getTitle().length());
             dos.writeUTF(t.getTitle());
             dos.writeBoolean(t.isActive());
@@ -95,7 +91,7 @@ public class TaskIO {
      * – записує задачі із списку у файл.
      */
     public static void writeBinary(AbstractTaskList tasks, File file) throws IOException {
-        //fileOutputStream - fos
+
         FileOutputStream fos = new FileOutputStream(file);
         try {
             write(tasks,fos);
@@ -107,7 +103,7 @@ public class TaskIO {
      * – зчитує задачі із файлу у список задач.
      */
     public static void readBinary(AbstractTaskList tasks, File file) throws IOException {
-        // fis - FileInputStream
+
         FileInputStream fis = new FileInputStream(file);
         try {
             read(tasks, fis);
@@ -122,16 +118,13 @@ public class TaskIO {
      * – записує задачі зі списку у потік в форматі JSON.
      */
     public static void write(AbstractTaskList tasks, Writer out) throws IOException {
-        //System.out.println(tasks);
-        //System.out.println("============= праметр ==================");
+
         Gson gson;
         gson =  new GsonBuilder()
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateAdapter())
                 .create();
         String sGson = gson.toJson(tasks);
 
-        //System.out.println(sGson);
-        //System.out.println("============= sGson ==================");
 
         try {
             out.write(sGson);
@@ -146,11 +139,7 @@ public class TaskIO {
      * – зчитує задачі із потоку у список.
      */
     public static void read(AbstractTaskList tasks, Reader in) {
-        //Gson gson = new Gson();
         Gson gson;
-        /*gson =  new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateAdapter())
-                .create();*/
         gson =  new GsonBuilder()
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateAdapter() {
                     @Override
@@ -165,10 +154,9 @@ public class TaskIO {
                 )
                 .create();
         ArrayTaskList tasksA =  gson.fromJson(in, ArrayTaskList.class);
-       // tasks = (AbstractTaskList) tasksA;
+
         tasksA.getStream().forEach(t-> tasks.add(t));
-       // System.out.println(tasks);
-       // System.out.println("============= read Json ==================");
+
     }
 
     /**
@@ -207,22 +195,6 @@ public class TaskIO {
             return LocalDateTime.parse(jsonReader.nextString());
         }
     }
-    /*
-    GSON GSON = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, (JsonDeserializer<LocalDateTime>) (json, type, jsonDeserializationContext) ->
-    ZonedDateTime.parse(json.getAsJsonPrimitive().getAsString()).toLocalDateTime()).create();
-     */
-    /*
-    Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new JsonDeserializer<LocalDateTime>() {
-     @Override
-     public LocalDateTime deserialize(JsonElement json, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-           return ZonedDateTime.parse(json.getAsJsonPrimitive().getAsString()).toLocalDateTime();
-      }
-      }).create();
-    public Iterator<Task> iterator() {
-        return new Iterator<Task>() {
-        };
-    }
-     */
 
 }
 

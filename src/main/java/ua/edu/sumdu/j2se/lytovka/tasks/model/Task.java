@@ -22,7 +22,7 @@ public class Task implements Serializable, Cloneable {
     private boolean repeated; //повторюваності задачі
     private boolean active; //стан задачі
 
-    //private boolean lDEBUG = false;
+
     /**
      * констрктор задач
      *   що не повторюються:
@@ -73,7 +73,7 @@ public class Task implements Serializable, Cloneable {
      * @param interval
      */
     public Task(String title, LocalDateTime start, LocalDateTime end, int interval) throws IllegalArgumentException {
-        //if (start.compareTo(end) == 1) {
+
         if (start.compareTo(end) > 0) {
             throw new IllegalArgumentException();
         }
@@ -239,32 +239,30 @@ public class Task implements Serializable, Cloneable {
      * @return
      */
     public LocalDateTime nextTimeAfter(LocalDateTime current) {
-        //System.out.println("task"+this);
-        //System.out.println( current);
+
         LocalDateTime currentTime;
         if (active) { // активна
             if (!repeated) { // одно разовая
-                //if (current.compareTo(time) == -1) { // только время ДО начала, если начло то уже -1
+
                 if (current.compareTo(time) < 0) { // только время ДО начала, если начло то уже -1
                     return time;
                 }
                 return null;
             } else { // повторяется
-                //if (current < startTime) { // время до страта
-                //if (current.compareTo(startTime) == -1) { // время до страта
+
                 if (current.compareTo(startTime) < 0) { // время до страта
                     return startTime;
                 } else {
                     int i = 0;
                     while (true) { // следующие после заданого
                         currentTime = startTime.plusSeconds(interval * i);
-                        //if (currentTime.compareTo(current) == 1) {
+
                         if (currentTime.compareTo(current) > 0) {
                             break;
                         }
                         i++;
                     }
-                    //if (currentTime.compareTo(endTime) == 1) {
+
                     if (currentTime.compareTo(endTime) > 0) {
                         return null;
                     }
