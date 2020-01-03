@@ -4,10 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * контейнер хранения элементов меню
+ * http://siargei-stepanov.blogspot.com/2015/02/java.html
  * и запуск выбора п. меню
  * nTypeMenu - 0 - горизонтальное меню, 1- вертикальное меню
  * isExit - что делать после успешного выбора п.меню,
@@ -16,7 +16,7 @@ import java.util.List;
  *      п.0 - выполняет выход (добавляется автоматически последним)
  */
 public class Menu  {
-    private List<MenuEntry> entries = new ArrayList();
+    private ArrayList<MenuEntry> entries = new ArrayList<>();
     private boolean isExit = false;
     private int nTypeMenu;
 
@@ -33,9 +33,8 @@ public class Menu  {
     }
 
     public int run() {
-        int nMaxNumElem;
         int choice = 0;
-        nMaxNumElem = entries.size();
+        int nMaxNumElem = entries.size();
         // Добавляем пункт меню Exit
         entries.add(new MenuEntry("0 - Выход", true) {
             @Override
