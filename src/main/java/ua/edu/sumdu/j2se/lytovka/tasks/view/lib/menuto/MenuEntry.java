@@ -2,6 +2,7 @@ package ua.edu.sumdu.j2se.lytovka.tasks.view.lib.menuto;
 
 /**
  * элементы меню
+ * http://siargei-stepanov.blogspot.com/2015/02/java.html
  */
 public abstract class MenuEntry {
     private String title;

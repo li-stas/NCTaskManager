@@ -51,11 +51,11 @@ public class RunEntry01_Edit {
                     }
                     if (tempTask.isRepeated()){
                         CtrlListRun ctrlReadTaskRepite = CtrlReadTaskRepite();
-                        RunEntry entry = (RunEntry) ctrlReadTaskRepite.getEntries().get(choice - 1);
+                        RunEntry entry = ctrlReadTaskRepite.getEntries().get(choice - 1);
                         entry.run();
                     } else {
                         CtrlListRun ctrlReadTask = CtrlReadTask();
-                        RunEntry entry = (RunEntry) ctrlReadTask.getEntries().get(choice - 1);
+                        RunEntry entry = ctrlReadTask.getEntries().get(choice - 1);
                         entry.run();
                     }
                 }
