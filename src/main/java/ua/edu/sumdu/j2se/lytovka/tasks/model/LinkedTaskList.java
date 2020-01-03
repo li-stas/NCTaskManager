@@ -116,22 +116,9 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable, It
         Stream.Builder<Task> builder = Stream.builder();
         for (Iterator<Task> it = this.iterator(); it.hasNext();) {
             Task t = it.next();
-            //System.out.println(t);
             builder.add(t);
         }
         return (Stream<Task>) builder.build();
-    }
-
-    /**
-     * знаходити, які саме задачі будуть виконані хоча б раз у деякому проміжку
-     * @param from
-     * @param to
-     * @return
-     */
-    public LinkedTaskList incoming1(LocalDateTime from, LocalDateTime to) {
-        LinkedTaskList resList = new LinkedTaskList();
-        this.getStream().filter(t -> isIncoming(t, from, to)).forEach(t -> resList.add(t));
-        return resList;
     }
      /**
      * toString.
@@ -353,8 +340,7 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable, It
     }
 
     private void  ADelAndASize(int index4Del, LinkedTaskListNode curNode) {
-        //LinkedTaskListNode curNode = fistNode;
-        //LinkedTaskListNode delNode;
+
         if (index4Del == 1) { // первый узел
             fistNode = fistNode.getNext();
             len--;
@@ -372,8 +358,6 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable, It
             len--;
         }
     }
-
-
     /**
      *
      */
@@ -400,99 +384,5 @@ public class LinkedTaskList extends AbstractTaskList implements Serializable, It
             this.next = next;
         }
     }
-
-
-
-
-    /**
-     * перевод из одного формата в другой
-     * @param linkedTaskList
-     * @return
-     */
-    private ArrayTaskList LinkedTaskList2ArrayTaskList(LinkedTaskList linkedTaskList) {
-        LinkedTaskListNode curNode = fistNode;
-        ArrayTaskList tmp = new ArrayTaskList();
-        //int i = 1;
-        while (true) {
-            tmp.add(curNode.getData()); // добавим узел в ArrayTaskList
-            // переход на след. узел
-            curNode = curNode.getNext();
-            if (curNode == null) {
-                break;
-            }
-            //i++;
-        }
-        return tmp;
-    }
 }
 
-    /*
-    public boolean isIncoming(Task elem, int from, int to) {
-        boolean lAdd2res = false;
-        if (!elem.isActive()) {
-            return false;
-        }
-        if (elem.isRepeated()) {
-            int testTime = 0;
-            boolean lAdd = false;
-            // начало попадает в анализируемый интервал from-to
-            if (elem.getStartTime() > from && elem.getStartTime() < to) {
-                testTime = elem.getStartTime();
-                lAdd = true;
-            } else { // точку анализа переместим в интервал from-to
-                if (elem.getStartTime() > to) { // Repeat right OUT
-                    lAdd = false;
-                } else if (elem.getEndTime() < from) { //Repeat left OUT
-                    lAdd = false;
-                } else {
-                    int i = 0;
-                    while (true) { // следующие после заданого
-                        i++;
-                        testTime = elem.getStartTime() + (elem.getRepeatInterval() * i);
-                        if (testTime > from) {
-                            lAdd = true;
-                            break; // попали в интервал
-                        }
-                        if (testTime > to) {
-                            lAdd = false;
-                            break; // вышли за интервла задания
-                        }
-                        if (testTime >= elem.getEndTime()) {
-                            lAdd = false;
-                            break;
-                        }
-                    }
-                }
-            }
-            if (lAdd && testTime + elem.getRepeatInterval() <= to) {
-                lAdd2res = true;
-            }
-        } else {
-            if (elem.getTime() > from && elem.getTime() <= to) {
-                lAdd2res = true;
-            }
-        }
-        return lAdd2res;
-    } */
-
-/*} else if ( false && curNode.getNext() == null ) { // последний узел
-                // предыдущая
-                curNode = fistNode;
-                for (int j = 2; j <= len - 1 ; j++) {
-                    curNode = curNode.getNext();
-                }
-                // сделаем последней
-                curNode.setNext(null);
-                lastNode = curNode;
-                len--; */
-
-            /*
-            // поиск последней
-            LinkedTaskListNode curNode = fistNode;
-            for (int j = 2; j <= len; j++) {
-                curNode = curNode.getNext();
-            }
-            //System.out.println("curNode.getNext()=" + curNode.getNext());
-            //System.out.println("curNode.getNext()=" + lastNode.getNext());
-            lastNode = curNode;
-*/
